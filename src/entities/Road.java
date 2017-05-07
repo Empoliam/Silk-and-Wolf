@@ -1,0 +1,27 @@
+package entities;
+
+public class Road {
+
+	final private int id;
+	final public int[] connects = new int[2];
+	final private String name;
+
+	public Road(String[] in) {
+
+		id = Integer.parseInt(in[0]);
+		name = in[1];
+		connects[0] = Integer.parseInt(in[2].split(";")[0]);
+		connects[1] = Integer.parseInt(in[2].split(";")[1]);
+
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public int[] getConnects() {
+
+		return connects;
+	}
+}

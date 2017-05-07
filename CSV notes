@@ -1,0 +1,9 @@
+Settlements
+0 id
+1 name
+2 roads
+
+Roads
+0 id
+1 name
+2 connects
