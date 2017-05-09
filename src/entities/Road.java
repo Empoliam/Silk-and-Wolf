@@ -17,6 +17,11 @@ public class Road {
 
 	}
 
+	public int getID() {
+		
+		return id;	
+	}
+	
 	public String getName() {
 
 		return name;

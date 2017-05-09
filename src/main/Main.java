@@ -16,7 +16,10 @@ public class Main {
 		Load.settlements();
 		Load.roads();
 
-		System.out.println(Settlement.getRoadBetween(3,4).getName());
+		Settlement a = SETTLEMENTS.get(6);
+		Settlement b = SETTLEMENTS.get(10);
+		Road r = a.getRoadTo(10);
+		System.out.println(b.getName() + " is " + r.getLength() + " miles away, across the " + r.getName());
 		
 	}
 }
