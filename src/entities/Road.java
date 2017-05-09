@@ -26,4 +26,9 @@ public class Road {
 
 		return connects;
 	}
+	
+	public int getLength() {
+		
+		return length;
+	}
 }

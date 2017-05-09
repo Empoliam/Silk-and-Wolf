@@ -16,15 +16,7 @@ public class Main {
 		Load.settlements();
 		Load.roads();
 
-		for(Settlement s : SETTLEMENTS) {
-			
-			System.out.print(SETTLEMENTS.get(s.getID()).getName() + " is connected to: ");
-
-			List<Integer> test = SETTLEMENTS.get(s.getID()).connectedTo();
-			for(int i : test) {
-				System.out.print(SETTLEMENTS.get(i).getName() + ", ");
-			}
-			System.out.println();
-		}
+		System.out.println(Settlement.getRoadBetween(3,4).getName());
+		
 	}
 }
