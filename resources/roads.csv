@@ -1,16 +1,16 @@
-0,Southern Road,0;1
-1,Orchard Trail,1;2
-2,Western Ruvinheigen Plains,2;4
-3,Monolith Pass,2;3
-4,Eastern Ruvinheigen Plains,3;4
-5,Lamtra Foothills,4;5
-6,Great Forest Trail,4;6
-7,Eastern Eyre Crossing,6;7
-8,Western Eyre Crossing,6;10
-9,Rolling Pass,7;8
-10,White Plains North,8;9
-11,Roam Crossing,10;11
-12,Roam Highway,9;10
-13,Travellers End,9;12
-14,Northern Road,9;13
-15,Craggy Pass,12;13
+0,Southern Road,0;1,45
+1,Orchard Trail,1;2,90
+2,Western Ruvinheigen Plains,2;4,270
+3,Monolith Pass,2;3,180
+4,Eastern Ruvinheigen Plains,3;4,180
+5,Lamtra Foothills,4;5,190
+6,Great Forest Trail,4;6,270
+7,Eastern Eyre Crossing,6;7,270
+8,Western Eyre Crossing,6;10,405
+9,Rolling Pass,7;8,90
+10,White Plains North,8;9,150
+11,Roam Crossing,10;11,60
+12,Roam Highway,9;10,225
+13,Travellers End,9;12,360
+14,Northern Road,9;13,765
+15,Craggy Pass,12;13,180

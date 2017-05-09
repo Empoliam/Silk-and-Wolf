@@ -5,6 +5,7 @@ public class Road {
 	final private int id;
 	final public int[] connects = new int[2];
 	final private String name;
+	final private int length;
 
 	public Road(String[] in) {
 
@@ -12,6 +13,7 @@ public class Road {
 		name = in[1];
 		connects[0] = Integer.parseInt(in[2].split(";")[0]);
 		connects[1] = Integer.parseInt(in[2].split(";")[1]);
+		length = Integer.parseInt(in[3]);
 
 	}
 
