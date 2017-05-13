@@ -8,3 +8,10 @@ Roads
 1 name
 2 connects
 3 length
+
+Stock
+0 id
+1 name
+2 value
+3 demand
+4 demand_mult
