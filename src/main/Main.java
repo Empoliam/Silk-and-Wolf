@@ -21,6 +21,10 @@ public class Main {
 		Load.stocks();
 		
 		Stock gold = STOCKS.get(0);
+		gold.buy(10);
+		System.out.println(gold.getValue()*gold.getDemand());
+		gold.buy(-10);
+		System.out.println(gold.getValue()*gold.getDemand());
 
 	}
 }

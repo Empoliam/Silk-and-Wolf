@@ -22,11 +22,6 @@ public class Stock {
 		demand += count*demand_mult;
 	}
 
-	public void sell(int count) {
-
-		demand -= count*demand_mult;
-	}
-
 	public float getValue() {
 
 		return value;
