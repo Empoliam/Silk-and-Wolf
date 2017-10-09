@@ -46,7 +46,6 @@ public class Settlement {
 		}
 
 		return out;
-
 	}
 
 	public Road getRoadTo(int b){

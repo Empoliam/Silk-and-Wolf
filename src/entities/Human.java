@@ -14,7 +14,7 @@ public class Human {
 	//when travelling, use road ID, otherwise Settlement ID
 	int location;
 
-	boolean travelling = false;
+	private boolean travelling = false;
 	int destination;
 	int remainingDistance = 0;
 
@@ -66,6 +66,10 @@ public class Human {
 
 		return travelling;
 
+	}
+	
+	public boolean isTravelling() {
+		return travelling;
 	}
 
 }

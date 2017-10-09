@@ -7,10 +7,14 @@ import entities.Road;
 import entities.Settlement;
 import entities.Human;
 
+import foundation.*;
+
 public class Main {
 
-	public static List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
-	public static List<Road> ROADS = new ArrayList<Road>();
+	public static final Time CLOCK = Time.getInstance();
+	
+	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
+	public static final List<Road> ROADS = new ArrayList<Road>();
 	public static List<Human> HUMANS = new ArrayList<Human>();
 	
 	public static void main(String[] args) {
@@ -18,20 +22,26 @@ public class Main {
 		Load.settlements();
 		Load.roads();
 		
-		HUMANS.add(new Human(1,"Lawrence","Kraft"));
-		
+		HUMANS.add(new Human(1,"Lawrence","Kraft"));		
 		Human lawrence = HUMANS.get(0);
 		
-		System.out.println(lawrence.getSettlement().getName());
-		lawrence.beginTravel(2);
-		System.out.println(lawrence.getRemainingDistance());
-		lawrence.advanceTravel();
-		System.out.println(lawrence.getRemainingDistance());
-		lawrence.advanceTravel();
-		System.out.println(lawrence.getRemainingDistance());
-		lawrence.advanceTravel();
-		System.out.println(lawrence.getRemainingDistance());
-		System.out.println(lawrence.getSettlement().getName());
-		
+		for(int k = 0; k < 700; k++){
+			
+			doHourTick();
+			System.out.println(Time.getFormattedDate() + ", " + Time.getFormattedTime());
+		}
 	}
+	
+	private static void doHourTick() {
+		
+		Time.advanceHour();
+		
+		for(Human h : HUMANS) {
+			if(h.isTravelling()) {
+				
+				h.advanceTravel();		
+			}
+		}	
+	}
+	
 }
