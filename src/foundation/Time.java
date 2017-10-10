@@ -45,14 +45,17 @@ public class Time {
 		
 	public static void advanceHour() {
 		
+		//Advance to nearest hour
 		hour++;
 		minute = 0;
 		
+		//advance day if appropriate
 		if(hour > 23) {
 			
 			hour = 0;
 			day ++;
 			
+			//Advance month if appropriate
 			if(month == 1 && day > 28) {
 				month ++;
 				day = 1;
@@ -66,6 +69,7 @@ public class Time {
 				day = 1;
 			}
 			
+			//Advance year if appropriate
 			if(month > 11) {
 				year++;
 				month = 0;

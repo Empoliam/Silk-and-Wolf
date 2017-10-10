@@ -1,0 +1,21 @@
+~~TRAVEL MECHANICS~~
+
+-Only NPCs with the DO_TRAVEL flag should travel
+-Travelling merchant NPCs should travel based on value of their carried products in the current town
+	>Exclude goods purchased in town from this weighting
+-Other professions should travel based on a multiplier
+	>More likely to travel in warm seasons
+	>Each NPC has own base probability
+-Check probability of travel once per day at 6am
+-Each profession should have a unique preferred stay time in town
+-The closer an NPC is to their preferred stay time, the more likely they are to decide to leave
+-Upon deciding to leave, an NPC will pick a remaining stay time, in days, normally distributed with mean equal to the difference between their preferred time and their current stay time
+	>NPCs should report their preferred stay time when asked
+-Weather should affect the decision to leave, decided at the intended departure time
+	>If the weather check fails, retry next day
+	>In terms of influence
+		-----	Blizzard
+		----	Heavy Snow
+		---		Snow, Storm
+		--		Heavy Rain
+		-		Rain, Blistering Heat

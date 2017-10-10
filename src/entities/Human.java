@@ -19,7 +19,8 @@ public class Human {
 	int remainingDistance = 0;
 
 	public Human(int location, String firstName, String lastName){
-
+		
+		//ensures each NPC has a unique ID
 		id = ID_COUNTER;		
 		ID_COUNTER++;
 

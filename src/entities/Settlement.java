@@ -50,6 +50,7 @@ public class Settlement {
 
 	public Road getRoadTo(int b){
 
+		//Check each connecting road until the appropriate connection is found
 		for(int r : roads) {
 			if(ROADS.get(r).getConnects()[0] == b || ROADS.get(r).getConnects()[1] == b) {
 				return ROADS.get(r);
