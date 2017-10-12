@@ -4,7 +4,7 @@ import main.Main;
 
 public class Human {
 
-	//"Human" NPC IDs start at 2. The player always has ID '0' and Holo always has ID '1'. If something is really fucked check that this statement is true.
+	//"Human" NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'. If something is really fucked check that this statement is true.
 	private static int ID_COUNTER = 0;
 
 	final int id;

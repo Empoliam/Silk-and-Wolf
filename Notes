@@ -19,3 +19,7 @@
 		---		Snow, Storm
 		--		Heavy Rain
 		-		Rain, Blistering Heat
+		
+~~NPC GENERATOR~~
+-A fixed number of NPCs should exist within each settlement at world initialisation
+-
