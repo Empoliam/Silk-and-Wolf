@@ -39,6 +39,7 @@ Aschines
 Astacos
 Atarratze
 Athelardus
+Azibar
 Bacauda
 Bangin
 Basileios
@@ -63,6 +64,7 @@ Briareus
 Bulis
 Capuel
 Ceas
+Cebriones
 Chairophon
 Chalin
 Charles
@@ -76,6 +78,7 @@ Cordylion
 Corydallos
 Cunradus
 Dalmatius
+Daluce
 Daphis
 Dickon
 Dieneces
@@ -128,8 +131,8 @@ Godvynus
 Gorgos
 Grefin
 Grisigon
-Gunteric
 Guérin
+Gunteric
 Habbie
 Hamelen
 Hamilax
@@ -140,6 +143,7 @@ Haribehrt
 Haritz
 Heimon
 Helgot
+Heliodorus
 Heloynet
 Herchier
 Hermolycus
@@ -245,9 +249,10 @@ Renier
 Ricardus
 Richal
 Robbie
+Rolph
 Rosser
-Russell
 Roussel
+Russell
 Sagarus
 Saillot
 Sarpedon
@@ -275,7 +280,6 @@ Thirkell
 Thurstan
 Tiele
 Timagoras
-Triopas
 Triopas
 Turoldus
 Ucke
