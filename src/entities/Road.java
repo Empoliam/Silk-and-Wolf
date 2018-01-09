@@ -1,9 +1,14 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Road {
 
+	public static final List<Road> ROADS = new ArrayList<Road>();
+	
 	final private int id;
-	final public int[] connects = new int[2];
+	final private int[] connects = new int[2];
 	final private String name;
 	final private int length;
 

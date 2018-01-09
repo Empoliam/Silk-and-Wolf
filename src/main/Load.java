@@ -1,8 +1,5 @@
 package main;
 
-import static main.Main.ROADS;
-import static main.Main.SETTLEMENTS;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,7 +10,7 @@ import entities.Settlement;
 
 public class Load {
 	
-	static void settlements() {
+	public static void settlements() {
 
 		try {
 			
@@ -22,7 +19,7 @@ public class Load {
 
 			while (line != null) {
 
-				SETTLEMENTS.add(new Settlement(line.split(",")));
+				Settlement.SETTLEMENTS.add(new Settlement(line.split(",")));
 				line = br.readLine();
 			}
 
@@ -32,7 +29,7 @@ public class Load {
 		catch (IOException e) {}
 	}
 
-	static void roads() {
+	public static void roads() {
 		
 		try {
 		
@@ -41,7 +38,7 @@ public class Load {
 			
 			while(line != null) {
 				
-				ROADS.add(new Road(line.split(",")));
+				Road.ROADS.add(new Road(line.split(",")));
 				line = br.readLine();
 			}
 			

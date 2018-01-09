@@ -1,9 +1,11 @@
 package entities;
 
-import main.Main;
+import java.util.List;
 
 public class Human {
 
+	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
+	
 	//"Human" NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'. If something is really fucked check that this statement is true.
 	private static int ID_COUNTER = 0;
 
@@ -32,7 +34,7 @@ public class Human {
 
 	public Settlement getSettlement(){
 
-		return Main.SETTLEMENTS.get(location);
+		return SETTLEMENTS.get(location);
 
 	}
 
@@ -46,7 +48,7 @@ public class Human {
 	public void beginTravel(int destination) {
 
 		travelling = true;
-		Road path = Main.SETTLEMENTS.get(location).getRoadTo(destination);
+		Road path = SETTLEMENTS.get(location).getRoadTo(destination);
 		this.destination = destination;
 		remainingDistance = path.getLength();
 		location = path.getID();

@@ -22,7 +22,10 @@ public class NPC_gen {
 			List<String> snames = new ArrayList<String>();
 			List<String> mnames = new ArrayList<String>();
 			List<String> fnames = new ArrayList<String>();
+			List<int[]> settlements = new ArrayList<int[]>();
 
+			int total = 0;
+			
 			//load surnames
 			BufferedReader rSnames = new BufferedReader(new FileReader("resources/snames.txt"));
 
@@ -51,27 +54,52 @@ public class NPC_gen {
 			}	
 			rFnames.close();
 
+			//load settlements
+			BufferedReader rSettlements = new BufferedReader(new FileReader("resources/settlements.csv"));
+
+			for(String line = rSettlements.readLine(); line != null;){
+				String[] split = line.split(",");
+				int[] arr = { Integer.parseInt(split[0]) , Integer.parseInt(split[3]) };
+				settlements.add(arr);
+				line = rSettlements.readLine();
+			}	
+			rSettlements.close();
+
 			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.txt"));
 
-			for(int k = 1; k <= NPCS_TO_GENERATE; k++) {
+			for(int[] s : settlements) {
 
-				boolean female = RANDOM.nextBoolean();
-				output.append((female ? "0" : "1") + ",");
+				for(int k = 1; k <= s[1]; k++) {
 
-				//generate first name
-				if(female) {
-					output.append(fnames.get(RANDOM.nextInt(fnames.size())));
+					//ID
+					output.append(total + ",");
+
+					boolean female = RANDOM.nextBoolean();
+
+					//generate first name
+					if(female) {
+						output.append(fnames.get(RANDOM.nextInt(fnames.size())));
+					}
+					else {
+						output.append(mnames.get(RANDOM.nextInt(mnames.size())));
+					}
+
+					output.append(",");
+
+					//generate last name
+					output.append(snames.get(RANDOM.nextInt(snames.size())) + ",");
+
+					//gender
+					output.append((female ? "0" : "1") + ",");
+					
+					//town ID
+					output.append(Integer.toString(s[0]));
+					
+					if(k != NPCS_TO_GENERATE) { output.newLine(); }
+					
+					total++;
+
 				}
-				else {
-					output.append(mnames.get(RANDOM.nextInt(mnames.size())));
-				}
-
-				output.append(",");
-
-				//generate last name
-				output.append(snames.get(RANDOM.nextInt(snames.size())));
-
-				if(k != NPCS_TO_GENERATE) { output.newLine(); }
 
 			}
 

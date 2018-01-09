@@ -2,10 +2,12 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import static main.Main.ROADS;
 
 public class Settlement {
 
+	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
+	static final List<Road> ROADS = Road.ROADS;
+	
 	final private int[] roads;
 	final private String name;
 	final private int id;
@@ -52,7 +54,7 @@ public class Settlement {
 
 		//Check each connecting road until the appropriate connection is found
 		for(int r : roads) {
-			if(ROADS.get(r).getConnects()[0] == b || ROADS.get(r).getConnects()[1] == b) {
+			if(Road.ROADS.get(r).getConnects()[0] == b || ROADS.get(r).getConnects()[1] == b) {
 				return ROADS.get(r);
 			}
 		}

@@ -12,10 +12,9 @@ import foundation.*;
 public class Main {
 
 	public static final Time CLOCK = Time.getInstance();
-	
-	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
-	public static final List<Road> ROADS = new ArrayList<Road>();
-	public static List<Human> HUMANS = new ArrayList<Human>();
+	static final List<Road> ROADS = Road.ROADS;
+	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
+	static final List<Human> HUMANS = new ArrayList<Human>();
 	
 	public static void main(String[] args) {
 
