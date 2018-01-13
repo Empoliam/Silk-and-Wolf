@@ -5,13 +5,16 @@ import java.util.List;
 
 public class Settlement {
 
-	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
-	static final List<Road> ROADS = Road.ROADS;
+	//dataset
+	public static List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
 	
+	//references
+	static final List<Road> ROADS = Road.ROADS;
+		
 	final private int[] roads;
 	final private String name;
 	final private int id;
-
+	
 	public Settlement(String[] in) {
 
 		id = Integer.parseInt(in[0]);

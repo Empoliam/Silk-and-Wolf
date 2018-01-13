@@ -23,8 +23,6 @@ public class NPC_gen {
 			List<String> mnames = new ArrayList<String>();
 			List<String> fnames = new ArrayList<String>();
 			List<int[]> settlements = new ArrayList<int[]>();
-
-			int total = 0;
 			
 			//load surnames
 			BufferedReader rSnames = new BufferedReader(new FileReader("resources/snames.txt"));
@@ -65,14 +63,11 @@ public class NPC_gen {
 			}	
 			rSettlements.close();
 
-			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.txt"));
+			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.csv"));
 
 			for(int[] s : settlements) {
 
 				for(int k = 1; k <= s[1]; k++) {
-
-					//ID
-					output.append(total + ",");
 
 					boolean female = RANDOM.nextBoolean();
 
@@ -97,8 +92,6 @@ public class NPC_gen {
 					
 					if(k != NPCS_TO_GENERATE) { output.newLine(); }
 					
-					total++;
-
 				}
 
 			}

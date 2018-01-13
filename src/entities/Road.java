@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Road {
 
-	public static final List<Road> ROADS = new ArrayList<Road>();
+	public static List<Road> ROADS = new ArrayList<Road>();
 	
 	final private int id;
 	final private int[] connects = new int[2];

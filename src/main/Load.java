@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import entities.NPC;
 import entities.Road;
 import entities.Settlement;
 
@@ -48,4 +49,24 @@ public class Load {
 		catch(IOException e){}
 	}
 	
+	public static void npcs() { 
+	
+		try {
+			
+			BufferedReader br = new BufferedReader(new FileReader("resources/npcs.csv"));
+			String line = br.readLine();
+			
+			while(line!=null) {
+				
+				NPC.NPCS.add(new NPC(line.split(",")));
+				line = br.readLine();
+			}
+			
+			br.close();
+		}
+		catch(FileNotFoundException e){}
+		catch(IOException e){}
+		
+	}
+		
 }
