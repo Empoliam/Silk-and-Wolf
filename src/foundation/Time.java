@@ -19,13 +19,12 @@ public class Time {
 	
 	private Time() {
 		
-		year = 1200;
+		year = 700;
 		//Index of month
-		month = 8
-				;
+		month = 8;
 		day = 22;
 		
-		hour = 8;
+		hour = 22;
 		minute = 0;
 		
 		thirtyDays.add(3);

@@ -1,6 +1,7 @@
 package main;
 
 import java.util.List;
+import java.util.Random;
 
 import entities.Road;
 import entities.Settlement;
@@ -11,6 +12,7 @@ import foundation.*;
 public class Main {
 
 	public static final Time CLOCK = Time.getInstance();
+	public static final Random RANDOM = new Random(System.nanoTime());
 	static final List<Road> ROADS = Road.ROADS;
 	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
 	static final List<NPC> NPCS = NPC.NPCS;
@@ -21,27 +23,30 @@ public class Main {
 		Load.roads();
 		Load.npcs();
 		
-		NPC A = NPCS.get(0);
-		NPC B = NPCS.get(476);
+		doHourTick();
+		doHourTick();
+		doHourTick();
+		doHourTick();
 		
-		System.out.println(A.getSettlement().getName());
-		System.out.println(B.getSettlement().getName());
-		A.beginTravel(1);
-		B.beginTravel(8);
-		for(int x = 0; x < 10; x++) doHourTick();
-		System.out.println(A.getSettlement().getName());
-		System.out.println(B.getSettlement().getName());
+		for(NPC h : NPCS) {
+			if(h.getPrepTravel()) System.out.println(h.getDepartsHours());
+		}
 		
 	}
 	
 	private static void doHourTick() {
 		
 		Time.advanceHour();
-		
-		for(NPC h : NPCS) {
-			if(h.isTravelling()) {
 				
-				h.advanceTravel();		
+		for(NPC h : NPCS) {
+						
+			if(h.isTravelling()) h.advanceTravel(); 
+			
+			else if(Time.getHour() == 0 && h.getDoTravel() && !h.getPrepTravel()) {
+				
+				h.setDepartureHours(SWMath.generateBinomialInt(23,0.347826087,RANDOM));
+				h.setPrepTravel(true);
+				
 			}
 		}	
 	}

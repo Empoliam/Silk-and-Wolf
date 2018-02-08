@@ -2,6 +2,7 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class NPC {
 
@@ -25,6 +26,11 @@ public class NPC {
 	private boolean travelling = false;
 	int destination;
 	int remainingDistance = 0;
+	
+	//travel decision parameters
+	boolean doTravel;
+	boolean prepTravel = false;
+	int departsInHours = 0;
 
 	public NPC(String firstName, String lastName, int location, boolean gender){
 		
@@ -47,6 +53,8 @@ public class NPC {
 		this.lastName = in[1];
 		this.female = Integer.parseInt(in[2]) == 0;
 		this.location = Integer.parseInt(in[3]);
+		
+		this.doTravel = new Random().nextBoolean();
 		
 	}
 
@@ -100,5 +108,20 @@ public class NPC {
 	public String getLName() {
 		return lastName;
 	}
-
+	public boolean getDoTravel() {
+		return doTravel;
+	}
+	public void setDepartureHours(int h) {
+		departsInHours = h;
+	}
+	public void setPrepTravel(boolean f) {
+		prepTravel = f;
+	}
+	public boolean getPrepTravel() {
+		return prepTravel;
+	}
+	public int getDepartsHours() {
+		return departsInHours;
+	}
+	
 }
