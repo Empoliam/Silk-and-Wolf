@@ -14,6 +14,8 @@ public class Time {
 	private static int hour;
 	private static int minute;
 	
+	private static int daysCount;
+	
 	private static final String[] lMonths = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	private static Set<Integer> thirtyDays = new HashSet<Integer>();
 	
@@ -31,6 +33,8 @@ public class Time {
 		thirtyDays.add(5);
 		thirtyDays.add(8);
 		thirtyDays.add(10);
+		
+		daysCount = 264;
 		
 	}
 	
@@ -53,6 +57,7 @@ public class Time {
 			
 			hour = 0;
 			day ++;
+			daysCount ++;
 			
 			//Advance month if appropriate
 			if(month == 1 && day > 28) {
@@ -72,6 +77,7 @@ public class Time {
 			if(month > 11) {
 				year++;
 				month = 0;
+				daysCount = 0;
 			}
 		}
 	}
@@ -90,8 +96,7 @@ public class Time {
 	}
 	public static int getMinute() {
 		return minute;
-	}
-	
+	}	
 	public static String getMonthByName() {
 		return lMonths[month];
 	}
@@ -113,5 +118,13 @@ public class Time {
 			return String.format("%02d", hour-12) + ":" + String.format("%02d", minute) + " pm";
 		}
 	}
+	public static int getCurrentDayCount() {
+		return daysCount;
+	}
+	
+	
+	/**public static int getDayLength() {
+		
+	}**/
 	
 }

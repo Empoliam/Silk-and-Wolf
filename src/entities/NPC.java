@@ -23,6 +23,7 @@ public class NPC {
 	//when travelling, use road ID, otherwise Settlement ID
 	int location;
 
+	//during travel parameters
 	private boolean travelling = false;
 	int destination;
 	int remainingDistance = 0;

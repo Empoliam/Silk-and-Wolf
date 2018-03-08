@@ -12,7 +12,7 @@ import foundation.*;
 public class Main {
 
 	public static final Time CLOCK = Time.getInstance();
-	public static final Random RANDOM = new Random(System.nanoTime());
+	static final Random RANDOM = new Random(System.nanoTime());
 	static final List<Road> ROADS = Road.ROADS;
 	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
 	static final List<NPC> NPCS = NPC.NPCS;
@@ -23,13 +23,11 @@ public class Main {
 		Load.roads();
 		Load.npcs();
 		
-		doHourTick();
-		doHourTick();
-		doHourTick();
-		doHourTick();
-		
-		for(NPC h : NPCS) {
-			if(h.getPrepTravel()) System.out.println(h.getDepartsHours());
+		for(int x = 0; x < 8760; x ++) {
+			
+			Time.advanceHour();
+			if (Time.getHour() == 0) System.out.println(Time.getFormattedDate() + " - Day " + Time.getCurrentDayCount());
+			
 		}
 		
 	}
