@@ -3,18 +3,32 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A generic location in which NPCs and buildings are contained.
+ */
 public class Settlement {
 
-	//dataset
-	public static List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
+	/** Full settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
 	
+	/** Reference to roads dataset. */
 	//references
 	static final List<Road> ROADS = Road.ROADS;
 		
+	/** Array of roads connected to the settlement. */
 	final private int[] roads;
+	
+	/** Name of the settlement. */
 	final private String name;
+	
+	/** Settlement ID. Corresponds to list index. */
 	final private int id;
 	
+	/**
+	 * Instantiates a new settlement.
+	 *
+	 * @param in input String array. Format described <a href="https://github.com/Empoliam/Silk-and-Wolf/wiki/CSV-Data-Structure">here</a>
+	 */
 	public Settlement(String[] in) {
 
 		id = Integer.parseInt(in[0]);
@@ -27,16 +41,31 @@ public class Settlement {
 		}	
 	}
 
+	/**
+	 * Returns the settlement name.
+	 *
+	 * @return Settlement name
+	 */
 	public String getName() {
 
 		return name;
 	}
 
+	/**
+	 * Gets the settlement ID.
+	 *
+	 * @return Settlement ID.
+	 */
 	public int getID(){
 
 		return id;
 	}
 
+	/**
+	 * Computes which other settlements are directly connected to the settlement by roads.
+	 *
+	 * @return List of indexes of connected settlements
+	 */
 	public List<Integer> connectedTo()
 	{
 
@@ -53,6 +82,12 @@ public class Settlement {
 		return out;
 	}
 
+	/**
+	 * Returns the road to the given settlement.
+	 *
+	 * @param b ID of the destination settlement
+	 * @return Road connecting the two settlements. Null if unconnected.
+	 */
 	public Road getRoadTo(int b){
 
 		//Check each connecting road until the appropriate connection is found

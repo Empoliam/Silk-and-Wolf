@@ -9,8 +9,19 @@ import entities.NPC;
 import entities.Road;
 import entities.Settlement;
 
+/**
+ * Handles all file loading at the start of the game.
+ */
 public class Load {
 	
+	/** NPC ID counter. Ensures that all NPC objects have a unique ID.<br>
+	 *	All NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'.
+	 */
+	private static int NPC_ID_COUNTER = 2;
+	
+	/**
+	 * Load settlements.
+	 */
 	public static void settlements() {
 
 		try {
@@ -30,6 +41,9 @@ public class Load {
 		catch (IOException e) {}
 	}
 
+	/**
+	 * Load roads.
+	 */
 	public static void roads() {
 		
 		try {
@@ -49,6 +63,9 @@ public class Load {
 		catch(IOException e){}
 	}
 	
+	/**
+	 * Load NPCs.
+	 */
 	public static void npcs() { 
 	
 		try {
@@ -58,7 +75,8 @@ public class Load {
 			
 			while(line!=null) {
 				
-				NPC.NPCS.add(new NPC(line.split(",")));
+				NPC.NPCS.put(NPC_ID_COUNTER,new NPC(line.split(",")));
+				NPC_ID_COUNTER ++;
 				line = br.readLine();
 			}
 			
