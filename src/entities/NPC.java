@@ -231,7 +231,7 @@ public class NPC {
 	 */
 	public int generateDepartureHour(Random RANDOM) {
 		
-		int departure = SWMath.generateBinomialInt(23,((2.0 * Math.cos((Math.PI * (double)CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0)/23.0),RANDOM);
+		int departure = SWMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy) / 23),RANDOM);
 		return departure;
 		
 	}
