@@ -18,6 +18,9 @@ public class NPC {
 	/** Reference to Settlements List */
 	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
 	
+	/** Reference to global clock */
+	static final Time CLOCK = Time.CLOCK;
+	
 	/** NPC first name. */
 	final String firstName;
 	
@@ -228,8 +231,7 @@ public class NPC {
 	 */
 	public int generateDepartureHour(Random RANDOM) {
 		
-		int departure = SWMath.generateBinomialInt(23,((2.0 * Math.cos((Math.PI * (double)Time.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0)/23.0),RANDOM);
-		if(departure == 24) departure-=1;
+		int departure = SWMath.generateBinomialInt(23,((2.0 * Math.cos((Math.PI * (double)CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0)/23.0),RANDOM);
 		return departure;
 		
 	}

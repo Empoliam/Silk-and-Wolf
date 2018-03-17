@@ -14,12 +14,12 @@ import foundation.*;
  * Main class.
  */
 public class Main {
-
-	/** Universal clock. Synchronizes everything.*/
-	public static final Time CLOCK = Time.getInstance();
 	
 	/** Universal random number generator. */
 	static final Random RANDOM = new Random(System.nanoTime());
+	
+	/** Reference to global clock */
+	static final Time CLOCK = Time.CLOCK;
 	
 	/** Reference to road dataset. */
 	static final List<Road> ROADS = Road.ROADS;
@@ -40,12 +40,15 @@ public class Main {
 		Load.settlements();
 		Load.roads();
 		Load.npcs();
-
-		System.out.println(Time.getFormattedDate());
 		
 		for(int x = 0; x < 8760; x ++) {
-
-			System.out.println(NPCS.get(2).generateDepartureHour(RANDOM));
+			int d = NPCS.get(2).generateDepartureHour(RANDOM);
+			if(CLOCK.getHour() == 0) {
+				
+				System.out.println(CLOCK.getCurrentDayCount() + "," + d);
+				
+			}
+			CLOCK.advanceHour();
 
 		}
 
@@ -56,11 +59,11 @@ public class Main {
 	 */
 	private static void doHourTick() {
 
-		Time.advanceHour();
+		CLOCK.advanceHour();
 
 		for(NPC h : NPCS.values()) {
 
-			if(Time.getHour() == 0 && h.getDoTravel() && !h.getPrepTravel()) {
+			if(CLOCK.getHour() == 0 && h.getDoTravel() && !h.getPrepTravel()) {
 
 				h.setDepartureHours(h.generateDepartureHour(RANDOM));
 				h.setPrepTravel(true);

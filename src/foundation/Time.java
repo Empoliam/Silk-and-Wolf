@@ -4,41 +4,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Timekeeping class. Synchronizes all events. Single instance only.
+ *	Tracks time. Capable of time math.
  */
-public class Time {
 
-	/** Time instance */
-	private static Time instance;
-	
-	/** Current year. */
-	private static int year;
-	
-	/** Current month, starting at 0. */
-	private static int month;
-	
-	/** Current day of the month, starting at 0. */
-	private static int day;
-	
-	/** Current hour, where 0 is 00:xx */
-	private static int hour;
-	
-	/** The current minute, where 0 is xx:00. */
-	private static int minute;
-	
-	/** Number of days since new year*/
-	private static int daysCount;
+public class Time {
 	
 	/** Month names. */
-	private static final String[] lMonths = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	private static final String[] MONTHS_LIST = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	
 	/** Set of months with 30 days. */
-	private static Set<Integer> thirtyDays = new HashSet<Integer>();
+	private static Set<Integer> THIRTY_DAYS = new HashSet<Integer>();
 	
+	/** Global clock. Synchronizes all game events */
+	public static final Time CLOCK = new Time();	
+	
+	/** Current year. */
+	private int year;
+	
+	/** Current month, starting at 0. */
+	private int month;
+	
+	/** Current day of the month, starting at 0. */
+	private int day;
+	
+	/** Current hour, where 0 is 00:xx */
+	private int hour;
+	
+	/** The current minute, where 0 is xx:00. */
+	private int minute;
+	
+	/** Number of days since new year*/
+	private int daysCount;
+	
+	
+
 	/**
-	 * Initialises the global clock
+	 * Initialises a time object
 	 */
-	private Time() {
+	public Time() {
 		
 		year = 700;
 		month = 8;
@@ -47,33 +50,20 @@ public class Time {
 		hour = 7;
 		minute = 0;
 		
-		thirtyDays.add(3);
-		thirtyDays.add(5);
-		thirtyDays.add(8);
-		thirtyDays.add(10);
+		THIRTY_DAYS.add(3);
+		THIRTY_DAYS.add(5);
+		THIRTY_DAYS.add(8);
+		THIRTY_DAYS.add(10);
 		
 		daysCount = 264;
 		
 	}
-	
-	/**
-	 * Ensures that only one Time instance can exist
-	 *
-	 * @return instance of Time
-	 */
-	public static Time getInstance() {
-		
-		if(instance == null){
-			instance = new Time();
-		}
-		return instance;
-	}
-		
+			
 	/**
 	 * Advances the time by one hour.<br>
 	 * Handles any necessary changes to the day, month, or year.
 	 */
-	public static void advanceHour() {
+	public void advanceHour() {
 		
 		//Advance to nearest hour
 		hour++;
@@ -91,7 +81,7 @@ public class Time {
 				month ++;
 				day = 0;
 			}
-			else if(thirtyDays.contains(month) && day > 29) {
+			else if(THIRTY_DAYS.contains(month) && day > 29) {
 				month ++;
 				day = 0;
 			}
@@ -114,7 +104,7 @@ public class Time {
 	 *
 	 * @return Current year
 	 */
-	public static int getYear() {
+	public int getYear() {
 		return year;
 	}
 	
@@ -123,7 +113,7 @@ public class Time {
 	 *
 	 * @return Current month
 	 */
-	public static int getMonthByID() {
+	public int getMonthByID() {
 		return month;
 	}
 	
@@ -132,7 +122,7 @@ public class Time {
 	 *
 	 * @return Current day
 	 */
-	public static int getDay() {
+	public int getDay() {
 		return day;
 	}
 	
@@ -141,7 +131,7 @@ public class Time {
 	 *
 	 * @return Current hour
 	 */
-	public static int getHour() {
+	public int getHour() {
 		return hour;
 	}
 	
@@ -150,7 +140,7 @@ public class Time {
 	 *
 	 * @return Current minute
 	 */
-	public static int getMinute() {
+	public int getMinute() {
 		return minute;
 	}	
 	
@@ -159,8 +149,8 @@ public class Time {
 	 *
 	 * @return Current month
 	 */
-	public static String getMonthByName() {
-		return lMonths[month];
+	public String getMonthByName() {
+		return MONTHS_LIST[month];
 	}
 	
 	/**
@@ -168,16 +158,16 @@ public class Time {
 	 *
 	 * @return Formatted date
 	 */
-	public static String getFormattedDate() {
-		return (day+1) + " " + lMonths[month] + ", " + year;
+	public String getFormattedDate() {
+		return (day+1) + " " + MONTHS_LIST[month] + ", " + year;
 	}
 	
 	/**
-	 * Returns a formatted time.
+	 * Returns the formatted time.
 	 *
 	 * @return Formatted time
 	 */
-	public static String getFormattedTime() {
+	public String getFormattedTime() {
 		
 		if(hour == 0){
 			return "12:" + String.format("%02d", minute) + " am";
@@ -192,13 +182,13 @@ public class Time {
 			return String.format("%02d", hour-12) + ":" + String.format("%02d", minute) + " pm";
 		}
 	}
-	
+		
 	/**
 	 * Returns the value of daysCount.
 	 *
 	 * @return daysCount
 	 */
-	public static int getCurrentDayCount() {
+	public int getCurrentDayCount() {
 		return daysCount;
 	}
 	
@@ -207,8 +197,8 @@ public class Time {
 	 *
 	 * @return Sunrise time
 	 */
-	public static double getSunriseTime() {
+	public double getSunriseTime() {
 		return 2*Math.cos((Math.PI * (double)daysCount)/182.0 + (5.0 * Math.PI)/91.0) + 5.0;
 	}
-	
+		
 }
