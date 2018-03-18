@@ -25,5 +25,24 @@ public abstract class SWMath {
 		return x;
 
 	}
+	
+	/**
+	 * If the double d is outside the interval [l,u], round to the nearest boundary.
+	 *
+	 * @param d value to truncate
+	 * @param l lower bound
+	 * @param u upper bound
+	 * @return truncated value
+	 */
+	public static double cutDoubleToRange(double d, double l, double u) {
+		
+		double o = d;
+		
+		if(o > 1.0) o = 1.0;
+		else if(o < 0.0) o = 0.0;
+		
+		return o;
+		
+	}
 
 }

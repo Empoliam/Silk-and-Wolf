@@ -75,7 +75,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				NPC.NPCS.put(NPC_ID_COUNTER,new NPC(line.split(",")));
+				NPC.NPCS.put(NPC_ID_COUNTER,new NPC(NPC_ID_COUNTER,line.split(",")));
 				NPC_ID_COUNTER ++;
 				line = br.readLine();
 			}

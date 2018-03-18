@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class NPC_gen {
 
-	final static int NPCS_TO_GENERATE = 1000;
 	final static Random RANDOM = new Random();
 
 	public static void main(String[] args){
@@ -65,6 +64,8 @@ public class NPC_gen {
 
 			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.csv"));
 
+			int total = 0;
+			
 			for(int[] s : settlements) {
 
 				for(int k = 1; k <= s[1]; k++) {
@@ -90,13 +91,17 @@ public class NPC_gen {
 					//town ID
 					output.append(Integer.toString(s[0]));
 					
-					if(k != NPCS_TO_GENERATE) { output.newLine(); }
+					output.newLine();
+					
+					total++;
 					
 				}
 
 			}
 
 			output.close();
+			
+			System.out.println("Successfully created " + total + " NPCs");
 
 		} 
 		catch (FileNotFoundException e) {

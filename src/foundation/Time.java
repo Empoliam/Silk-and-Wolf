@@ -47,7 +47,7 @@ public class Time {
 		month = 8;
 		day = 21;
 		
-		hour = 7;
+		hour = 20;
 		minute = 0;
 		
 		THIRTY_DAYS.add(3);

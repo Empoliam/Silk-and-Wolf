@@ -8,3 +8,9 @@ Roads
 1 name
 2 connects
 3 length
+
+Npcs
+0 fname
+1 lname
+2 female
+3 location
