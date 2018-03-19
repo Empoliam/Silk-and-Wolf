@@ -11,11 +11,13 @@ import entities.NPC;
 import foundation.*;
 import gui.NPCTable;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 /**
  * Main class.
@@ -39,6 +41,9 @@ public class Main extends Application {
 
 	//UI Elements
 	Button advHourButton;
+	Button advHourAutoButton;
+	TextField loopTimes;
+	int loop = 0;
 
 	/**
 	 * Primary initialization method.
@@ -71,9 +76,9 @@ public class Main extends Application {
 
 		System.out.println("Launch successful");
 		primaryStage.setTitle("Debug build");
-		
+
 		Label timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-		
+
 		NPCTable npcTable = new NPCTable();
 
 		advHourButton = new Button("Advance Time 1hr");
@@ -81,12 +86,26 @@ public class Main extends Application {
 			doHourTick();
 			npcTable.refresh();
 			timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-			});
+		});
+
+		loopTimes = new TextField();
+
+		advHourAutoButton = new Button("Auto Time");
+		advHourAutoButton.setOnAction(e -> {
+			int l = Integer.parseInt(loopTimes.getText());
+			for(int x = 0; x < l; x++) {
+				doHourTick();
+				npcTable.refresh();
+				timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+
+			}
+
+		});
 
 		VBox layout = new VBox();
-		layout.getChildren().addAll(timeLabel,npcTable,advHourButton);
+		layout.getChildren().addAll(timeLabel,npcTable,advHourButton,loopTimes,advHourAutoButton);
 
-		Scene scene = new Scene(layout, 500, 500);
+		Scene scene = new Scene(layout, 1000, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -101,21 +120,31 @@ public class Main extends Application {
 
 		System.out.println(CLOCK.getFormattedDate() + ", " + CLOCK.getFormattedTime());
 
-		int departureDecisionCount = 0;
-		
 		for(NPC h : NPCS.values()) {
 
-			if(CLOCK.getHour() == 0 && h.getDoTravel() && !h.getPrepTravel()) {
+			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
+			if(		CLOCK.getHour() == 0 
+					&& h.getDoTravel() 
+					&& !h.getPrepTravel() 
+					&& !h.getTravelling()) {
 
-				h.setDepartureHours(h.generateDepartureHour(RANDOM));
+				h.setDepartureHours(h.generateDepartureHour(RANDOM));			
+				List<Integer> destinationPool = SETTLEMENTS.get(h.getLocation()).connectedTo();			
+				h.setDestination(SETTLEMENTS.get(destinationPool.get(RANDOM.nextInt(destinationPool.size()))).getID());
 				h.setPrepTravel(true);
-				departureDecisionCount ++;
 			}
 
-			else if(h.getTravelling()) h.advanceTravel();
+			//NPCs advance
+			if(h.getTravelling()) h.advanceTravel();
+
+			//NPCs depart
+			if(h.getPrepTravel()) {
+				h.decrementDepartureHours();
+				if(h.getDepartureHours() == 0) {
+					h.beginTravel();
+				}
+			}
 		}
-		
-		System.out.println(departureDecisionCount + " NPCs decided to leave");
 
 	}
 

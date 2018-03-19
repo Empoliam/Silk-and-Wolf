@@ -3,7 +3,6 @@ package gui;
 import java.util.HashMap;
 
 import entities.NPC;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
@@ -50,10 +49,18 @@ public class NPCTable extends VBox{
 		TableColumn<NPC,Number> departureColumn = new TableColumn<>("Departure time");
 		departureColumn.setMinWidth(100);
 		departureColumn.setCellValueFactory(n -> n.getValue().getDepartureHoursProperty());
-
+		
+		TableColumn<NPC,Boolean> travellingColumn = new TableColumn<>("Travelling");
+		travellingColumn.setMinWidth(100);
+		travellingColumn.setCellValueFactory(n -> n.getValue().getTravellingProperty());
+		
+		TableColumn<NPC, Number> remainingDistanceColumn = new TableColumn<>("Remaining Distance");
+		remainingDistanceColumn.setMinWidth(100);
+		remainingDistanceColumn.setCellValueFactory(n -> n.getValue().getRemainingDistanceProperty());
+		
 		table = new TableView<NPC>();	
 		table.setItems(listTest);
-		table.getColumns().addAll(idColumn,fnameColumn,lnameColumn,locationColumn,departureColumn);		
+		table.getColumns().addAll(idColumn,fnameColumn,lnameColumn,locationColumn,departureColumn,travellingColumn,remainingDistanceColumn);		
 		table.setEditable(false);
 		
 		this.getChildren().add(table);

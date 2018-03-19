@@ -101,19 +101,15 @@ public class NPC {
 
 	}
 
-	/**
-	 * Initiates NPC travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination. 
-	 *
-	 * @param destination Destination settlement list index
-	 */
-	public void beginTravel(int destination) {
+	/** Initiates NPC travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
+	public void beginTravel() {
 
-		travelling.set(true);
-		Road path = SETTLEMENTS.get(location.get()).getRoadTo(destination);
-		this.destination.set(destination);;
+		prepTravel.set(false);
+		departureHours.set(0);
+		travelling.set(true);	
+		Road path = SETTLEMENTS.get(location.get()).getRoadTo(destination.get());
 		remainingDistance.set(path.getLength());
 		location.set(path.getID());
-
 	}
 
 	/**
@@ -126,7 +122,7 @@ public class NPC {
 
 		if(travelling.get() == true) {
 
-			remainingDistance.subtract(40);
+			remainingDistance.set(remainingDistance.get() - 6);
 
 			if(remainingDistance.get() <= 0) {
 				remainingDistance.set(0);
@@ -152,6 +148,8 @@ public class NPC {
 
 	}
 
+	//############################## GETTERS AND SETTERS AND ALL THAT ##############################//
+
 	/**
 	 * Returns the location index of the NPC. Refers to a settlement usually, but refers to a road if the travel flag is set.
 	 *
@@ -175,6 +173,15 @@ public class NPC {
 	}
 
 	/**
+	 * Returns the remainingDistance Property.
+	 *
+	 * @return  remainingDistance IntegerProperty
+	 */
+	public IntegerProperty getRemainingDistanceProperty() {
+		return remainingDistance;
+	}
+	
+	/**
 	 * Returns the state of the NPC travel flag.
 	 *
 	 * @return travel flag state
@@ -183,6 +190,15 @@ public class NPC {
 		return travelling.get();
 	}
 
+	/**
+	 * Returns the travelling Property.
+	 *
+	 * @return travelling BolleanProperty
+	 */
+	public BooleanProperty getTravellingProperty() {
+		return travelling;
+	} 
+	
 	/**
 	 * Returns the first name of the NPC.
 	 *
@@ -255,6 +271,11 @@ public class NPC {
 		return departureHours;
 	}
 
+	/** decrements the departureHours property */
+	public void decrementDepartureHours() {
+		departureHours.set(departureHours.get()-1);
+	}
+
 	/**
 	 * Sets the prepTravel flag.
 	 *
@@ -271,6 +292,15 @@ public class NPC {
 	 */
 	public boolean getPrepTravel() {
 		return prepTravel.get();
+	}
+
+	/**
+	 * Returns the prepTravel Property.
+	 *
+	 * @return prepTravel BooleanProperty
+	 */
+	public BooleanProperty getPrepTravelProperty() {
+		return prepTravel;
 	}
 
 	/**
@@ -330,4 +360,20 @@ public class NPC {
 		return confidence;
 	}
 
+	/**
+	 * Returns the id of the destination settlement
+	 * 
+	 * @return destination ID
+	 */
+	public int getDestination() {
+		return destination.get();
+	}
+
+	/** Sets the destination
+	 * @param i Destination settlement id
+	 */
+	public void setDestination(int i) {
+		destination.set(i);
+	}
+	
 }
