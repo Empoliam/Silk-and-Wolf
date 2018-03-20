@@ -11,6 +11,7 @@ import entities.NPC;
 import foundation.*;
 import gui.NPCTable;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -41,9 +42,11 @@ public class Main extends Application {
 
 	//UI Elements
 	Button advHourButton;
-	Button advHourAutoButton;
 	TextField loopTimes;
+	TextField loopDelay;
 	int loop = 0;
+	NPCTable npcTable;
+	Label timeLabel;
 
 	/**
 	 * Primary initialization method.
@@ -52,22 +55,22 @@ public class Main extends Application {
 	 */
 	public static void main(String[] args) {
 
-		long start = System.nanoTime();
+		long start = System.currentTimeMillis();
 		Load.settlements();
-		System.out.println("Loaded Settlements in " + (System.nanoTime()-start) + "ns");
-		start = System.nanoTime();
+		System.out.println("Loaded Settlements in " + (System.currentTimeMillis()-start) + "ms");
+		start = System.currentTimeMillis();
 		Load.roads();
-		System.out.println("Loaded roads in " + (System.nanoTime()-start) + "ns");
-		start = System.nanoTime();
+		System.out.println("Loaded roads in " + (System.currentTimeMillis()-start) + "ms");
+		start = System.currentTimeMillis();
 		Load.npcs();
-		System.out.println("Loaded NPCs in " + (System.nanoTime()-start) + "ns");
+		System.out.println("Loaded NPCs in " + (System.currentTimeMillis()-start) + "ms");
 
 		launch(args);
 
 	}
 
 	/**
-	 * 	User interface builder. Establishes 
+	 * 	Debug interface builder
 	 *	@see javafx.application.Application#start(javafx.stage.Stage)
 	 *	@param primaryStage	First Stage
 	 *	 */
@@ -77,33 +80,50 @@ public class Main extends Application {
 		System.out.println("Launch successful");
 		primaryStage.setTitle("Debug build");
 
-		Label timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 
-		NPCTable npcTable = new NPCTable();
+		npcTable = new NPCTable();
 
-		advHourButton = new Button("Advance Time 1hr");
-		advHourButton.setOnAction(e -> {
-			doHourTick();
-			npcTable.refresh();
-			timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-		});
+		loopTimes = new TextField("1");
+		loopDelay = new TextField("500");
 
-		loopTimes = new TextField();
+		advHourButton = new Button("Advance Time");
+		advHourButton.setOnAction(e -> { 
+			e.consume();
+			Thread t = new Thread(new Task<Void>(){
+				@Override
+				protected Void call() throws Exception {
 
-		advHourAutoButton = new Button("Auto Time");
-		advHourAutoButton.setOnAction(e -> {
-			int l = Integer.parseInt(loopTimes.getText());
-			for(int x = 0; x < l; x++) {
-				doHourTick();
-				npcTable.refresh();
-				timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+					int l = Integer.parseInt(loopTimes.getText());
 
-			}
+					for(int x = 0; x < l; x++) {
+						doHourTick();
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								npcTable.refresh();
+								timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+							}
+						});
+						int d; 
+						try {d = Integer.parseInt(loopDelay.getText());}
+						catch (NumberFormatException nfe){d = 500;}
+						Thread.sleep(d);
+					}
+					advHourButton.setDisable(false);
+					stop();
+					return null;
 
+				};
+
+			});
+			t.setDaemon(true);
+			t.start();
+			advHourButton.setDisable(true);
 		});
 
 		VBox layout = new VBox();
-		layout.getChildren().addAll(timeLabel,npcTable,advHourButton,loopTimes,advHourAutoButton);
+		layout.getChildren().addAll(timeLabel,npcTable,loopTimes,loopDelay,advHourButton);
 
 		Scene scene = new Scene(layout, 1000, 500);
 		primaryStage.setScene(scene);
@@ -117,8 +137,6 @@ public class Main extends Application {
 	private static void doHourTick() {
 
 		CLOCK.advanceHour();
-
-		System.out.println(CLOCK.getFormattedDate() + ", " + CLOCK.getFormattedTime());
 
 		for(NPC h : NPCS.values()) {
 
@@ -139,13 +157,13 @@ public class Main extends Application {
 
 			//NPCs depart
 			if(h.getPrepTravel()) {
-				h.decrementDepartureHours();
-				if(h.getDepartureHours() == 0) {
-					h.beginTravel();
-				}
+				if(h.getDepartureHours() == 0) h.beginTravel();
+				else h.decrementDepartureHours();
 			}
 		}
 
 	}
 
 }
+
+
