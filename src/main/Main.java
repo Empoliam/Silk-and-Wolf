@@ -10,6 +10,7 @@ import entities.NPC;
 
 import foundation.*;
 import gui.NPCTable;
+import gui.TravelWindow;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -65,6 +66,9 @@ public class Main extends Application {
 		Load.npcs();
 		System.out.println("Loaded NPCs in " + (System.currentTimeMillis()-start) + "ms");
 
+		NPCS.put(0, new NPC(0,"Kraft","Lawrence",1,false,true));
+		NPCS.put(1, new NPC(1,"Holo","",1,false,true));
+		
 		launch(args);
 
 	}
@@ -122,10 +126,12 @@ public class Main extends Application {
 			advHourButton.setDisable(true);
 		});
 
-		VBox layout = new VBox();
-		layout.getChildren().addAll(timeLabel,npcTable,loopTimes,loopDelay,advHourButton);
+		VBox mainLayout = new VBox();
+		mainLayout.getChildren().addAll(timeLabel,npcTable,loopTimes,loopDelay,advHourButton);
 
-		Scene scene = new Scene(layout, 1000, 500);
+		TravelWindow travelwindow = new TravelWindow();		
+
+		Scene scene = new Scene(mainLayout, 1000, 500);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
@@ -141,28 +147,30 @@ public class Main extends Application {
 		for(NPC h : NPCS.values()) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
-			if(		CLOCK.getHour() == 0 
-					&& h.getDoTravel() 
-					&& !h.getPrepTravel() 
-					&& !h.getTravelling()) {
+			if (h.getId() != 0 && h.getId() != 1) {
+				if(		CLOCK.getHour() == 0 
+				&& h.getDoTravel() 
+				&& !h.getPrepTravel() 
+				&& !h.getTravelling()) {
 
-				h.setDepartureHours(h.generateDepartureHour(RANDOM));			
-				List<Integer> destinationPool = SETTLEMENTS.get(h.getLocation()).connectedTo();			
-				h.setDestination(SETTLEMENTS.get(destinationPool.get(RANDOM.nextInt(destinationPool.size()))).getID());
-				h.setPrepTravel(true);
-			}
-
-			//NPCs advance
-			if(h.getTravelling()) h.advanceTravel();
-
-			//NPCs depart
-			if(h.getPrepTravel()) {
-				if(h.getDepartureHours() == 0) h.beginTravel();
-				else h.decrementDepartureHours();
-			}
+					h.setDepartureHours(h.generateDepartureHour(RANDOM));			
+					List<Integer> destinationPool = SETTLEMENTS.get(h.getLocation()).connectedTo();			
+					h.setDestination(SETTLEMENTS.get(destinationPool.get(RANDOM.nextInt(destinationPool.size()))).getID());
+					h.setPrepTravel(true);
+				}
 		}
 
+		//NPCs advance
+		if(h.getTravelling()) h.advanceTravel();
+
+		//NPCs depart
+		if(h.getPrepTravel()) {
+			if(h.getDepartureHours() == 0) h.beginTravel();
+			else h.decrementDepartureHours();
+		}
 	}
+
+}
 
 }
 

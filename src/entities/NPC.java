@@ -73,14 +73,15 @@ public class NPC {
 	 * @param location Settlement that an NPC initializes in
 	 * @param female NPC gender flag
 	 */
-	public NPC(int id, String firstName, String lastName, int location, boolean female){
+	public NPC(int id, String firstName, String lastName, int location, boolean female, boolean doTravel){
 
 		this.id.set(id);
 		this.location.set(location);
 		this.firstName.set(firstName);
 		this.lastName.set(lastName);
 		this.female.set(female);
-
+		this.doTravel.set(doTravel);
+		
 	}
 
 	/**
