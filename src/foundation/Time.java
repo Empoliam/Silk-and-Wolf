@@ -27,19 +27,19 @@ public class Time {
 	/** Current day of the month, starting at 0. */
 	private int day;
 	
-	/** Current hour, where 0 is 00:xx */
+	/**  Current hour, where 0 is 00:xx. */
 	private int hour;
 	
 	/** The current minute, where 0 is xx:00. */
 	private int minute;
 	
-	/** Number of days since new year*/
+	/**  Number of days since new year. */
 	private int daysCount;
 	
 	
 
 	/**
-	 * Initialises a time object
+	 * Initialises a time object.
 	 */
 	public Time() {
 		
@@ -47,7 +47,7 @@ public class Time {
 		month = 8;
 		day = 21;
 		
-		hour = 20;
+		hour = 7;
 		minute = 0;
 		
 		THIRTY_DAYS.add(3);
@@ -70,7 +70,7 @@ public class Time {
 		minute = 0;
 		
 		//advance day if appropriate
-		if(hour > 23) {
+		if(getHour() > 23) {
 			
 			hour = 0;
 			day ++;
@@ -134,7 +134,7 @@ public class Time {
 	public int getHour() {
 		return hour;
 	}
-	
+		
 	/**
 	 * Returns the current minute.
 	 *
@@ -143,7 +143,7 @@ public class Time {
 	public int getMinute() {
 		return minute;
 	}	
-	
+		
 	/**
 	 * Returns the name of the current month.
 	 *

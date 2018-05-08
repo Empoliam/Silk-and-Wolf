@@ -8,8 +8,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
-// TODO: Auto-generated Javadoc
 /**
  * A debug UI element used to display all NPCs and their details.
  */
