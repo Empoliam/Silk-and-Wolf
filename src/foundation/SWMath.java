@@ -5,7 +5,7 @@ import java.util.Random;
 /**
  * Class for custom mathematical methods.
  */
-public abstract class SWMath {
+public final class SWMath {
 
 	/**
 	 * Generates an int with binomial probability distribution.

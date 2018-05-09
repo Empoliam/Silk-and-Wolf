@@ -12,7 +12,8 @@ import foundation.*;
 import gui.NPCTable;
 import gui.TravelWindow;
 import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -114,17 +115,8 @@ public class Main extends Application {
 
 					for(int x = 0; x < l; x++) {
 						doHourTick();
-						updateMessage(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-						Platform.runLater(new Runnable() {
-							
-							//Update table
-							//TODO please don't do this in the future
-							
-							@Override
-							public void run() {
-								npcTable.refresh();
-							}
-						});
+						updateMessage(Integer.toString(x));
+						
 						int d; 
 						try {d = Integer.parseInt(loopDelay.getText());}
 						catch (NumberFormatException nfe){d = 500;}
@@ -144,11 +136,20 @@ public class Main extends Application {
 				};
 
 			};
-			timeLabel.textProperty().bind(t.messageProperty());
+			
+			t.messageProperty().addListener(new ChangeListener<String>() {
+
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+					npcTable.refresh();
+				}
+				
+			});
 			new Thread(t).start();
 			advHourButton.setDisable(true);
 			travelButton.setDisable(true);
-			timeLabel.textProperty();
+			
 		});
 
 		VBox mainLayout = new VBox();
