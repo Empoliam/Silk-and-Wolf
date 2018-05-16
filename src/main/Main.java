@@ -103,8 +103,6 @@ public class Main extends Application {
 
 		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 				
-		
-
 		loopTimes = new TextField("1");
 		loopDelay = new TextField("500");
 
@@ -121,12 +119,12 @@ public class Main extends Application {
 
 					for(int x = 0; x < l; x++) {
 						doHourTick();
-						updateMessage(Integer.toString(x));
-						
+						updateMessage(Integer.toString(x+1) + "," + l);					
 						int d; 
 						try {d = Integer.parseInt(loopDelay.getText());}
 						catch (NumberFormatException nfe){d = 500;}
 						Thread.sleep(d);
+						
 					}
 					
 					advHourButton.setDisable(false);					
@@ -141,11 +139,14 @@ public class Main extends Application {
 
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					
 					timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 					npcTable.refresh();
 					
+					
+					String[] s = t.getMessage().split(",");
 					//Detect if player is travelling. Allow access to travel window if not
-					if (!LAWRENCE.getTravelling()) {
+					if (!LAWRENCE.getTravelling() && (Integer.parseInt(s[0])==Integer.parseInt(s[1]))) {
 						
 						for(Button B : travelWindow.getButtons()) B.setDisable(false);
 						travelWindow.update();

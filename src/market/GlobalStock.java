@@ -5,21 +5,23 @@ package market;
  */
 public class GlobalStock {
 
-	/** Increments with instantiation of a new stock. New stocks automatically recieve a unique ID as determined by the ID tracker */
+	/** 
+	 * Increments with instantiation of a new stock. 
+	 * New stocks automatically recieve a unique ID as determined by the ID tracker.
+	 */
 	private static int idTracker = 0;
-	
-	/** Stock ID */
+
+	/**  Stock ID. */
 	private int id;
-	
-	
+
 	/**
 	 * Instantiates a new GlobalStock.
 	 */
 	public GlobalStock() {
-		
+
 		setId(idTracker);
 		idTracker++;
-		
+
 	}
 
 	/**

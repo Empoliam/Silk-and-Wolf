@@ -8,9 +8,8 @@ import entities.Settlement;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
-public class TravelWindow extends VBox{
+public class TravelWindow extends GridPane{
 
 	/** Reference to settlement dataset. */
 	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
@@ -21,24 +20,18 @@ public class TravelWindow extends VBox{
 	/** NPC references. */
 	static final NPC LAWRENCE = NPC.NPCS.get(0);
 	static final NPC HOLO = NPC.NPCS.get(1);
-
-	GridPane internal;
 	
 	public TravelWindow() {
 
-		internal = new GridPane();
 		travelButtons = new ArrayList<Button>();
 		update();
-		getChildren().addAll(internal);
 
 	}
 	
 	public void update() {
 
 		travelButtons.clear();
-		internal.getChildren().clear();
-		
-		System.out.println("A");
+		getChildren().clear();
 		
 		List<Integer> connects = SETTLEMENTS.get(LAWRENCE.getLocation()).connectedTo();
 		int r = 0;
@@ -57,8 +50,8 @@ public class TravelWindow extends VBox{
 				
 			});
 			
-			internal.add(new Label(SETTLEMENTS.get(i).getName()), 1, r);
-			internal.add(B,2,r);
+			add(new Label(SETTLEMENTS.get(i).getName()), 1, r);
+			add(B,2,r);
 			
 			travelButtons.add(B);
 			
