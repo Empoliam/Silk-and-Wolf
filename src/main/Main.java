@@ -21,6 +21,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 
 /**
  * Main class.
@@ -45,16 +47,20 @@ public class Main extends Application {
 	static NPC HOLO;
 
 	//UI Elements
+	
 	Button advHourButton;
 	TextField loopTimes;
 	TextField loopDelay;
 	int loop = 0;
-	NPCTable npcTable;
+	
 	Label timeLabel;
 	
-	Button backButton = new Button("Back");
-	static Button travelButton = new Button("Go to");
-
+	TabPane mainTabPane;
+	Tab npcTab;
+	Tab travelTab;
+	Tab stockTab;
+	NPCTable npcTable;
+	
 	static TravelWindow travelWindow;
 	
 	/**
@@ -97,7 +103,7 @@ public class Main extends Application {
 
 		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 				
-		npcTable = new NPCTable();
+		
 
 		loopTimes = new TextField("1");
 		loopDelay = new TextField("500");
@@ -123,51 +129,53 @@ public class Main extends Application {
 						Thread.sleep(d);
 					}
 					
-					advHourButton.setDisable(false);
+					advHourButton.setDisable(false);					
 					
-					//Detect if player is travelling. Allow access to travel window if not
-					if (!LAWRENCE.getTravelling()) {
-						travelWindow.update();
-						travelButton.setDisable(false);
-					}
-					stop();
 					return null;
 
 				};
 
 			};
-			
+	
 			t.messageProperty().addListener(new ChangeListener<String>() {
 
 				@Override
 				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 					timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 					npcTable.refresh();
+					
+					//Detect if player is travelling. Allow access to travel window if not
+					if (!LAWRENCE.getTravelling()) {
+						
+						for(Button B : travelWindow.getButtons()) B.setDisable(false);
+						travelWindow.update();
+						
+					}
 				}
 				
 			});
 			new Thread(t).start();
 			advHourButton.setDisable(true);
-			travelButton.setDisable(true);
-			
+			for(Button B : travelWindow.getButtons()) B.setDisable(true);
+					
 		});
-
+		
+		npcTable = new NPCTable();
+		npcTab = new Tab("NPCs",npcTable);
+		npcTab.setClosable(false);
+		
+		travelWindow = new TravelWindow();
+		travelTab = new Tab("Travel",travelWindow);
+		travelTab.setClosable(false);
+		
+		mainTabPane = new TabPane();
+		mainTabPane.getTabs().addAll(npcTab, travelTab);
+		
 		VBox mainLayout = new VBox();
-		mainLayout.getChildren().addAll(timeLabel,npcTable,loopTimes,loopDelay,advHourButton,travelButton);
+		mainLayout.getChildren().addAll(timeLabel,mainTabPane,loopTimes,loopDelay,advHourButton);
 		
 		Scene mainScene = new Scene(mainLayout, 1000, 500);
-		
-		travelWindow = new TravelWindow(primaryStage, mainScene);		
-		Scene travelScene = new Scene(travelWindow, 1000, 500);
-
-		travelButton.setOnAction(e -> {
-			primaryStage.setScene(travelScene);
-		});
-		
-		backButton.setOnAction(e -> {
-			primaryStage.setScene(mainScene);
-		});
-		
+						
 		primaryStage.setScene(mainScene);
 		primaryStage.show();
 
