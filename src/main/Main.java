@@ -12,8 +12,6 @@ import foundation.*;
 import gui.NPCTable;
 import gui.TravelWindow;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -135,11 +133,8 @@ public class Main extends Application {
 
 			};
 	
-			t.messageProperty().addListener(new ChangeListener<String>() {
+			t.messageProperty().addListener((observable, old, updated) -> {
 
-				@Override
-				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-					
 					timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 					npcTable.refresh();
 					
@@ -151,7 +146,6 @@ public class Main extends Application {
 						for(Button B : travelWindow.getButtons()) B.setDisable(false);
 						travelWindow.update();
 						
-					}
 				}
 				
 			});

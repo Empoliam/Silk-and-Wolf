@@ -1,7 +1,14 @@
 package market;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Tracks universal data for a commodity, such as global availability. Contains information used to determine the price of a given object in any particular place. Object value is further subject to local demand, as detailed by town-specific LocalStocks.
+ * Tracks universal data for a commodity, such as global availability. 
+ * Contains information used to determine the price of a given object in any particular place. 
+ * Object value is further subject to local demand, as detailed by town-specific LocalStocks.
+ * There are no changes to the properties within a GlobalStock. Changes only occur locally, influenced by
+ * the spread of information between people and towns.
  */
 public class GlobalStock {
 
@@ -11,6 +18,9 @@ public class GlobalStock {
 	 */
 	private static int idTracker = 0;
 
+	/** Global stock list. */
+	public static final List<GlobalStock> STOCKS = new ArrayList<GlobalStock>();
+	
 	/**  Stock ID. */
 	private int id;
 

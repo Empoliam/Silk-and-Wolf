@@ -3,6 +3,8 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import market.LocalStock;
+
 /**
  * A generic location in which NPCs and buildings are contained.
  */
@@ -23,6 +25,9 @@ public class Settlement {
 	
 	/** Settlement ID. Corresponds to list index. */
 	final private int id;
+	
+	/** Local market details */
+	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
 	
 	/**
 	 * Instantiates a new settlement.

@@ -1,7 +1,8 @@
 package market;
 
 /**
- * Determines the properties of a given commodity within a settlement.
+ * Determines the properties of a given commodity within a settlement. Changes to these values may occur
+ * instantly if exchanges occur at a market, or otherwise when information propogates.
  */
 public class LocalStock {
 
