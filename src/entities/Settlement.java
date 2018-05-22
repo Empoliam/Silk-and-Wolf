@@ -1,8 +1,10 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import market.GlobalStock;
 import market.LocalStock;
 
 /**
@@ -13,9 +15,12 @@ public class Settlement {
 	/** Full settlement dataset ArrayList*/
 	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
 	
+	/** Reference to global stock dataset */
+	private static final HashMap<Integer, GlobalStock> STOCKS = GlobalStock.STOCKS;
+	
 	/** Reference to roads dataset. */
 	//references
-	static final List<Road> ROADS = Road.ROADS;
+	private static final List<Road> ROADS = Road.ROADS;
 		
 	/** Array of roads connected to the settlement. */
 	final private int[] roads;
@@ -44,6 +49,11 @@ public class Settlement {
 		for(int k = 0; k < r.length; k++) {
 			roads[k] = Integer.parseInt(r[k]);
 		}	
+		
+		for(GlobalStock G : STOCKS.values()) {
+			regionalMarket.add(new LocalStock(G));
+		}
+		
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package market;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Tracks universal data for a commodity, such as global availability. 
@@ -19,19 +18,32 @@ public class GlobalStock {
 	private static int idTracker = 0;
 
 	/** Global stock list. */
-	public static final List<GlobalStock> STOCKS = new ArrayList<GlobalStock>();
+	public static final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 	
 	/**  Stock ID. */
 	private int id;
 
+	/** Base global value */
+	private final int baseValue;
+	
+	/** Stock name */
+	private final String name;
+	
 	/**
 	 * Instantiates a new GlobalStock.
+	 *
+	 * @param values the values
 	 */
-	public GlobalStock() {
+	public GlobalStock(String values) {
 
 		setId(idTracker);
 		idTracker++;
-
+		
+		String[] v = values.split(",");
+		
+		name = v[0];
+		baseValue = Integer.parseInt(v[1]);
+		
 	}
 
 	/**
@@ -43,7 +55,6 @@ public class GlobalStock {
 		return id;
 	}
 
-
 	/**
 	 * Sets the id.
 	 *
@@ -51,6 +62,33 @@ public class GlobalStock {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * Gets the basic global value of the stock
+	 * 
+	 * @return stock baseValue
+	 */
+	public int getBaseValue() {
+		return baseValue;
+	}
+
+	/**
+	 * Gets the value id tracker.
+	 *
+	 * @return the value of the stock id tracker
+	 */
+	public static int getIdTracker() {
+		return idTracker;
+	}
+
+	/**
+	 * Returns the name of the stock
+	 * 
+	 * @return Stock name
+	 */
+	public String getName() {
+		return name;
 	}
 
 }

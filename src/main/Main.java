@@ -4,23 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import entities.NPC;
 import entities.Road;
 import entities.Settlement;
-import entities.NPC;
-
-import foundation.*;
+import foundation.Time;
 import gui.NPCTable;
 import gui.TravelWindow;
+
+import market.GlobalStock;
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Main class.
@@ -38,12 +39,15 @@ public class Main extends Application {
 
 	/** Reference to settlement dataset. */
 	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
-
+	
 	/** References to NPC dataset and important NPC objects */
 	static final HashMap<Integer,NPC> NPCS = NPC.NPCS;
 	static NPC LAWRENCE;
 	static NPC HOLO;
 
+	/** Reference to global stock dataset */
+	static final HashMap<Integer,GlobalStock> STOCKS = GlobalStock.STOCKS;
+	
 	//UI Elements
 	
 	Button advHourButton;
@@ -70,16 +74,19 @@ public class Main extends Application {
 
 		long start = System.currentTimeMillis();
 		Load.settlements();
-		System.out.println("Loaded Settlements in " + (System.currentTimeMillis()-start) + "ms");
+		System.out.println("Loaded settlements in " + (System.currentTimeMillis()-start) + "ms");
 		start = System.currentTimeMillis();
 		Load.roads();
 		System.out.println("Loaded roads in " + (System.currentTimeMillis()-start) + "ms");
 		start = System.currentTimeMillis();
 		Load.npcs();
 		System.out.println("Loaded NPCs in " + (System.currentTimeMillis()-start) + "ms");
-
+		start = System.currentTimeMillis();
+		Load.stocks();
+		System.out.println("Loaded stocks in " + (System.currentTimeMillis()-start) + "ms");
+		
 		NPCS.put(0, new NPC(0,"Kraft","Lawrence",1,false,true));
-		NPCS.put(1, new NPC(1,"Holo","",1,false,true));
+		NPCS.put(1, new NPC(1,"Holo","",1,true,true));
 
 		LAWRENCE = NPC.NPCS.get(0);
 		HOLO = NPC.NPCS.get(1);
@@ -98,11 +105,11 @@ public class Main extends Application {
 
 		System.out.println("Launch successful");
 		primaryStage.setTitle("Debug build");
-
+		
 		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 				
 		loopTimes = new TextField("1");
-		loopDelay = new TextField("500");
+		loopDelay = new TextField("50");
 
 		advHourButton = new Button("Advance Time");
 		advHourButton.setOnAction(e -> { 

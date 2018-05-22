@@ -8,6 +8,7 @@ import java.io.IOException;
 import entities.NPC;
 import entities.Road;
 import entities.Settlement;
+import market.GlobalStock;
 
 /**
  * Handles all file loading at the start of the game.
@@ -86,5 +87,24 @@ public class Load {
 		catch(IOException e){}
 		
 	}
+
+	public static void stocks() { 
 		
+		try {
+			
+			BufferedReader br = new BufferedReader(new FileReader("resources/stocks.csv"));
+			String line = br.readLine();
+			
+			while(line!=null) {
+				
+				GlobalStock.STOCKS.put(GlobalStock.getIdTracker(),new GlobalStock(line));
+				line = br.readLine();
+			}
+			
+			br.close();
+		}
+		catch(FileNotFoundException e){}
+		catch(IOException e){}
+		
+	}
 }

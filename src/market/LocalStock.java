@@ -21,6 +21,7 @@ public class LocalStock {
 	public LocalStock(GlobalStock parentStock) {
 
 		this.parentStock = parentStock;
+		this.localValue = parentStock.getBaseValue();
 
 	}
 
