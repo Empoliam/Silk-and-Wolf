@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -22,15 +21,14 @@ import javafx.beans.property.StringProperty;
  */
 public class NPC {
 
-	/** Full NPC set as HashMap. */
-	public static HashMap<Integer,NPC> NPCS = new HashMap<Integer,NPC>();	
-
-	/** Reference to Settlements List */
-	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;	
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
+	
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+			
 	/** Reference to global clock */
 	static final Time CLOCK = Time.CLOCK;
-	/** Reference to Roads List */
-	static final List<Road> ROADS = Road.ROADS;
 
 	//############################## PROPERTIES ##############################//
 
@@ -40,10 +38,13 @@ public class NPC {
 	private final StringProperty firstName = new SimpleStringProperty();	
 	/** NPC last name. */
 	private final StringProperty lastName = new SimpleStringProperty();
-	/** Active location id. While travel flag is true, refers to a road. Otherwise, refers to a settlement. */
-	private IntegerProperty location = new SimpleIntegerProperty();	
+	
+	/** Active location. While travel flag is true, road is relevant. Otherwise, settlement. */
+	private Settlement locationSettlement;
+	private Road locationRoad;
+	
 	/** Destination settlement list index. */
-	private IntegerProperty destination = new SimpleIntegerProperty();	
+	private Settlement destination;	
 	/** The remaining distance to the next settlement. */
 	private IntegerProperty remainingDistance = new SimpleIntegerProperty(0);		
 	/** The hours remaining until an NPC begins travelling. */
@@ -73,10 +74,10 @@ public class NPC {
 	 * @param location Settlement that an NPC initializes in
 	 * @param female NPC gender flag
 	 */
-	public NPC(int id, String firstName, String lastName, int location, boolean female, boolean doTravel){
+	public NPC(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel){
 
 		this.id.set(id);
-		this.location.set(location);
+		locationSettlement = location;
 		this.firstName.set(firstName);
 		this.lastName.set(lastName);
 		this.female.set(female);
@@ -96,7 +97,7 @@ public class NPC {
 		this.firstName.set(in[0]);
 		this.lastName.set(in[1]);
 		this.female.set(Integer.parseInt(in[2]) == 0);
-		this.location.set(Integer.parseInt(in[3]));
+		locationSettlement = SETTLEMENTS.get(Integer.parseInt(in[3]));
 
 		this.doTravel.set(new Random().nextBoolean());
 
@@ -108,9 +109,9 @@ public class NPC {
 		prepTravel.set(false);
 		departureHours.set(0);
 		travelling.set(true);	
-		Road path = SETTLEMENTS.get(location.get()).getRoadTo(destination.get());
+		Road path = locationSettlement.getRoadTo(destination);
 		remainingDistance.set(path.getLength());
-		location.set(path.getID());
+		locationRoad = path;
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class NPC {
 			if(remainingDistance.get() <= 0) {
 				remainingDistance.set(0);
 				travelling.set(false);
-				location.set(destination.get());
+				locationSettlement = destination;
 			}
 		}
 
@@ -150,17 +151,6 @@ public class NPC {
 	}
 
 	//############################## GETTERS AND SETTERS AND ALL THAT ##############################//
-
-	/**
-	 * Returns the location index of the NPC. Refers to a settlement usually, but refers to a road if the travel flag is set.
-	 *
-	 * @return Location index
-	 */
-	public int getLocation(){
-
-		return location.get();
-
-	}
 
 	/**
 	 * Returns the remaining distance to the next settlement.
@@ -329,7 +319,7 @@ public class NPC {
 	 */
 	public ReadOnlyStringWrapper locationNameProperty() {
 		String locationName;
-		locationName = (travelling.get()) ? ROADS.get(location.get()).getName() : SETTLEMENTS.get(location.get()).getName();
+		locationName = (travelling.get()) ? locationRoad.getName() : locationSettlement.getName();
 		return new ReadOnlyStringWrapper(locationName);
 	}
 
@@ -362,19 +352,35 @@ public class NPC {
 	}
 
 	/**
-	 * Returns the id of the destination settlement
+	 * Returns a reference to the destination settlement
 	 * 
-	 * @return destination ID
+	 * @return Settlement reference
 	 */
-	public int getDestination() {
-		return destination.get();
+	public Settlement getDestination() {
+		return destination;
 	}
 
 	/** Sets the destination
-	 * @param i Destination settlement id
+	 * @param i Destination settlement reference
 	 */
-	public void setDestination(int i) {
-		destination.set(i);
+	public void setDestination(Settlement i) {
+		destination = i;
+	}
+
+	public Settlement getLocationSettlement() {
+		return locationSettlement;
+	}
+
+	public void setLocationSettlement(Settlement locationSettlement) {
+		this.locationSettlement = locationSettlement;
+	}
+
+	public Road getLocationRoad() {
+		return locationRoad;
+	}
+
+	public void setLocationRoad(Road locationRoad) {
+		this.locationRoad = locationRoad;
 	}
 	
 }

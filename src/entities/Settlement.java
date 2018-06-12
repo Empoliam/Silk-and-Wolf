@@ -12,28 +12,32 @@ import market.LocalStock;
  */
 public class Settlement {
 
-	/** Full settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
-	
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
+
 	/** Reference to global stock dataset */
-	private static final HashMap<Integer, GlobalStock> STOCKS = GlobalStock.STOCKS;
+	private static final HashMap<Integer, GlobalStock> STOCKS = WORLD.getGlobalStockSet();
+
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 	
-	/** Reference to roads dataset. */
-	//references
-	private static final List<Road> ROADS = Road.ROADS;
-		
-	/** Array of roads connected to the settlement. */
-	final private int[] roads;
-	
+	/** Arraylist of connecting roads */
+	final private ArrayList<Road> connectingRoads = new ArrayList<Road>();
+
 	/** Name of the settlement. */
 	final private String name;
-	
+
 	/** Settlement ID. Corresponds to list index. */
 	final private int id;
-	
+
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
-	
+
+	/**Parameters used in executing dijkstra's algorithm */
+	protected int workingValue;
+	protected int finalValue;
+	protected boolean done;
+
 	/**
 	 * Instantiates a new settlement.
 	 *
@@ -44,16 +48,10 @@ public class Settlement {
 		id = Integer.parseInt(in[0]);
 		name = in[1];
 
-		String[] r = in[2].split(";");
-		roads = new int[r.length];
-		for(int k = 0; k < r.length; k++) {
-			roads[k] = Integer.parseInt(r[k]);
-		}	
-		
 		for(GlobalStock G : STOCKS.values()) {
 			regionalMarket.add(new LocalStock(G));
 		}
-		
+
 	}
 
 	/**
@@ -76,25 +74,15 @@ public class Settlement {
 		return id;
 	}
 
-	/**
-	 * Computes which other settlements are directly connected to the settlement by roads.
-	 *
-	 * @return List of indexes of connected settlements
-	 */
-	public List<Integer> connectedTo()
-	{
-
-		List<Integer> out = new ArrayList<Integer>();
-		for (int rID : roads) {
-			int[] connected = ROADS.get(rID).getConnects();		
-			for (int cID : connected) {
-				if(cID != id) {
-					out.add(cID);
-				}
-			}
+	public ArrayList<Settlement> getConnectedSettlements() {
+		
+		ArrayList<Settlement> C = new ArrayList<>();
+		for(Road R : connectingRoads) {
+			if(R.getConnectingA() != this) C.add(R.getConnectingA());
+			else C.add(R.getConnectingB());
 		}
-
-		return out;
+		return C;
+		
 	}
 
 	/**
@@ -103,15 +91,52 @@ public class Settlement {
 	 * @param b ID of the destination settlement
 	 * @return Road connecting the two settlements. Null if unconnected.
 	 */
-	public Road getRoadTo(int b){
+	public Road getRoadTo(Settlement s){
 
 		//Check each connecting road until the appropriate connection is found
-		for(int r : roads) {
-			if(Road.ROADS.get(r).getConnects()[0] == b || ROADS.get(r).getConnects()[1] == b) {
-				return ROADS.get(r);
+		for(Road r : connectingRoads) {
+			if(r.getConnectingA().equals(s) || r.getConnectingB().equals(s)) {
+				return r;
 			}
 		}
 
 		return null;
 	}
+
+	/** Returns arraylist of connected roads */
+	public ArrayList<Road> getRoads() {
+		return connectingRoads;
+	}
+	
+	//Dijkstra methods
+
+	public void purge() {
+		workingValue = Integer.MAX_VALUE;
+		done = false;
+	}
+
+	public int getWorkingValue() {
+		return workingValue;
+	}
+
+	public void setWorkingValue(int workingValue) {
+		this.workingValue = workingValue;
+	}
+
+	public int getFinalValue() {
+		return finalValue;
+	}
+
+	public void setFinalValue(int finalValue) {
+		this.finalValue = finalValue;
+	}
+
+	public boolean getDone() {
+		return done;
+	}
+
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+
 }

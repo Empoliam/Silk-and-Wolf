@@ -1,7 +1,5 @@
 package market;
 
-import java.util.HashMap;
-
 /**
  * Tracks universal data for a commodity, such as global availability. 
  * Contains information used to determine the price of a given object in any particular place. 
@@ -16,9 +14,6 @@ public class GlobalStock {
 	 * New stocks automatically recieve a unique ID as determined by the ID tracker.
 	 */
 	private static int idTracker = 0;
-
-	/** Global stock list. */
-	public static final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 	
 	/**  Stock ID. */
 	private int id;

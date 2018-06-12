@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import entities.NPC;
-import entities.Road;
 import entities.Settlement;
+import entities.World;
 import foundation.Time;
 import gui.NPCTable;
 import gui.TravelWindow;
@@ -34,19 +34,19 @@ public class Main extends Application {
 	/** Reference to global clock */
 	static final Time CLOCK = Time.CLOCK;
 
-	/** Reference to road dataset. */
-	static final List<Road> ROADS = Road.ROADS;
-
-	/** Reference to settlement dataset. */
-	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
 	
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+
 	/** References to NPC dataset and important NPC objects */
-	static final HashMap<Integer,NPC> NPCS = NPC.NPCS;
+	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
 	static NPC LAWRENCE;
 	static NPC HOLO;
 
 	/** Reference to global stock dataset */
-	static final HashMap<Integer,GlobalStock> STOCKS = GlobalStock.STOCKS;
+	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	//UI Elements
 	
@@ -85,14 +85,14 @@ public class Main extends Application {
 		Load.stocks();
 		System.out.println("Loaded stocks in " + (System.currentTimeMillis()-start) + "ms");
 		
-		NPCS.put(0, new NPC(0,"Kraft","Lawrence",1,false,true));
-		NPCS.put(1, new NPC(1,"Holo","",1,true,true));
+		NPCS.put(0, new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(1),false,true));
+		NPCS.put(1, new NPC(1,"Holo","",SETTLEMENTS.get(1),true,true));
 
-		LAWRENCE = NPC.NPCS.get(0);
-		HOLO = NPC.NPCS.get(1);
-		
+		LAWRENCE = NPCS.get(0);
+		HOLO = NPCS.get(1);
+				
 		launch(args);
-
+		
 	}
 
 	/**
@@ -114,6 +114,7 @@ public class Main extends Application {
 		advHourButton = new Button("Advance Time");
 		advHourButton.setOnAction(e -> { 
 			e.consume();
+			
 			Task<Void> t = new Task<Void>() {
 				@Override
 				protected Void call() throws Exception {
@@ -198,10 +199,10 @@ public class Main extends Application {
 						&& h.getDoTravel() 
 						&& !h.getPrepTravel() 
 						&& !h.getTravelling()) {
-
+					
 					h.setDepartureHours(h.generateDepartureHour(RANDOM));			
-					List<Integer> destinationPool = SETTLEMENTS.get(h.getLocation()).connectedTo();			
-					h.setDestination(SETTLEMENTS.get(destinationPool.get(RANDOM.nextInt(destinationPool.size()))).getID());
+					List<Settlement> destinationPool = h.getLocationSettlement().getConnectedSettlements();			
+					h.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
 					h.setPrepTravel(true);
 				}
 			}

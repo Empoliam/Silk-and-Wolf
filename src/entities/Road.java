@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,14 +7,18 @@ import java.util.List;
  */
 public class Road {
 
-	/** Full road set as ArrayList.*/
-	public static final List<Road> ROADS = new ArrayList<Road>();
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
 	
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+
 	/** Road ID. Corresponds to list index. */
 	final private int id;
-	
-	/** Array containing IDs of both settlements conencted by the road.*/
-	final private int[] connects = new int[2];
+		
+	/** Connecting settlements */
+	final private Settlement connectingA;
+	final private Settlement connectingB;
 	
 	/** Road name. */
 	final private String name;
@@ -32,10 +35,13 @@ public class Road {
 
 		id = Integer.parseInt(in[0]);
 		name = in[1];
-		connects[0] = Integer.parseInt(in[2].split(";")[0]);
-		connects[1] = Integer.parseInt(in[2].split(";")[1]);
 		length = Integer.parseInt(in[3]);
-
+		
+		connectingA = SETTLEMENTS.get(Integer.parseInt(in[2].split(";")[0]));
+		connectingB = SETTLEMENTS.get(Integer.parseInt(in[2].split(";")[1]));		
+		connectingA.getRoads().add(this);
+		connectingB.getRoads().add(this);
+		
 	}
 
 	/**
@@ -57,16 +63,6 @@ public class Road {
 
 		return name;
 	}
-
-	/**
-	 * Returns the array describing the connected settlements.
-	 *
-	 * @return Array of connected settlements
-	 */
-	public int[] getConnects() {
-
-		return connects;
-	}
 	
 	/**
 	 * Returns the length of the road.
@@ -76,5 +72,13 @@ public class Road {
 	public int getLength() {
 		
 		return length;
+	}
+
+	public Settlement getConnectingA() {
+		return connectingA;
+	}
+
+	public Settlement getConnectingB() {
+		return connectingB;
 	}
 }

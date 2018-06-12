@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import entities.NPC;
 import entities.Road;
 import entities.Settlement;
+import entities.World;
 import market.GlobalStock;
 
 /**
@@ -19,6 +22,21 @@ public class Load {
 	 *	All NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'.
 	 */
 	private static int NPC_ID_COUNTER = 2;
+
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
+	
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+
+	/** Reference to roads dataset. */
+	private static final List<Road> ROADS = WORLD.getRoadSet();
+	
+	/** Reference to global stock dataset */
+	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
+	
+	/** Reference to NPC dataset*/
+	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
 	
 	/**
 	 * Load settlements.
@@ -32,7 +50,7 @@ public class Load {
 
 			while (line != null) {
 
-				Settlement.SETTLEMENTS.add(new Settlement(line.split(",")));
+				SETTLEMENTS.add(new Settlement(line.split(",")));
 				line = br.readLine();
 			}
 
@@ -54,7 +72,7 @@ public class Load {
 			
 			while(line != null) {
 				
-				Road.ROADS.add(new Road(line.split(",")));
+				ROADS.add(new Road(line.split(",")));
 				line = br.readLine();
 			}
 			
@@ -76,7 +94,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				NPC.NPCS.put(NPC_ID_COUNTER,new NPC(NPC_ID_COUNTER,line.split(",")));
+				NPCS.put(NPC_ID_COUNTER,new NPC(NPC_ID_COUNTER,line.split(",")));
 				NPC_ID_COUNTER ++;
 				line = br.readLine();
 			}
@@ -97,7 +115,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				GlobalStock.STOCKS.put(GlobalStock.getIdTracker(),new GlobalStock(line));
+				STOCKS.put(GlobalStock.getIdTracker(),new GlobalStock(line));
 				line = br.readLine();
 			}
 			

@@ -3,6 +3,7 @@ package gui;
 import java.util.HashMap;
 
 import entities.NPC;
+import entities.World;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
@@ -13,8 +14,11 @@ import javafx.scene.control.TableView;
  */
 public class NPCTable extends VBox{
 
-	/** Reference to NPCs HashMap. */
-	private static final HashMap<Integer,NPC> NPCS = NPC.NPCS;
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
+		
+	/** Reference to NPC dataset*/
+	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
 	
 	/** Table object */
 	private TableView<NPC> table; 

@@ -1,25 +1,32 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import entities.NPC;
 import entities.Settlement;
+import entities.World;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 public class TravelWindow extends GridPane{
 
-	/** Reference to settlement dataset. */
-	static final List<Settlement> SETTLEMENTS = Settlement.SETTLEMENTS;
+	/** Main World reference */
+	public static final World WORLD = World.getMainWorld();
+	
+	/** Reference to settlement dataset ArrayList*/
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 	
 	/** Reference to list of all travel buttons */
 	private static List<Button> travelButtons;
 	
 	/** NPC references. */
-	static final NPC LAWRENCE = NPC.NPCS.get(0);
-	static final NPC HOLO = NPC.NPCS.get(1);
+	/** References to NPC dataset and important NPC objects */
+	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
+	static NPC LAWRENCE = NPCS.get(0);
+	static NPC HOLO = NPCS.get(1);
 	
 	public TravelWindow() {
 
@@ -33,24 +40,24 @@ public class TravelWindow extends GridPane{
 		travelButtons.clear();
 		getChildren().clear();
 		
-		List<Integer> connects = SETTLEMENTS.get(LAWRENCE.getLocation()).connectedTo();
+		List<Settlement> connects = LAWRENCE.getLocationSettlement().getConnectedSettlements();
 		int r = 0;
 				
-		for(Integer i : connects) {
+		for(Settlement S : connects) {
 			
 			Button B = new Button("Go");
 			B.setOnAction(e -> {
 				
 				LAWRENCE.setDepartureHours(0);
 				HOLO.setDepartureHours(0);
-				LAWRENCE.setDestination(i);
-				HOLO.setDestination(i);
+				LAWRENCE.setDestination(S);
+				HOLO.setDestination(S);
 				LAWRENCE.setPrepTravel(true);
 				HOLO.setPrepTravel(true);
 				
 			});
 			
-			add(new Label(SETTLEMENTS.get(i).getName()), 1, r);
+			add(new Label(S.getName()), 1, r);
 			add(B,2,r);
 			
 			travelButtons.add(B);

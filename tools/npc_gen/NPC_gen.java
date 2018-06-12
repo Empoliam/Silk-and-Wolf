@@ -55,8 +55,8 @@ public class NPC_gen {
 			BufferedReader rSettlements = new BufferedReader(new FileReader("resources/settlements.csv"));
 
 			for(String line = rSettlements.readLine(); line != null;){
-				String[] split = line.split(",");
-				int[] arr = { Integer.parseInt(split[0]) , Integer.parseInt(split[3]) };
+				String[] split = line.split(",");				
+				int[] arr = { Integer.parseInt(split[0]) , Integer.parseInt(split[2]) };
 				settlements.add(arr);
 				line = rSettlements.readLine();
 			}	
