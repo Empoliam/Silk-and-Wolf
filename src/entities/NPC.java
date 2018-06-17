@@ -3,18 +3,17 @@ package entities;
 import java.util.List;
 import java.util.Random;
 
-import foundation.SWMath;
+import patchi.math.PatchiMath;
 import foundation.Time;
-
+import item.Inventory;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 /**
  * Generic sentient humanoid entity. All human NPCs are handled by the same hourly decision tree, including Lawrence and Holo.
@@ -33,11 +32,11 @@ public class NPC {
 	//############################## PROPERTIES ##############################//
 
 	/** NPC ID. Equivalent to HashMap key*/
-	private final IntegerProperty id = new SimpleIntegerProperty();	
+	private final int id;	
 	/** NPC first name. */
-	private final StringProperty firstName = new SimpleStringProperty();	
+	private final String firstName;	
 	/** NPC last name. */
-	private final StringProperty lastName = new SimpleStringProperty();
+	private final String lastName;
 	
 	/** Active location. While travel flag is true, road is relevant. Otherwise, settlement. */
 	private Settlement locationSettlement;
@@ -46,25 +45,29 @@ public class NPC {
 	/** Destination settlement list index. */
 	private Settlement destination;	
 	/** The remaining distance to the next settlement. */
-	private IntegerProperty remainingDistance = new SimpleIntegerProperty(0);		
+	private int remainingDistance = 0;		
 	/** The hours remaining until an NPC begins travelling. */
-	private IntegerProperty departureHours = new SimpleIntegerProperty(0);
+	private int departureHours = 0;
 	/** Confidence modifier. Double between 0.0 and 1.0. Affects departure time. Currently unimplemented. */
-	private DoubleProperty confidence = new SimpleDoubleProperty(0.0);
-
+	private double confidence = 1.0;
+	
+	//############################## OTHER ##############################//
+	
+	private final Inventory inventory = new Inventory();
+	
 	//############################## FLAGS ##############################//
 
 	/** Gender flag. True if female. */
-	private final BooleanProperty female = new SimpleBooleanProperty();
+	private final boolean female;
 	/** Travel flag. While true, town-based interactions and decisions are disabled. NPCs with this flag will execute the travel routine each hour.*/
-	private BooleanProperty travelling = new SimpleBooleanProperty(false);	
+	private boolean travelling = false;	
 	/** Illegitimacy flag. Integer representation of a boolean flag. True if the NPC is conducting shady business. Affects departure time. Currently unimplemented. */
 	private IntegerProperty illegitimacy = new SimpleIntegerProperty(0);
 	/** DoTravel flag. While true, NPC is subject to travel decision making at midnight each day.*/
 	private BooleanProperty doTravel = new SimpleBooleanProperty();
 	/** PrepTravel flag. While true, the NPC is preparing to leave.*/
 	private BooleanProperty prepTravel = new SimpleBooleanProperty(false);
-
+	
 	/**
 	 * Instantiates a new npc.
 	 *
@@ -76,11 +79,11 @@ public class NPC {
 	 */
 	public NPC(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel){
 
-		this.id.set(id);
+		this.id = id;
 		locationSettlement = location;
-		this.firstName.set(firstName);
-		this.lastName.set(lastName);
-		this.female.set(female);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.female = female;
 		this.doTravel.set(doTravel);
 		
 	}
@@ -93,10 +96,10 @@ public class NPC {
 	 */
 	public NPC(int id, String[] in){
 
-		this.id.set(id);
-		this.firstName.set(in[0]);
-		this.lastName.set(in[1]);
-		this.female.set(Integer.parseInt(in[2]) == 0);
+		this.id = id;
+		this.firstName = in[0];
+		this.lastName = in[1];
+		this.female = (Integer.parseInt(in[2]) == 0);
 		locationSettlement = SETTLEMENTS.get(Integer.parseInt(in[3]));
 
 		this.doTravel.set(new Random().nextBoolean());
@@ -107,10 +110,10 @@ public class NPC {
 	public void beginTravel() {
 
 		prepTravel.set(false);
-		departureHours.set(0);
-		travelling.set(true);	
+		departureHours = 0;
+		travelling = true;	
 		Road path = locationSettlement.getRoadTo(destination);
-		remainingDistance.set(path.getLength());
+		remainingDistance = path.getLength();
 		locationRoad = path;
 	}
 
@@ -122,18 +125,18 @@ public class NPC {
 	 */
 	public boolean advanceTravel() {
 
-		if(travelling.get() == true) {
+		if(travelling) {
 
-			remainingDistance.set(remainingDistance.get() - 6);
+			remainingDistance = remainingDistance - 6;
 
-			if(remainingDistance.get() <= 0) {
-				remainingDistance.set(0);
-				travelling.set(false);
+			if(remainingDistance <= 0) {
+				remainingDistance = 0;
+				travelling = false;
 				locationSettlement = destination;
 			}
 		}
 
-		return travelling.get();
+		return travelling;
 
 	}
 
@@ -145,13 +148,30 @@ public class NPC {
 	 */
 	public int generateDepartureHour(Random RANDOM) {
 
-		int departure = SWMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy.get()) / 23),RANDOM);
+		int departure = PatchiMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy.get()) / 23),RANDOM);
 		return departure;
 
 	}
 
-	//############################## GETTERS AND SETTERS AND ALL THAT ##############################//
+	//############################## INVENTORY MANAGEMENT ##############################//
+		
+	public Inventory getInventory() {
+		return inventory;
+	}
+	
+	//############################## GETTERS / SETTERS ##############################//
 
+	/**
+	 * Sets the remaining distance to the next settlement.
+	 *
+	 * @return Remaining distance
+	 */
+	public void setRemainingDistance(int d) {
+
+		remainingDistance = d;
+
+	}
+	
 	/**
 	 * Returns the remaining distance to the next settlement.
 	 *
@@ -159,17 +179,17 @@ public class NPC {
 	 */
 	public int getRemainingDistance() {
 
-		return remainingDistance.get();
+		return remainingDistance;
 
 	}
 
 	/**
-	 * Returns the remainingDistance Property.
+	 * Returns the remainingDistance as a read-only Property.
 	 *
 	 * @return  remainingDistance IntegerProperty
 	 */
-	public IntegerProperty getRemainingDistanceProperty() {
-		return remainingDistance;
+	public ReadOnlyIntegerWrapper getRemainingDistanceProperty() {
+		return new ReadOnlyIntegerWrapper(remainingDistance);
 	}
 	
 	/**
@@ -178,7 +198,7 @@ public class NPC {
 	 * @return travel flag state
 	 */
 	public boolean getTravelling() {
-		return travelling.get();
+		return travelling;
 	}
 
 	/**
@@ -186,8 +206,8 @@ public class NPC {
 	 *
 	 * @return travelling BolleanProperty
 	 */
-	public BooleanProperty getTravellingProperty() {
-		return travelling;
+	public ReadOnlyBooleanWrapper getTravellingProperty() {
+		return new ReadOnlyBooleanWrapper(travelling);
 	} 
 	
 	/**
@@ -196,7 +216,7 @@ public class NPC {
 	 * @return NPC's First Name
 	 */
 	public String getFirstName() {
-		return firstName.get();
+		return firstName;
 	}
 
 	/** 
@@ -204,8 +224,8 @@ public class NPC {
 	 * 
 	 * @return lastName Property
 	 */
-	public StringProperty getFirstNameProperty() {
-		return firstName;
+	public ReadOnlyStringWrapper getFirstNameProperty() {
+		return new ReadOnlyStringWrapper(firstName);
 	}
 
 	/**
@@ -214,7 +234,7 @@ public class NPC {
 	 * @return NPC's Last Name
 	 */
 	public String getLastName() {
-		return lastName.get();
+		return lastName;
 	}
 
 	/**
@@ -222,8 +242,8 @@ public class NPC {
 	 * 
 	 * @return lastName property
 	 */
-	public StringProperty getLastNameProperty() {
-		return lastName;
+	public ReadOnlyStringWrapper getLastNameProperty() {
+		return new ReadOnlyStringWrapper(lastName);
 	}
 
 	/**
@@ -241,7 +261,7 @@ public class NPC {
 	 * @param h Hours from set time
 	 */
 	public void setDepartureHours(int h) {
-		departureHours.set(h);
+		departureHours = h;
 	}
 
 	/**
@@ -250,21 +270,22 @@ public class NPC {
 	 * @return Remaining hours until departure
 	 */
 	public int getDepartureHours() {
-		return departureHours.get();
+		return departureHours;
 	}
 
 	/**
-	 * Returns the IntegerProperty of departureHours.
+	 * Returns departureHours as a property.
 	 * 
-	 * @return Returns departureHours as IntegerProperty
+	 * @return Returns departureHours as ReadOnlyIntegerWrapper
 	 */
-	public IntegerProperty getDepartureHoursProperty() {
-		return departureHours;
+	public ReadOnlyIntegerWrapper getDepartureHoursProperty() {
+		return new ReadOnlyIntegerWrapper(departureHours);
 	}
 
 	/** decrements the departureHours property */
 	public void decrementDepartureHours() {
-		departureHours.set(departureHours.get()-1);
+		departureHours--
+		;
 	}
 
 	/**
@@ -300,7 +321,7 @@ public class NPC {
 	 * @return NPC id
 	 */
 	public int getId() {
-		return id.get();
+		return id;
 	}
 
 	/** 
@@ -308,8 +329,8 @@ public class NPC {
 	 * 
 	 * @return id Property
 	 */
-	public IntegerProperty getIdProperty() {
-		return id;
+	public ReadOnlyIntegerWrapper getIdProperty() {
+		return new ReadOnlyIntegerWrapper(id);
 	}
 
 	/**
@@ -319,7 +340,7 @@ public class NPC {
 	 */
 	public ReadOnlyStringWrapper locationNameProperty() {
 		String locationName;
-		locationName = (travelling.get()) ? locationRoad.getName() : locationSettlement.getName();
+		locationName = (travelling) ? locationRoad.getName() : locationSettlement.getName();
 		return new ReadOnlyStringWrapper(locationName);
 	}
 
@@ -329,8 +350,8 @@ public class NPC {
 	 * @param d confidence
 	 */
 	public void setConfidence(double d) {
-		d = SWMath.cutDoubleToRange(d, 0.0, 1.0);
-		confidence.set(d);
+		d = PatchiMath.cutDoubleToRange(d, 0.0, 1.0);
+		confidence = d;
 	}
 
 	/**
@@ -339,7 +360,7 @@ public class NPC {
 	 * @return confidence coefficient
 	 */
 	public double getConfidence() {
-		return confidence.get();
+		return confidence;
 	}
 
 	/**
@@ -347,8 +368,8 @@ public class NPC {
 	 *
 	 * @return confidence Property
 	 */
-	public DoubleProperty getConfidenceProperty() {
-		return confidence;
+	public ReadOnlyDoubleWrapper getConfidenceProperty() {
+		return new ReadOnlyDoubleWrapper(confidence);
 	}
 
 	/**
@@ -381,6 +402,14 @@ public class NPC {
 
 	public void setLocationRoad(Road locationRoad) {
 		this.locationRoad = locationRoad;
+	}
+	
+	public boolean getFemale() {
+		return female;
+	}
+	
+	public ReadOnlyBooleanWrapper getFemaleProperty() {
+		return new ReadOnlyBooleanWrapper(female);
 	}
 	
 }
