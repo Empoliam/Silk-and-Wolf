@@ -23,8 +23,24 @@ public class World {
 	/** Global stock list. */
 	private final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 	
-	/** Full NPC set as HashMap. */
-	private final HashMap<Integer,NPC> NPCS = new HashMap<Integer,NPC>();	
+	/** Full NPC dataset ArrayList. Automatically sorts when adding new NPC. */
+	private final ArrayList<NPC> NPCS = new ArrayList<NPC>() {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean add(NPC A) {
+			
+			super.add(A);
+			
+			sort((X, Y) -> {
+				return X.getId() - Y.getId();
+			});
+			
+			return true;	
+		}
+				
+	};	
 	
 	/**
 	 * Instantiates a new world.
@@ -70,11 +86,11 @@ public class World {
 	}
 	
 	/**
-	 * Gets the NPCS set.
+	 * Gets the NPC list.
 	 *
-	 * @return the NPCS set
+	 * @return the NPC list
 	 */
-	public HashMap<Integer,NPC> getNPCSSet() {
+	public ArrayList<NPC> getNPCS() {
 		return NPCS;
 	}
 	

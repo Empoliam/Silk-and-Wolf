@@ -1,7 +1,6 @@
 package gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import entities.NPC;
@@ -24,7 +23,7 @@ public class TravelWindow extends GridPane{
 	
 	/** NPC references. */
 	/** References to NPC dataset and important NPC objects */
-	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
+	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
 	static NPC LAWRENCE = NPCS.get(0);
 	static NPC HOLO = NPCS.get(1);
 	

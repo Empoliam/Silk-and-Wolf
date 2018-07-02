@@ -1,6 +1,6 @@
 package gui;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import entities.NPC;
 import entities.World;
@@ -18,7 +18,7 @@ public class NPCTable extends VBox{
 	public static final World WORLD = World.getMainWorld();
 		
 	/** Reference to NPC dataset*/
-	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
+	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
 	
 	/** Table object */
 	private TableView<NPC> table; 
@@ -30,7 +30,7 @@ public class NPCTable extends VBox{
 	public NPCTable() 
 	{
 		
-		ObservableList<NPC> listTest = FXCollections.observableArrayList(NPCS.values());
+		ObservableList<NPC> listTest = FXCollections.observableArrayList(NPCS);
 
 		TableColumn<NPC,Number> idColumn = new TableColumn<>("ID");
 		idColumn.setMinWidth(50);

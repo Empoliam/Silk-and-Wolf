@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -41,7 +42,7 @@ public class Main extends Application {
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 
 	/** References to NPC dataset and important NPC objects */
-	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
+	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
 	static NPC LAWRENCE;
 	static NPC HOLO;
 
@@ -85,8 +86,8 @@ public class Main extends Application {
 		Load.stocks();
 		System.out.println("Loaded stocks in " + (System.currentTimeMillis()-start) + "ms");
 		
-		NPCS.put(0, new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(1),false,true));
-		NPCS.put(1, new NPC(1,"Holo","",SETTLEMENTS.get(1),true,true));
+		NPCS.add(new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(1),false,true));
+		NPCS.add(new NPC(1,"Holo","",SETTLEMENTS.get(1),true,true));
 
 		LAWRENCE = NPCS.get(0);
 		HOLO = NPCS.get(1);
@@ -191,7 +192,7 @@ public class Main extends Application {
 
 		CLOCK.advanceHour();
 
-		for(NPC h : NPCS.values()) {
+		for(NPC h : NPCS) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
 			if (h.getId() != 0 && h.getId() != 1) {

@@ -94,13 +94,13 @@ public class NPC {
 	 * @param id NPC id. Same as HashMap key.
 	 * @param in Input String array. Format described <a href="https://github.com/Empoliam/Silk-and-Wolf/wiki/CSV-Data-Structure">here</a>
 	 */
-	public NPC(int id, String[] in){
+	public NPC(String[] in){
 
-		this.id = id;
-		this.firstName = in[0];
-		this.lastName = in[1];
-		this.female = (Integer.parseInt(in[2]) == 0);
-		locationSettlement = SETTLEMENTS.get(Integer.parseInt(in[3]));
+		this.id = Integer.parseInt(in[0]);
+		this.firstName = in[1];
+		this.lastName = in[2];
+		this.female = (Integer.parseInt(in[3]) == 0);
+		locationSettlement = SETTLEMENTS.get(Integer.parseInt(in[4]));
 
 		this.doTravel.set(new Random().nextBoolean());
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,9 +19,10 @@ import market.GlobalStock;
  */
 public class Load {
 	
-	/** NPC ID counter. Ensures that all NPC objects have a unique ID.<br>
+	/** NPC ID counter. For keeping track of the current NPC ID.<br>
 	 *	All NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'.
 	 */
+	@SuppressWarnings("unused")
 	private static int NPC_ID_COUNTER = 2;
 
 	/** Main World reference */
@@ -36,7 +38,7 @@ public class Load {
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	/** Reference to NPC dataset*/
-	static final HashMap<Integer,NPC> NPCS = WORLD.getNPCSSet();
+	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
 	
 	/**
 	 * Load settlements.
@@ -94,7 +96,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				NPCS.put(NPC_ID_COUNTER,new NPC(NPC_ID_COUNTER,line.split(",")));
+				NPCS.add(new NPC(line.split(",")));
 				NPC_ID_COUNTER ++;
 				line = br.readLine();
 			}

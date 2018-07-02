@@ -13,7 +13,7 @@ import java.util.Random;
 public class NPC_gen {
 
 	final static Random RANDOM = new Random();
-
+	
 	public static void main(String[] args){
 
 		try {
@@ -64,7 +64,7 @@ public class NPC_gen {
 
 			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.csv"));
 
-			int total = 0;
+			int idCounter = 2;
 			
 			for(int[] s : settlements) {
 
@@ -72,6 +72,8 @@ public class NPC_gen {
 
 					boolean female = RANDOM.nextBoolean();
 
+					output.append(Integer.toString(idCounter) + ",");
+					
 					//generate first name
 					if(female) {
 						output.append(fnames.get(RANDOM.nextInt(fnames.size())));
@@ -93,7 +95,7 @@ public class NPC_gen {
 					
 					output.newLine();
 					
-					total++;
+					idCounter++;
 					
 				}
 
@@ -101,7 +103,7 @@ public class NPC_gen {
 
 			output.close();
 			
-			System.out.println("Successfully created " + total + " NPCs");
+			System.out.println("Successfully created " + idCounter + " NPCs");
 
 		} 
 		catch (FileNotFoundException e) {
