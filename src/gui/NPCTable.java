@@ -1,36 +1,31 @@
 package gui;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import entities.NPC;
 import entities.World;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 /**
- * A debug UI element used to display all NPCs and their details.
+ * A debug UI element used to display all NPCs and some details.
  */
-public class NPCTable extends VBox{
+public class NPCTable extends TableView<NPC>{
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
 		
 	/** Reference to NPC dataset*/
-	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
-	
-	/** Table object */
-	private TableView<NPC> table; 
+	static final List<NPC> NPCS = WORLD.getNPCS();
 	
 	/**
 	 * Instantiates the NPC Table.
 	 */
 	@SuppressWarnings("unchecked")
-	public NPCTable() 
+	public NPCTable(List<NPC> inputList) 
 	{
 		
-		ObservableList<NPC> listTest = FXCollections.observableArrayList(NPCS);
+		ObservableList<NPC> listTest = FXCollections.observableArrayList(inputList);
 
 		TableColumn<NPC,Number> idColumn = new TableColumn<>("ID");
 		idColumn.setMinWidth(50);
@@ -60,20 +55,10 @@ public class NPCTable extends VBox{
 		remainingDistanceColumn.setMinWidth(100);
 		remainingDistanceColumn.setCellValueFactory(n -> n.getValue().getRemainingDistanceProperty());
 		
-		table = new TableView<NPC>();	
-		table.setItems(listTest);
-		table.getColumns().addAll(idColumn,fnameColumn,lnameColumn,locationColumn,departureColumn,travellingColumn,remainingDistanceColumn);		
-		table.setEditable(false);
-		
-		this.getChildren().add(table);
+		setItems(listTest);
+		getColumns().addAll(idColumn,fnameColumn,lnameColumn,locationColumn,departureColumn,travellingColumn,remainingDistanceColumn);		
+		setEditable(false);
 		
 	}
 	
-	/**
-	 * Refresh table values.
-	 */
-	public void refresh() {
-		table.refresh();
-	}
-
 }

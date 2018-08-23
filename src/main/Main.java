@@ -1,6 +1,5 @@
 package main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -8,11 +7,12 @@ import java.util.Random;
 import entities.NPC;
 import entities.Settlement;
 import entities.World;
+
 import foundation.Time;
+
 import gui.NPCTable;
 import gui.TravelWindow;
 
-import market.GlobalStock;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
@@ -23,6 +23,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import market.GlobalStock;
 
 /**
  * Main class.
@@ -42,7 +44,7 @@ public class Main extends Application {
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 
 	/** References to NPC dataset and important NPC objects */
-	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
+	static final List<NPC> NPCS = WORLD.getNPCS();
 	static NPC LAWRENCE;
 	static NPC HOLO;
 
@@ -74,20 +76,27 @@ public class Main extends Application {
 	public static void main(String[] args) {
 
 		long start = System.currentTimeMillis();
-		Load.settlements();
-		System.out.println("Loaded settlements in " + (System.currentTimeMillis()-start) + "ms");
-		start = System.currentTimeMillis();
 		Load.roads();
 		System.out.println("Loaded roads in " + (System.currentTimeMillis()-start) + "ms");
+		
 		start = System.currentTimeMillis();
 		Load.npcs();
 		System.out.println("Loaded NPCs in " + (System.currentTimeMillis()-start) + "ms");
+		
+		start = System.currentTimeMillis();
+		Load.settlements();
+		System.out.println("Loaded settlements in " + (System.currentTimeMillis()-start) + "ms");
+				
 		start = System.currentTimeMillis();
 		Load.stocks();
 		System.out.println("Loaded stocks in " + (System.currentTimeMillis()-start) + "ms");
 		
-		NPCS.add(new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(1),false,true));
-		NPCS.add(new NPC(1,"Holo","",SETTLEMENTS.get(1),true,true));
+		start = System.currentTimeMillis();
+		Load.unpack();
+		System.out.println("Unpacked in " + (System.currentTimeMillis()-start) + "ms");
+		
+		NPCS.add(new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(0),false,true,false));
+		NPCS.add(new NPC(1,"Holo","",SETTLEMENTS.get(0),true,true,false));
 
 		LAWRENCE = NPCS.get(0);
 		HOLO = NPCS.get(1);
@@ -106,7 +115,7 @@ public class Main extends Application {
 
 		System.out.println("Launch successful");
 		primaryStage.setTitle("Debug build");
-		
+						
 		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 				
 		loopTimes = new TextField("1");
@@ -164,8 +173,9 @@ public class Main extends Application {
 					
 		});
 		
-		npcTable = new NPCTable();
-		npcTab = new Tab("NPCs",npcTable);
+		npcTable = new NPCTable(NPCS);
+		VBox npcContainer = new VBox(npcTable);
+		npcTab = new Tab("NPCs",npcContainer);
 		npcTab.setClosable(false);
 		
 		travelWindow = new TravelWindow();
@@ -186,7 +196,7 @@ public class Main extends Application {
 	}
 
 	/**
-	 * Executes a single hour tick. The bulk of all game logic happens in these ticks.
+	 * Executes a single hour tick.
 	 */
 	private static void doHourTick() {
 
@@ -195,7 +205,7 @@ public class Main extends Application {
 		for(NPC h : NPCS) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
-			if (h.getId() != 0 && h.getId() != 1) {
+			if (h.getDoDecisionTree()) {
 				if(		CLOCK.getHour() == 0 
 						&& h.getDoTravel() 
 						&& !h.getPrepTravel() 
@@ -213,8 +223,11 @@ public class Main extends Application {
 
 			//NPCs depart
 			if(h.getPrepTravel()) {
-				if(h.getDepartureHours() == 0) h.beginTravel();
-				else h.decrementDepartureHours();
+				if(h.getDepartureHours() == 0) {
+					h.beginTravel();
+				} else {
+					h.decrementDepartureHours();
+				}
 			}
 		}
 		

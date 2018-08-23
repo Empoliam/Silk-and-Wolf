@@ -1,16 +1,16 @@
-0,Southern Road,0;1,65
-1,Orchard Trail,1;2,120
-2,Western Ruvinheigen Plains,2;4,360
-3,Monolith Pass,2;3,230
-4,Eastern Ruvinheigen Plains,3;4,270
-5,Lamtra Foothills,4;5,310
-6,Great Forest Trail,4;6,310
-7,Eastern Eyre Crossing,6;7,270
-8,Western Eyre Crossing,6;10,405
-9,Rolling Pass,7;8,505
-10,White Plains North,8;9,150
-11,Roam Crossing,10;11,90
-12,Roam Highway,9;10,260
-13,Travellers End,9;12,460
-14,Northern Road,9;13,950
-15,Craggy Pass,12;13,285
+sw.southernroad,Southern Road,sw.yorenz;sw.pasloe,65
+sw.orchardtrail,Orchard Trail,sw.pasloe;sw.pazzio,120
+sw.wrplains,Western Ruvinheigen Plains,sw.pazzio;sw.ruvenheign,360
+sw.monolithpass,Monolith Pass,sw.pazzio;sw.poroson,230
+sw.erplains,Eastern Ruvinheigen Plains,sw.poroson;sw.ruvenheign,270
+sw.lamtrahills,Lamtra Foothills,sw.ruvenheign;sw.lamtra,310
+sw.foresttrail,Great Forest Trail,sw.ruvenheign;sw.kumerson,310
+sw.eeyrecrossing,Eastern Eyre Crossing,sw.kumerson;sw.enberch,270
+sw.weyrecrossing,Western Eyre Crossing,sw.kumerson;sw.ploania,405
+sw.rollingpass,Rolling Pass,sw.enberch;sw.tereo,505
+sw.northplains,White Plains North,sw.tereo;sw.lenos,150
+sw.roamcrossing,Roam Crossing,sw.ploania;sw.gerube,90
+sw.roamhighway,Roam Highway,sw.lenos;sw.ploania,260
+sw.travellersend,Travellers End,sw.lenos;sw.yoitsu,460
+sw.northernroad,Northern Road,sw.lenos;sw.nyohira,950
+sw.craggypass,Craggy Pass,sw.yoitsu;sw.nyohira,285

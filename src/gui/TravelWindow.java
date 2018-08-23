@@ -23,7 +23,7 @@ public class TravelWindow extends GridPane{
 	
 	/** NPC references. */
 	/** References to NPC dataset and important NPC objects */
-	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
+	static final List<NPC> NPCS = WORLD.getNPCS();
 	static NPC LAWRENCE = NPCS.get(0);
 	static NPC HOLO = NPCS.get(1);
 	

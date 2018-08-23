@@ -2,6 +2,7 @@ package entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import market.GlobalStock;
@@ -12,6 +13,8 @@ import market.LocalStock;
  */
 public class Settlement {
 
+
+
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
 
@@ -20,15 +23,17 @@ public class Settlement {
 
 	/** Reference to settlement dataset ArrayList*/
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
-	
+
 	/** Arraylist of connecting roads */
-	final private ArrayList<Road> connectingRoads = new ArrayList<Road>();
+	private ArrayList<Road> connectingRoads = new ArrayList<Road>();
 
 	/** Name of the settlement. */
-	final private String name;
+	private String name;
 
-	/** Settlement ID. Corresponds to list index. */
-	final private int id;
+	/** Settlement ID.*/
+	private String id;
+
+	private List<NPC> currentInhabitants = new LinkedList<NPC>();
 
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
@@ -38,6 +43,8 @@ public class Settlement {
 	protected int finalValue;
 	protected boolean done;
 
+	private String packedData;
+
 	/**
 	 * Instantiates a new settlement.
 	 *
@@ -45,13 +52,32 @@ public class Settlement {
 	 */
 	public Settlement(String[] in) {
 
-		id = Integer.parseInt(in[0]);
+		id = in[0];
 		name = in[1];
 
 		for(GlobalStock G : STOCKS.values()) {
 			regionalMarket.add(new LocalStock(G));
 		}
 
+	}
+
+	public Settlement(String id, String packedData) {
+
+		this.id = id;
+		this.packedData = packedData;
+		
+	}
+	
+	public void unpack() {
+		
+		String[] in = packedData.split(",");
+		
+		name = in[0];
+
+		for(GlobalStock G : STOCKS.values()) {
+			regionalMarket.add(new LocalStock(G));
+		}
+		
 	}
 
 	/**
@@ -69,20 +95,20 @@ public class Settlement {
 	 *
 	 * @return Settlement ID.
 	 */
-	public int getID(){
+	public String getID(){
 
 		return id;
 	}
 
 	public ArrayList<Settlement> getConnectedSettlements() {
-		
+
 		ArrayList<Settlement> C = new ArrayList<>();
 		for(Road R : connectingRoads) {
 			if(R.getConnectingA() != this) C.add(R.getConnectingA());
 			else C.add(R.getConnectingB());
 		}
 		return C;
-		
+
 	}
 
 	/**
@@ -107,7 +133,7 @@ public class Settlement {
 	public ArrayList<Road> getRoads() {
 		return connectingRoads;
 	}
-	
+
 	//Dijkstra methods
 
 	public void purge() {
@@ -137,6 +163,18 @@ public class Settlement {
 
 	public void setDone(boolean done) {
 		this.done = done;
+	}
+
+	public void addNPC(NPC A) {
+		currentInhabitants.add(A);
+	}
+
+	public void removeNPC(NPC A) {
+		currentInhabitants.remove(A);
+	}
+	
+	public int getCurrentPopulation() {
+		return currentInhabitants.size();
 	}
 
 }
