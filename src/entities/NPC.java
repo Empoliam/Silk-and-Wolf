@@ -1,6 +1,5 @@
 package entities;
 
-import java.util.List;
 import java.util.Random;
 
 import patchi.math.PatchiMath;
@@ -16,27 +15,28 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * Generic sentient humanoid entity. All human NPCs are handled by the same hourly decision tree, including Lawrence and Holo.
+ * Generic sentient humanoid entity.
  */
 public class NPC {
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
-	
-	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 			
 	/** Reference to global clock */
 	static final Time CLOCK = Time.CLOCK;
 
+	//############################## DATA PACKING ##############################//
+	
+	private String packedData;
+	
 	//############################## PROPERTIES ##############################//
 
-	/** NPC ID. Equivalent to HashMap key*/
-	private final int id;	
+	/** NPC ID. */
+	private int id;	
 	/** NPC first name. */
-	private final String firstName;	
+	private String firstName;	
 	/** NPC last name. */
-	private final String lastName;
+	private String lastName;
 	
 	/** Active location. While travel flag is true, road is relevant. Otherwise, settlement. */
 	private Settlement locationSettlement;
@@ -58,7 +58,7 @@ public class NPC {
 	//############################## FLAGS ##############################//
 
 	/** Gender flag. True if female. */
-	private final boolean female;
+	private boolean female;
 	/** Travel flag. While true, town-based interactions and decisions are disabled. NPCs with this flag will execute the travel routine each hour.*/
 	private boolean travelling = false;	
 	/** Illegitimacy flag. Integer representation of a boolean flag. True if the NPC is conducting shady business. Affects departure time. Currently unimplemented. */
@@ -67,17 +67,21 @@ public class NPC {
 	private BooleanProperty doTravel = new SimpleBooleanProperty();
 	/** PrepTravel flag. While true, the NPC is preparing to leave.*/
 	private BooleanProperty prepTravel = new SimpleBooleanProperty(false);
+	/** doDecisionTree flag. If true, run full decision tree each game tick **/
+	private boolean doDecisionTree;	
 	
 	/**
 	 * Instantiates a new npc.
 	 *
-	 * @param id NPC id. Same as HashMap key.
+	 * @param id NPC id.
 	 * @param firstName NPC First Name
 	 * @param lastName NPC Last Name
 	 * @param location Settlement that an NPC initializes in
 	 * @param female NPC gender flag
+	 * @param doTravel doTravel flag
+	 * @param doDecisionTree doDecisionTree flag
 	 */
-	public NPC(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel){
+	public NPC(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
 
 		this.id = id;
 		locationSettlement = location;
@@ -85,27 +89,36 @@ public class NPC {
 		this.lastName = lastName;
 		this.female = female;
 		this.doTravel.set(doTravel);
+		this.doDecisionTree = doDecisionTree;
 		
 	}
 
 	/**
-	 * Instantiates a new npc.
+	 * Begins instantiation of a new NPC. Populates NPC list with empty NPCs, ready to be unpacked from a data string.
+	 * Ensures that loading never throws a NullPointer, regardless of initialisation order.
 	 *
-	 * @param id NPC id. Same as HashMap key.
-	 * @param in Input String array. Format described <a href="https://github.com/Empoliam/Silk-and-Wolf/wiki/CSV-Data-Structure">here</a>
+	 * @param packedData packed NPC data string.
 	 */
-	public NPC(String[] in){
-
+	public NPC(String packedData) {
+		this.packedData = packedData;
+	}
+	
+	public void unpack() {
+		
+		String[] in = packedData.split(",");
+		
 		this.id = Integer.parseInt(in[0]);
 		this.firstName = in[1];
 		this.lastName = in[2];
 		this.female = (Integer.parseInt(in[3]) == 0);
-		locationSettlement = SETTLEMENTS.get(Integer.parseInt(in[4]));
+		locationSettlement = WORLD.getSettlementByID(in[4]);
+		locationSettlement.addNPC(this);
 
 		this.doTravel.set(new Random().nextBoolean());
-
+		this.doDecisionTree = true;
+		
 	}
-
+	
 	/** Initiates NPC travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {
 
@@ -115,6 +128,8 @@ public class NPC {
 		Road path = locationSettlement.getRoadTo(destination);
 		remainingDistance = path.getLength();
 		locationRoad = path;
+		locationSettlement.removeNPC(this);
+		
 	}
 
 	/**
@@ -133,6 +148,7 @@ public class NPC {
 				remainingDistance = 0;
 				travelling = false;
 				locationSettlement = destination;
+				locationSettlement.addNPC(this);
 			}
 		}
 
@@ -410,6 +426,10 @@ public class NPC {
 	
 	public ReadOnlyBooleanWrapper getFemaleProperty() {
 		return new ReadOnlyBooleanWrapper(female);
+	}
+	
+	public boolean getDoDecisionTree() {
+		return doDecisionTree;
 	}
 	
 }

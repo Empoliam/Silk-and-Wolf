@@ -14,18 +14,20 @@ public class Road {
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
 
 	/** Road ID. Corresponds to list index. */
-	final private int id;
+	private String id;
 		
 	/** Connecting settlements */
-	final private Settlement connectingA;
-	final private Settlement connectingB;
+	private Settlement connectingA;
+	private Settlement connectingB;
 	
 	/** Road name. */
-	final private String name;
+	private String name;
 	
 	/** Road length. */
-	final private int length;
+	private int length;
 
+	private String packedData;
+	
 	/**
 	 * Instantiates a new road.
 	 *
@@ -33,12 +35,31 @@ public class Road {
 	 */
 	public Road(String[] in) {
 
-		id = Integer.parseInt(in[0]);
+		id = in[0];
 		name = in[1];
 		length = Integer.parseInt(in[3]);
 		
-		connectingA = SETTLEMENTS.get(Integer.parseInt(in[2].split(";")[0]));
-		connectingB = SETTLEMENTS.get(Integer.parseInt(in[2].split(";")[1]));		
+		connectingA = WORLD.getSettlementByID(in[2].split(";")[0]);
+		connectingB = WORLD.getSettlementByID(in[2].split(";")[1]);		
+		connectingA.getRoads().add(this);
+		connectingB.getRoads().add(this);
+		
+	}
+	
+	public Road(String id, String packedData) {
+		this.id = id;
+		this.packedData = packedData;
+	}
+	
+	public void unpack() {
+		
+		String[] in = packedData.split(",");
+		
+		name = in[0];
+		length = Integer.parseInt(in[2]);
+		
+		connectingA = WORLD.getSettlementByID(in[1].split(";")[0]);
+		connectingB = WORLD.getSettlementByID(in[1].split(";")[1]);		
 		connectingA.getRoads().add(this);
 		connectingB.getRoads().add(this);
 		
@@ -49,7 +70,7 @@ public class Road {
 	 *
 	 * @return ID
 	 */
-	public int getID() {
+	public String getID() {
 		
 		return id;	
 	}

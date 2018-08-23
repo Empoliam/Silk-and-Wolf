@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +12,7 @@ import entities.NPC;
 import entities.Road;
 import entities.Settlement;
 import entities.World;
+
 import market.GlobalStock;
 
 /**
@@ -38,7 +39,7 @@ public class Load {
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	/** Reference to NPC dataset*/
-	static final ArrayList<NPC> NPCS = WORLD.getNPCS();
+	static final List<NPC> NPCS = WORLD.getNPCS();
 	
 	/**
 	 * Load settlements.
@@ -52,7 +53,9 @@ public class Load {
 
 			while (line != null) {
 
-				SETTLEMENTS.add(new Settlement(line.split(",")));
+				int idSplitPoint = line.indexOf(",");
+				
+				SETTLEMENTS.add(new Settlement(line.substring(0, idSplitPoint), line.substring(idSplitPoint+1, line.length())));
 				line = br.readLine();
 			}
 
@@ -74,7 +77,9 @@ public class Load {
 			
 			while(line != null) {
 				
-				ROADS.add(new Road(line.split(",")));
+				int idSplitPoint = line.indexOf(",");
+				
+				ROADS.add(new Road(line.substring(0, idSplitPoint), line.substring(idSplitPoint+1, line.length())));
 				line = br.readLine();
 			}
 			
@@ -96,9 +101,10 @@ public class Load {
 			
 			while(line!=null) {
 				
-				NPCS.add(new NPC(line.split(",")));
+				NPCS.add(new NPC(line));
 				NPC_ID_COUNTER ++;
 				line = br.readLine();
+				
 			}
 			
 			br.close();
@@ -125,6 +131,22 @@ public class Load {
 		}
 		catch(FileNotFoundException e){}
 		catch(IOException e){}
+		
+	}
+	
+	public static void unpack() {
+		
+		for(Settlement S : SETTLEMENTS) {
+			S.unpack();
+		}
+		
+		for(Road R : ROADS) {
+			R.unpack();
+		}
+		
+		for(NPC N : NPCS) {
+			N.unpack();
+		}
 		
 	}
 }

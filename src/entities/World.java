@@ -94,6 +94,36 @@ public class World {
 		return NPCS;
 	}
 	
+	/**
+	 * Returns a reference to the specified Settlement, if it exists. Otherwise, throws IllegalArgumentException.
+	 *
+	 * @param id Settlement String ID
+	 * @return Settlement by ID
+	 */
+	public Settlement getSettlementByID(String id) {
+		for(Settlement S : SETTLEMENTS) {
+			if(S.getID().equals(id)) return S;
+			
+		}
+		
+		throw new IllegalArgumentException();
+	}
+	
+	/**
+	 * Returns a reference to the specified Road, if it exists. Otherwise, throws IllegalArgumentException.
+	 *
+	 * @param Road String ID
+	 * @return Road by ID
+	 */
+	public Road getRoadByID(String id) {
+		for(Road R : ROADS) {
+			if(R.getID().equals(id)) return R;
+			
+		}
+		
+		throw new IllegalArgumentException();
+	}
+	
 	public void printWorld() {
 
 		ArrayList<Road> roads = new ArrayList<Road>();

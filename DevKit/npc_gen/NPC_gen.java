@@ -21,7 +21,7 @@ public class NPC_gen {
 			List<String> snames = new ArrayList<String>();
 			List<String> mnames = new ArrayList<String>();
 			List<String> fnames = new ArrayList<String>();
-			List<int[]> settlements = new ArrayList<int[]>();
+			List<String[]> settlements = new ArrayList<String[]>();
 			
 			//load surnames
 			BufferedReader rSnames = new BufferedReader(new FileReader("resources/snames.txt"));
@@ -56,7 +56,7 @@ public class NPC_gen {
 
 			for(String line = rSettlements.readLine(); line != null;){
 				String[] split = line.split(",");				
-				int[] arr = { Integer.parseInt(split[0]) , Integer.parseInt(split[2]) };
+				String[] arr = { split[0] , split[2] };
 				settlements.add(arr);
 				line = rSettlements.readLine();
 			}	
@@ -66,9 +66,9 @@ public class NPC_gen {
 
 			int idCounter = 2;
 			
-			for(int[] s : settlements) {
+			for(String[] s : settlements) {
 
-				for(int k = 1; k <= s[1]; k++) {
+				for(int k = 1; k <= Integer.parseInt(s[1]); k++) {
 
 					boolean female = RANDOM.nextBoolean();
 
@@ -91,7 +91,7 @@ public class NPC_gen {
 					output.append((female ? "0" : "1") + ",");
 					
 					//town ID
-					output.append(Integer.toString(s[0]));
+					output.append(s[0]);
 					
 					output.newLine();
 					
@@ -103,7 +103,7 @@ public class NPC_gen {
 
 			output.close();
 			
-			System.out.println("Successfully created " + idCounter + " NPCs");
+			System.out.println("Successfully created " + (idCounter-2) + " NPCs");
 
 		} 
 		catch (FileNotFoundException e) {
