@@ -1,4 +1,4 @@
-package entities;
+package patchi.silk.entities;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class Road {
 	public static final World WORLD = World.getMainWorld();
 	
 	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
 	/** Road ID. Corresponds to list index. */
 	private String id;
@@ -27,25 +27,7 @@ public class Road {
 	private int length;
 
 	private String packedData;
-	
-	/**
-	 * Instantiates a new road.
-	 *
-	 * @param in Input String array. Format described <a href="https://github.com/Empoliam/Silk-and-Wolf/wiki/CSV-Data-Structure">here</a>
-	 */
-	public Road(String[] in) {
-
-		id = in[0];
-		name = in[1];
-		length = Integer.parseInt(in[3]);
 		
-		connectingA = WORLD.getSettlementByID(in[2].split(";")[0]);
-		connectingB = WORLD.getSettlementByID(in[2].split(";")[1]);		
-		connectingA.getRoads().add(this);
-		connectingB.getRoads().add(this);
-		
-	}
-	
 	public Road(String id, String packedData) {
 		this.id = id;
 		this.packedData = packedData;

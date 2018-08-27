@@ -2,7 +2,6 @@ package item_gen;
 
 import java.util.ArrayList;
 
-import item.Item;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
@@ -10,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import patchi.components.IntegerField;
+import patchi.silk.item.Item;
 
 public class ItemCreationDialog extends Dialog<Item>{
 

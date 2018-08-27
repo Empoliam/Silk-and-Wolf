@@ -1,23 +1,19 @@
-package entities;
+package patchi.silk.entities;
 
 import java.util.Random;
 
 import patchi.math.PatchiMath;
-import foundation.Time;
-import item.Inventory;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
+import patchi.silk.foundation.Time;
+import patchi.silk.item.Inventory;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * Generic sentient humanoid entity.
  */
-public class NPC {
+public class Character {
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
@@ -31,11 +27,11 @@ public class NPC {
 	
 	//############################## PROPERTIES ##############################//
 
-	/** NPC ID. */
+	/** Character ID. */
 	private int id;	
-	/** NPC first name. */
+	/** Character first name. */
 	private String firstName;	
-	/** NPC last name. */
+	/** Character last name. */
 	private String lastName;
 	
 	/** Active location. While travel flag is true, road is relevant. Otherwise, settlement. */
@@ -46,7 +42,7 @@ public class NPC {
 	private Settlement destination;	
 	/** The remaining distance to the next settlement. */
 	private int remainingDistance = 0;		
-	/** The hours remaining until an NPC begins travelling. */
+	/** The hours remaining until an Character begins travelling. */
 	private int departureHours = 0;
 	/** Confidence modifier. Double between 0.0 and 1.0. Affects departure time. Currently unimplemented. */
 	private double confidence = 1.0;
@@ -59,47 +55,47 @@ public class NPC {
 
 	/** Gender flag. True if female. */
 	private boolean female;
-	/** Travel flag. While true, town-based interactions and decisions are disabled. NPCs with this flag will execute the travel routine each hour.*/
+	/** Travel flag. While true, town-based interactions and decisions are disabled. Characters with this flag will execute the travel routine each hour.*/
 	private boolean travelling = false;	
-	/** Illegitimacy flag. Integer representation of a boolean flag. True if the NPC is conducting shady business. Affects departure time. Currently unimplemented. */
-	private IntegerProperty illegitimacy = new SimpleIntegerProperty(0);
-	/** DoTravel flag. While true, NPC is subject to travel decision making at midnight each day.*/
-	private BooleanProperty doTravel = new SimpleBooleanProperty();
-	/** PrepTravel flag. While true, the NPC is preparing to leave.*/
-	private BooleanProperty prepTravel = new SimpleBooleanProperty(false);
+	/** Illegitimacy flag. Integer representation of a boolean flag. True if the Character is conducting shady business. Affects departure time. Currently unimplemented. */
+	private int illegitimacy = 0;
+	/** DoTravel flag. While true, Character is subject to travel decision making at midnight each day.*/
+	private boolean doTravel;
+	/** PrepTravel flag. While true, the Character is preparing to leave.*/
+	private boolean prepTravel = false;
 	/** doDecisionTree flag. If true, run full decision tree each game tick **/
 	private boolean doDecisionTree;	
 	
 	/**
-	 * Instantiates a new npc.
+	 * Instantiates a new Character.
 	 *
-	 * @param id NPC id.
-	 * @param firstName NPC First Name
-	 * @param lastName NPC Last Name
-	 * @param location Settlement that an NPC initializes in
-	 * @param female NPC gender flag
+	 * @param id Character id.
+	 * @param firstName Character First Name
+	 * @param lastName Character Last Name
+	 * @param location Settlement that an Character initializes in
+	 * @param female Character gender flag
 	 * @param doTravel doTravel flag
 	 * @param doDecisionTree doDecisionTree flag
 	 */
-	public NPC(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
+	public Character(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
 
 		this.id = id;
 		locationSettlement = location;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.female = female;
-		this.doTravel.set(doTravel);
+		this.doTravel= doTravel;
 		this.doDecisionTree = doDecisionTree;
 		
 	}
 
 	/**
-	 * Begins instantiation of a new NPC. Populates NPC list with empty NPCs, ready to be unpacked from a data string.
+	 * Begins instantiation of a new Character. Populates Character list with empty Characters, ready to be unpacked from a data string.
 	 * Ensures that loading never throws a NullPointer, regardless of initialisation order.
 	 *
-	 * @param packedData packed NPC data string.
+	 * @param packedData packed Character data string.
 	 */
-	public NPC(String packedData) {
+	public Character(String packedData) {
 		this.packedData = packedData;
 	}
 	
@@ -112,23 +108,23 @@ public class NPC {
 		this.lastName = in[2];
 		this.female = (Integer.parseInt(in[3]) == 0);
 		locationSettlement = WORLD.getSettlementByID(in[4]);
-		locationSettlement.addNPC(this);
+		locationSettlement.addCharacter(this);
 
-		this.doTravel.set(new Random().nextBoolean());
+		this.doTravel = new Random().nextBoolean();
 		this.doDecisionTree = true;
 		
 	}
 	
-	/** Initiates NPC travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
+	/** Initiates Character travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {
 
-		prepTravel.set(false);
+		prepTravel = false;
 		departureHours = 0;
 		travelling = true;	
 		Road path = locationSettlement.getRoadTo(destination);
 		remainingDistance = path.getLength();
 		locationRoad = path;
-		locationSettlement.removeNPC(this);
+		locationSettlement.removeCharacter(this);
 		
 	}
 
@@ -148,7 +144,7 @@ public class NPC {
 				remainingDistance = 0;
 				travelling = false;
 				locationSettlement = destination;
-				locationSettlement.addNPC(this);
+				locationSettlement.addCharacter(this);
 			}
 		}
 
@@ -157,14 +153,14 @@ public class NPC {
 	}
 
 	/**
-	 * Generates a departure hour for this NPC.
+	 * Generates a departure hour for this Character.
 	 *
 	 * @param RANDOM Project wide Math.Random object
 	 * @return Generated hour of departure.
 	 */
 	public int generateDepartureHour(Random RANDOM) {
 
-		int departure = PatchiMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy.get()) / 23),RANDOM);
+		int departure = PatchiMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy) / 23),RANDOM);
 		return departure;
 
 	}
@@ -209,7 +205,7 @@ public class NPC {
 	}
 	
 	/**
-	 * Returns the state of the NPC travel flag.
+	 * Returns the state of the Character travel flag.
 	 *
 	 * @return travel flag state
 	 */
@@ -227,16 +223,16 @@ public class NPC {
 	} 
 	
 	/**
-	 * Returns the first name of the NPC.
+	 * Returns the first name of the Character.
 	 *
-	 * @return NPC's First Name
+	 * @return Character's First Name
 	 */
 	public String getFirstName() {
 		return firstName;
 	}
 
 	/** 
-	 * Returns the firstName Property of the NPC.
+	 * Returns the firstName Property of the Character.
 	 * 
 	 * @return lastName Property
 	 */
@@ -245,16 +241,16 @@ public class NPC {
 	}
 
 	/**
-	 * Returns the last name of the NPC.
+	 * Returns the last name of the Character.
 	 *
-	 * @return NPC's Last Name
+	 * @return Character's Last Name
 	 */
 	public String getLastName() {
 		return lastName;
 	}
 
 	/**
-	 * Returns the lastName Property of the NPC
+	 * Returns the lastName Property of the Character
 	 * 
 	 * @return lastName property
 	 */
@@ -268,11 +264,11 @@ public class NPC {
 	 * @return doTravel flag state
 	 */
 	public boolean getDoTravel() {
-		return doTravel.get();
+		return doTravel;
 	}
 
 	/**
-	 * Sets the number of hours until an NPC departs.
+	 * Sets the number of hours until an Character departs.
 	 *
 	 * @param h Hours from set time
 	 */
@@ -310,7 +306,7 @@ public class NPC {
 	 * @param f Desired state
 	 */
 	public void setPrepTravel(boolean f) {
-		prepTravel.set(f);
+		prepTravel = f;
 	}
 
 	/**
@@ -319,7 +315,7 @@ public class NPC {
 	 * @return prepTravel flag state
 	 */
 	public boolean getPrepTravel() {
-		return prepTravel.get();
+		return prepTravel;
 	}
 
 	/**
@@ -327,14 +323,14 @@ public class NPC {
 	 *
 	 * @return prepTravel BooleanProperty
 	 */
-	public BooleanProperty getPrepTravelProperty() {
-		return prepTravel;
+	public ReadOnlyBooleanWrapper getPrepTravelProperty() {
+		return new ReadOnlyBooleanWrapper(prepTravel);
 	}
 
 	/**
-	 * Returns the NPC id.
+	 * Returns the Character id.
 	 *
-	 * @return NPC id
+	 * @return Character id
 	 */
 	public int getId() {
 		return id;
@@ -371,7 +367,7 @@ public class NPC {
 	}
 
 	/**
-	 * Returns the NPC confidence coefficient.
+	 * Returns the Character confidence coefficient.
 	 *
 	 * @return confidence coefficient
 	 */

@@ -1,4 +1,4 @@
-package main;
+package patchi.silk.main;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,29 +8,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import entities.NPC;
-import entities.Road;
-import entities.Settlement;
-import entities.World;
-
-import market.GlobalStock;
+import patchi.silk.entities.Character;
+import patchi.silk.entities.Road;
+import patchi.silk.entities.Settlement;
+import patchi.silk.entities.World;
+import patchi.silk.market.GlobalStock;
 
 /**
  * Handles all file loading at the start of the game.
  */
 public class Load {
 	
-	/** NPC ID counter. For keeping track of the current NPC ID.<br>
-	 *	All NPC IDs start at 2. Lawrence always has ID '0' and Holo always has ID '1'.
-	 */
-	@SuppressWarnings("unused")
-	private static int NPC_ID_COUNTER = 2;
-
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
 	
 	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
 	/** Reference to roads dataset. */
 	private static final List<Road> ROADS = WORLD.getRoadSet();
@@ -38,8 +31,8 @@ public class Load {
 	/** Reference to global stock dataset */
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
-	/** Reference to NPC dataset*/
-	static final List<NPC> NPCS = WORLD.getNPCS();
+	/** Reference to character dataset*/
+	static final List<Character> CHARACTERS = WORLD.getCharacterSet();
 	
 	/**
 	 * Load settlements.
@@ -90,19 +83,18 @@ public class Load {
 	}
 	
 	/**
-	 * Load NPCs.
+	 * Load Characters.
 	 */
-	public static void npcs() { 
+	public static void characters() { 
 	
 		try {
 			
-			BufferedReader br = new BufferedReader(new FileReader("resources/npcs.csv"));
+			BufferedReader br = new BufferedReader(new FileReader("resources/characters.csv"));
 			String line = br.readLine();
 			
 			while(line!=null) {
 				
-				NPCS.add(new NPC(line));
-				NPC_ID_COUNTER ++;
+				CHARACTERS.add(new Character(line));
 				line = br.readLine();
 				
 			}
@@ -144,7 +136,7 @@ public class Load {
 			R.unpack();
 		}
 		
-		for(NPC N : NPCS) {
+		for(Character N : CHARACTERS) {
 			N.unpack();
 		}
 		

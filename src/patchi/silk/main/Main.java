@@ -1,17 +1,8 @@
-package main;
+package patchi.silk.main;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
-import entities.NPC;
-import entities.Settlement;
-import entities.World;
-
-import foundation.Time;
-
-import gui.NPCTable;
-import gui.TravelWindow;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -23,8 +14,14 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import market.GlobalStock;
+import patchi.silk.entities.Character;
+import patchi.silk.entities.Settlement;
+import patchi.silk.entities.World;
+import patchi.silk.foundation.Time;
+import patchi.silk.gui.CharacterOverview;
+import patchi.silk.gui.SettlementOverview;
+import patchi.silk.gui.TravelWindow;
+import patchi.silk.market.GlobalStock;
 
 /**
  * Main class.
@@ -41,33 +38,23 @@ public class Main extends Application {
 	public static final World WORLD = World.getMainWorld();
 	
 	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
-	/** References to NPC dataset and important NPC objects */
-	static final List<NPC> NPCS = WORLD.getNPCS();
-	static NPC LAWRENCE;
-	static NPC HOLO;
+	/** References to character dataset and important Characters */
+	static final List<Character> CHARACTERS = WORLD.getCharacterSet();
+	static Character LAWRENCE;
+	static Character HOLO;
 
 	/** Reference to global stock dataset */
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	//UI Elements
-	
-	Button advHourButton;
-	TextField loopTimes;
-	TextField loopDelay;
-	int loop = 0;
-	
-	Label timeLabel;
-	
-	TabPane mainTabPane;
-	Tab npcTab;
-	Tab travelTab;
-	Tab stockTab;
-	NPCTable npcTable;
-	
-	static TravelWindow travelWindow;
-	
+	private static Stage primaryStage;	
+	private static Scene mainScene;
+	private static CharacterOverview charTable;
+	private static SettlementOverview settlementTable; 
+	private static TravelWindow travelWindow;
+		
 	/**
 	 * Primary initialization method.
 	 *
@@ -80,8 +67,8 @@ public class Main extends Application {
 		System.out.println("Loaded roads in " + (System.currentTimeMillis()-start) + "ms");
 		
 		start = System.currentTimeMillis();
-		Load.npcs();
-		System.out.println("Loaded NPCs in " + (System.currentTimeMillis()-start) + "ms");
+		Load.characters();
+		System.out.println("Loaded characters in " + (System.currentTimeMillis()-start) + "ms");
 		
 		start = System.currentTimeMillis();
 		Load.settlements();
@@ -95,11 +82,11 @@ public class Main extends Application {
 		Load.unpack();
 		System.out.println("Unpacked in " + (System.currentTimeMillis()-start) + "ms");
 		
-		NPCS.add(new NPC(0,"Kraft","Lawrence",SETTLEMENTS.get(0),false,true,false));
-		NPCS.add(new NPC(1,"Holo","",SETTLEMENTS.get(0),true,true,false));
+		CHARACTERS.add(new Character(0,"Kraft","Lawrence",SETTLEMENTS.get(0),false,true,false));
+		CHARACTERS.add(new Character(1,"Holo","",SETTLEMENTS.get(0),true,true,false));
 
-		LAWRENCE = NPCS.get(0);
-		HOLO = NPCS.get(1);
+		LAWRENCE = CHARACTERS.get(0);
+		HOLO = CHARACTERS.get(1);
 				
 		launch(args);
 		
@@ -111,17 +98,19 @@ public class Main extends Application {
 	 *	@param primaryStage	First Stage
 	 *	 */
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage mainStage) throws Exception {
 
+		primaryStage = mainStage;
+						
 		System.out.println("Launch successful");
 		primaryStage.setTitle("Debug build");
 						
-		timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
+		Label timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
 				
-		loopTimes = new TextField("1");
-		loopDelay = new TextField("50");
+		TextField loopTimes = new TextField("1");
+		TextField loopDelay = new TextField("50");
 
-		advHourButton = new Button("Advance Time");
+		Button advHourButton = new Button("Advance Time");
 		advHourButton.setOnAction(e -> { 
 			e.consume();
 			
@@ -154,8 +143,8 @@ public class Main extends Application {
 			t.messageProperty().addListener((observable, old, updated) -> {
 
 					timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-					npcTable.refresh();
-					
+					charTable.refresh();
+					settlementTable.refresh();
 					
 					String[] s = t.getMessage().split(",");
 					//Detect if player is travelling. Allow access to travel window if not
@@ -173,22 +162,27 @@ public class Main extends Application {
 					
 		});
 		
-		npcTable = new NPCTable(NPCS);
-		VBox npcContainer = new VBox(npcTable);
-		npcTab = new Tab("NPCs",npcContainer);
-		npcTab.setClosable(false);
+		charTable = new CharacterOverview(CHARACTERS);
+		VBox charContainer = new VBox(charTable);
+		Tab charTab = new Tab("Characters",charContainer);
+		charTab.setClosable(false);
 		
 		travelWindow = new TravelWindow();
-		travelTab = new Tab("Travel",travelWindow);
+		Tab travelTab = new Tab("Travel",travelWindow);
 		travelTab.setClosable(false);
 		
-		mainTabPane = new TabPane();
-		mainTabPane.getTabs().addAll(npcTab, travelTab);
+		settlementTable = new SettlementOverview();
+		VBox settlementContainer = new VBox(settlementTable);
+		Tab settlementTab = new Tab("Settlements", settlementContainer);
+		settlementTab.setClosable(false);
+		
+		TabPane mainTabPane = new TabPane();
+		mainTabPane.getTabs().addAll(charTab, settlementTab, travelTab);
 		
 		VBox mainLayout = new VBox();
 		mainLayout.getChildren().addAll(timeLabel,mainTabPane,loopTimes,loopDelay,advHourButton);
 		
-		Scene mainScene = new Scene(mainLayout, 1000, 500);
+		mainScene = new Scene(mainLayout, 1000, 500);
 						
 		primaryStage.setScene(mainScene);
 		primaryStage.show();
@@ -202,7 +196,7 @@ public class Main extends Application {
 
 		CLOCK.advanceHour();
 
-		for(NPC h : NPCS) {
+		for(Character h : CHARACTERS) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
 			if (h.getDoDecisionTree()) {
@@ -218,10 +212,10 @@ public class Main extends Application {
 				}
 			}
 
-			//NPCs advance
+			//Characters advance
 			if(h.getTravelling()) h.advanceTravel();
 
-			//NPCs depart
+			//Characters depart
 			if(h.getPrepTravel()) {
 				if(h.getDepartureHours() == 0) {
 					h.beginTravel();
@@ -232,7 +226,7 @@ public class Main extends Application {
 		}
 		
 	}
-
+	
 }
 
 

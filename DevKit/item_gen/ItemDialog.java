@@ -2,7 +2,6 @@ package item_gen;
 
 import java.util.ArrayList;
 
-import item.Item;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -14,6 +13,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import patchi.components.IntegerField;
+import patchi.silk.item.Item;
 
 public class ItemDialog extends Dialog<Item> {
 

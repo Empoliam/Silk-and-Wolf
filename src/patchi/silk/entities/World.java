@@ -1,10 +1,10 @@
-package entities;
+package patchi.silk.entities;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import market.GlobalStock;
+import patchi.silk.market.GlobalStock;
 
 /**
  * World class. Acts as a central access point for all datasets. Also functions as a graph of settlements connected by roads.
@@ -23,13 +23,13 @@ public class World {
 	/** Global stock list. */
 	private final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 	
-	/** Full NPC dataset ArrayList. Automatically sorts when adding new NPC. */
-	private final ArrayList<NPC> NPCS = new ArrayList<NPC>() {
+	/** Full character dataset ArrayList. Automatically sorts when adding new character. */
+	private final ArrayList<Character> CHARACTERS = new ArrayList<Character>() {
 
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public boolean add(NPC A) {
+		public boolean add(Character A) {
 			
 			super.add(A);
 			
@@ -63,7 +63,7 @@ public class World {
 	 *
 	 * @return the settlements set
 	 */
-	public ArrayList<Settlement> getSettlementsSet(){
+	public ArrayList<Settlement> getSettlementSet(){
 		return SETTLEMENTS;
 	}
 	
@@ -86,12 +86,12 @@ public class World {
 	}
 	
 	/**
-	 * Gets the NPC list.
+	 * Gets the character list.
 	 *
-	 * @return the NPC list
+	 * @return the character list
 	 */
-	public ArrayList<NPC> getNPCS() {
-		return NPCS;
+	public ArrayList<Character> getCharacterSet() {
+		return CHARACTERS;
 	}
 	
 	/**

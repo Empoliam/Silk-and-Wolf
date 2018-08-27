@@ -1,4 +1,4 @@
-package market;
+package patchi.silk.market;
 
 /**
  * Determines the properties of a given commodity within a settlement. Changes to these values may occur

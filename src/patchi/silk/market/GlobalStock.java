@@ -1,4 +1,4 @@
-package market;
+package patchi.silk.market;
 
 /**
  * Tracks universal data for a commodity, such as global availability. 

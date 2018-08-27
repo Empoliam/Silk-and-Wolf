@@ -1,15 +1,17 @@
-package entities;
+package patchi.silk.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import market.GlobalStock;
-import market.LocalStock;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import patchi.silk.market.GlobalStock;
+import patchi.silk.market.LocalStock;
 
 /**
- * A generic location in which NPCs and buildings are contained.
+ * A generic location in which characters and buildings are contained.
  */
 public class Settlement {
 
@@ -22,7 +24,7 @@ public class Settlement {
 	private static final HashMap<Integer, GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 
 	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
 	/** Arraylist of connecting roads */
 	private ArrayList<Road> connectingRoads = new ArrayList<Road>();
@@ -33,7 +35,7 @@ public class Settlement {
 	/** Settlement ID.*/
 	private String id;
 
-	private List<NPC> currentInhabitants = new LinkedList<NPC>();
+	private List<Character> currentInhabitants = new LinkedList<Character>();
 
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
@@ -88,6 +90,12 @@ public class Settlement {
 	public String getName() {
 
 		return name;
+	}
+	
+	public ReadOnlyStringWrapper getNameProperty() {
+		
+		return new ReadOnlyStringWrapper(name);
+		
 	}
 
 	/**
@@ -165,11 +173,11 @@ public class Settlement {
 		this.done = done;
 	}
 
-	public void addNPC(NPC A) {
+	public void addCharacter(Character A) {
 		currentInhabitants.add(A);
 	}
 
-	public void removeNPC(NPC A) {
+	public void removeCharacter(Character A) {
 		currentInhabitants.remove(A);
 	}
 	
@@ -177,4 +185,8 @@ public class Settlement {
 		return currentInhabitants.size();
 	}
 
+	public ReadOnlyIntegerWrapper getCurrentPopulationProperty() {
+		return new ReadOnlyIntegerWrapper(currentInhabitants.size());
+	}
+	
 }

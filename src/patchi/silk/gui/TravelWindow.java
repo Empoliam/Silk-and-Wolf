@@ -1,14 +1,14 @@
-package gui;
+package patchi.silk.gui;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import entities.NPC;
-import entities.Settlement;
-import entities.World;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import patchi.silk.entities.Character;
+import patchi.silk.entities.Settlement;
+import patchi.silk.entities.World;
 
 public class TravelWindow extends GridPane{
 
@@ -16,16 +16,16 @@ public class TravelWindow extends GridPane{
 	public static final World WORLD = World.getMainWorld();
 	
 	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementsSet();
+	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 	
 	/** Reference to list of all travel buttons */
 	private static List<Button> travelButtons;
 	
-	/** NPC references. */
-	/** References to NPC dataset and important NPC objects */
-	static final List<NPC> NPCS = WORLD.getNPCS();
-	static NPC LAWRENCE = NPCS.get(0);
-	static NPC HOLO = NPCS.get(1);
+	/** Character references. */
+	/** References to Character dataset and important characters */
+	static final List<Character> CHARACTERS = WORLD.getCharacterSet();
+	static Character LAWRENCE = CHARACTERS.get(0);
+	static Character HOLO = CHARACTERS.get(1);
 	
 	public TravelWindow() {
 

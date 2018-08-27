@@ -1,4 +1,4 @@
-package npc_gen;
+package char_gen;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class NPC_gen {
+public class Char_gen {
 
 	final static Random RANDOM = new Random();
 	
@@ -62,7 +62,7 @@ public class NPC_gen {
 			}	
 			rSettlements.close();
 
-			BufferedWriter output = new BufferedWriter(new FileWriter("npcs.csv"));
+			BufferedWriter output = new BufferedWriter(new FileWriter("characters.csv"));
 
 			int idCounter = 2;
 			
@@ -103,7 +103,7 @@ public class NPC_gen {
 
 			output.close();
 			
-			System.out.println("Successfully created " + (idCounter-2) + " NPCs");
+			System.out.println("Successfully created " + (idCounter-2) + " Characters");
 
 		} 
 		catch (FileNotFoundException e) {
