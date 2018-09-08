@@ -90,7 +90,11 @@ public class CharacterOverview extends VBox{
 
 			this.C = C;
 			name = new Label(C.getFirstName() + " " + C.getLastName());
-			location = new Label(C.getLocationSettlement().getName());
+			if(C.getTravelling()) { 
+				location = new Label("On " + C.locationName() + " travelling to " + C.getDestination().getName());
+			} else {
+				location = new Label(C.locationName());
+			}
 			
 			Button backButton = new Button("Back");
 			backButton.setOnAction(e -> {
@@ -104,7 +108,11 @@ public class CharacterOverview extends VBox{
 		}
 		
 		protected void refresh() {
-			location.setText(C.locationNameProperty().get());
+			if(C.getTravelling()) { 
+				location.setText("On " + C.locationName() + " travelling to " + C.getDestination().getName());
+			} else {
+				location.setText(C.locationName());
+			}
 		}
 
 	}		

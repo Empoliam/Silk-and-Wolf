@@ -352,10 +352,21 @@ public class Character {
 	 */
 	public ReadOnlyStringWrapper locationNameProperty() {
 		String locationName;
-		locationName = (travelling) ? locationRoad.getName() : locationSettlement.getName();
+		locationName = this.locationName();
 		return new ReadOnlyStringWrapper(locationName);
 	}
 
+	/**
+	 * Returns the name of the current location.
+	 *
+	 * @return Location name as String
+	 */
+	public String locationName() {
+		String locationName;
+		locationName = (travelling) ? locationRoad.getName() : locationSettlement.getName();
+		return locationName;
+	}
+	
 	/**
 	 * Sets the confidence coefficient. Automatically trims to [0.0,1.0].
 	 *
