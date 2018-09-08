@@ -90,7 +90,7 @@ public class CharacterOverview extends VBox{
 
 			this.C = C;
 			name = new Label(C.getFirstName() + " " + C.getLastName());
-			if(C.getTravelling()) { 
+			if(C.isTravelling()) { 
 				location = new Label("On " + C.locationName() + " travelling to " + C.getDestination().getName());
 			} else {
 				location = new Label(C.locationName());
@@ -108,7 +108,7 @@ public class CharacterOverview extends VBox{
 		}
 		
 		protected void refresh() {
-			if(C.getTravelling()) { 
+			if(C.isTravelling()) { 
 				location.setText("On " + C.locationName() + " travelling to " + C.getDestination().getName());
 			} else {
 				location.setText(C.locationName());

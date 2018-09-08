@@ -179,7 +179,7 @@ public class Main extends Application {
 
 					advHourButton.setDisable(false);	
 
-					if (!LAWRENCE.getTravelling()) {
+					if (!LAWRENCE.isTravelling()) {
 						for(Button B : travelWindow.getButtons()) B.setDisable(false);			
 						travelWindow.update();
 					}
@@ -231,17 +231,17 @@ public class Main extends Application {
 				if(		CLOCK.getHour() == 0 
 						&& h.getDoTravel() 
 						&& !h.getPrepTravel() 
-						&& !h.getTravelling()) {
+						&& !h.isTravelling()) {
 
 					h.setDepartureHours(h.generateDepartureHour(RANDOM));			
 					List<Settlement> destinationPool = h.getLocationSettlement().getConnectedSettlements();			
 					h.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
-					h.setPrepTravel(true);
+					h.setPrepTravel();
 				}
 			}
 
 			//Characters advance
-			if(h.getTravelling()) h.advanceTravel();
+			if(h.isTravelling()) h.advanceTravel();
 
 			//Characters depart
 			if(h.getPrepTravel()) {

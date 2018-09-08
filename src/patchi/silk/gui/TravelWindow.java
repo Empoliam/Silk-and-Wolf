@@ -51,8 +51,8 @@ public class TravelWindow extends GridPane{
 				HOLO.setDepartureHours(0);
 				LAWRENCE.setDestination(S);
 				HOLO.setDestination(S);
-				LAWRENCE.setPrepTravel(true);
-				HOLO.setPrepTravel(true);
+				LAWRENCE.setPrepTravel();
+				HOLO.setPrepTravel();
 				
 			});
 			

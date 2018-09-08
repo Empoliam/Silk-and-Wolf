@@ -36,6 +36,9 @@ public class Time {
 	/**  Number of days since new year. */
 	private int daysCount;
 	
+	private double sunriseTime;
+	private double sunsetTime;
+	private double dayLength;
 	
 
 	/**
@@ -96,6 +99,11 @@ public class Time {
 				month = 0;
 				daysCount = 0;
 			}
+			
+			sunriseTime = 2.0 * Math.cos((Math.PI * (double) daysCount)/182.0 + (5.0 * Math.PI)/91.0) + 6.0;
+			sunsetTime = 18.0 - 2.0 * Math.cos((Math.PI * daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
+			dayLength = 12.0 - 4.0 * Math.cos((Math.PI * (double) daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
+			
 		}
 	}
 	
@@ -198,7 +206,15 @@ public class Time {
 	 * @return Sunrise time
 	 */
 	public double getSunriseTime() {
-		return 2*Math.cos((Math.PI * (double)daysCount)/182.0 + (5.0 * Math.PI)/91.0) + 5.0;
+		return sunriseTime;
+	}
+
+	public double getSunsetTime() {
+		return sunsetTime;
+	}
+	
+	public double getCurrentDayLength() {
+		return dayLength;
 	}
 		
 }

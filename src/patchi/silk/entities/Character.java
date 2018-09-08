@@ -1,5 +1,6 @@
 package patchi.silk.entities;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 import patchi.math.PatchiMath;
@@ -16,11 +17,11 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 public class Character {
 
 	/** Main World reference */
-	public static final World WORLD = World.getMainWorld();
+	static final World WORLD = World.getMainWorld();
 			
 	/** Reference to global clock */
 	static final Time CLOCK = Time.CLOCK;
-
+	
 	//############################## DATA PACKING ##############################//
 	
 	private String packedData;
@@ -51,20 +52,7 @@ public class Character {
 	
 	private final Inventory inventory = new Inventory();
 	
-	//############################## FLAGS ##############################//
-
-	/** Gender flag. True if female. */
-	private boolean female;
-	/** Travel flag. While true, town-based interactions and decisions are disabled. Characters with this flag will execute the travel routine each hour.*/
-	private boolean travelling = false;	
-	/** Illegitimacy flag. Integer representation of a boolean flag. True if the Character is conducting shady business. Affects departure time. Currently unimplemented. */
-	private int illegitimacy = 0;
-	/** DoTravel flag. While true, Character is subject to travel decision making at midnight each day.*/
-	private boolean doTravel;
-	/** PrepTravel flag. While true, the Character is preparing to leave.*/
-	private boolean prepTravel = false;
-	/** doDecisionTree flag. If true, run full decision tree each game tick **/
-	private boolean doDecisionTree;	
+	private EnumSet<CharacterFlags> FLAGS = EnumSet.noneOf(CharacterFlags.class);
 	
 	/**
 	 * Instantiates a new Character.
@@ -83,9 +71,10 @@ public class Character {
 		locationSettlement = location;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.female = female;
-		this.doTravel= doTravel;
-		this.doDecisionTree = doDecisionTree;
+		
+		if(female) FLAGS.add(CharacterFlags.FEMALE);
+		if(doTravel) FLAGS.add(CharacterFlags.DO_TRAVEL);
+		if(doDecisionTree) FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		
 	}
 
@@ -106,21 +95,21 @@ public class Character {
 		this.id = Integer.parseInt(in[0]);
 		this.firstName = in[1];
 		this.lastName = in[2];
-		this.female = (Integer.parseInt(in[3]) == 0);
+		if(Integer.parseInt(in[3]) == 0) FLAGS.add(CharacterFlags.FEMALE);
 		locationSettlement = WORLD.getSettlementByID(in[4]);
 		locationSettlement.addCharacter(this);
 
-		this.doTravel = new Random().nextBoolean();
-		this.doDecisionTree = true;
+		if(new Random().nextBoolean()) FLAGS.add(CharacterFlags.DO_TRAVEL);
+		FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		
 	}
 	
 	/** Initiates Character travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {
 
-		prepTravel = false;
+		FLAGS.remove(CharacterFlags.PREP_TRAVEL);
 		departureHours = 0;
-		travelling = true;	
+		FLAGS.add(CharacterFlags.TRAVELLING);	
 		Road path = locationSettlement.getRoadTo(destination);
 		remainingDistance = path.getLength();
 		locationRoad = path;
@@ -136,19 +125,19 @@ public class Character {
 	 */
 	public boolean advanceTravel() {
 
-		if(travelling) {
+		if(isTravelling()) {
 
 			remainingDistance = remainingDistance - 6;
 
 			if(remainingDistance <= 0) {
 				remainingDistance = 0;
-				travelling = false;
+				FLAGS.remove(CharacterFlags.TRAVELLING);
 				locationSettlement = destination;
 				locationSettlement.addCharacter(this);
 			}
 		}
 
-		return travelling;
+		return isTravelling();
 
 	}
 
@@ -160,7 +149,14 @@ public class Character {
 	 */
 	public int generateDepartureHour(Random RANDOM) {
 
-		int departure = PatchiMath.generateBinomialInt(23,((2.0 *Math.cos((Math.PI * CLOCK.getCurrentDayCount()) / 182.0 + (5.0 * Math.PI) / 91.0) + 6.0 + 1 - illegitimacy) / 23),RANDOM);
+		double sunrise = CLOCK.getSunriseTime();
+		double daylength = CLOCK.getCurrentDayLength();
+		
+		double baseProb = sunrise + 1;
+		double confidenceMod = ((1 - confidence) / 5.0) * daylength;
+		double finalProb = (baseProb + confidenceMod) / 23.0;
+		
+		int departure = PatchiMath.generateBinomialInt(23,finalProb,RANDOM);
 		return departure;
 
 	}
@@ -205,21 +201,12 @@ public class Character {
 	}
 	
 	/**
-	 * Returns the state of the Character travel flag.
-	 *
-	 * @return travel flag state
-	 */
-	public boolean getTravelling() {
-		return travelling;
-	}
-
-	/**
 	 * Returns the travelling Property.
 	 *
 	 * @return travelling BolleanProperty
 	 */
 	public ReadOnlyBooleanWrapper getTravellingProperty() {
-		return new ReadOnlyBooleanWrapper(travelling);
+		return new ReadOnlyBooleanWrapper(isTravelling());
 	} 
 	
 	/**
@@ -264,7 +251,7 @@ public class Character {
 	 * @return doTravel flag state
 	 */
 	public boolean getDoTravel() {
-		return doTravel;
+		return FLAGS.contains(CharacterFlags.DO_TRAVEL);
 	}
 
 	/**
@@ -300,14 +287,6 @@ public class Character {
 		;
 	}
 
-	/**
-	 * Sets the prepTravel flag.
-	 *
-	 * @param f Desired state
-	 */
-	public void setPrepTravel(boolean f) {
-		prepTravel = f;
-	}
 
 	/**
 	 * Returns the value of the prepTravel flag.
@@ -315,7 +294,7 @@ public class Character {
 	 * @return prepTravel flag state
 	 */
 	public boolean getPrepTravel() {
-		return prepTravel;
+		return FLAGS.contains(CharacterFlags.PREP_TRAVEL);
 	}
 
 	/**
@@ -324,7 +303,7 @@ public class Character {
 	 * @return prepTravel BooleanProperty
 	 */
 	public ReadOnlyBooleanWrapper getPrepTravelProperty() {
-		return new ReadOnlyBooleanWrapper(prepTravel);
+		return new ReadOnlyBooleanWrapper(getPrepTravel());
 	}
 
 	/**
@@ -363,7 +342,7 @@ public class Character {
 	 */
 	public String locationName() {
 		String locationName;
-		locationName = (travelling) ? locationRoad.getName() : locationSettlement.getName();
+		locationName = (isTravelling()) ? locationRoad.getName() : locationSettlement.getName();
 		return locationName;
 	}
 	
@@ -428,15 +407,23 @@ public class Character {
 	}
 	
 	public boolean getFemale() {
-		return female;
+		return FLAGS.contains(CharacterFlags.FEMALE);
 	}
 	
 	public ReadOnlyBooleanWrapper getFemaleProperty() {
-		return new ReadOnlyBooleanWrapper(female);
+		return new ReadOnlyBooleanWrapper(getFemale());
 	}
 	
 	public boolean getDoDecisionTree() {
-		return doDecisionTree;
+		return FLAGS.contains(CharacterFlags.DO_DECISION_TREE);
+	}
+	
+	public boolean isTravelling() {
+		return FLAGS.contains(CharacterFlags.TRAVELLING);
+	}
+
+	public void setPrepTravel() {
+		FLAGS.add(CharacterFlags.PREP_TRAVEL);
 	}
 	
 }
