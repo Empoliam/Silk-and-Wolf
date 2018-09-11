@@ -23,20 +23,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import patchi.silk.item.Item;
+
+import patchi.silk.item.ItemDef;
 
 public class Item_gen extends Application {
 
-	static final int VERSION = 1;
-	static int currentID = 0;
+	static final int VERSION = 2;
 
-	static ArrayList<Item> itemList = new ArrayList<>();
+	static ArrayList<ItemDef> itemList = new ArrayList<>();
 
 	static HBox loadWindow;
 	static Scene loadScene;
 
 	static VBox mainWindow;
-	static ListView<Item> itemListView = new ListView<>();
+	static ListView<ItemDef> itemListView = new ListView<>();
 	static Scene mainScene;
 
 	static File inputFile;
@@ -75,9 +75,8 @@ public class Item_gen extends Application {
 						line = in.readLine();
 						
 						while(line != null) {
-							itemList.add(new Item(line));
+							itemList.add(new ItemDef(line.split(",")));
 							line = in.readLine();
-							currentID++;
 						}
 
 						in.close();
@@ -87,7 +86,6 @@ public class Item_gen extends Application {
 						System.out.println("Version Mismatch.");
 						VersionMismatchDialog mismatch = new VersionMismatchDialog(mainStage, in, itemList);
 						mismatch.showAndWait();
-						currentID = mismatch.getResult();
 					}
 					
 					launchMainView(mainStage);
@@ -114,11 +112,10 @@ public class Item_gen extends Application {
 
 		newItemButton.setOnAction(e -> {
 
-			ItemCreationDialog createDialog = new ItemCreationDialog(mainStage, itemList, currentID);
-			Optional<Item> result = createDialog.showAndWait();
+			ItemCreationDialog createDialog = new ItemCreationDialog(mainStage, itemList);
+			Optional<ItemDef> result = createDialog.showAndWait();
 			if(result.isPresent()) {
 				itemListView.getItems().add(result.get());	
-				currentID = result.get().getID()+1;
 			}
 
 		});
@@ -139,7 +136,7 @@ public class Item_gen extends Application {
 			int index = itemListView.getSelectionModel().getSelectedIndex();
 			if(index != -1) {
 				ItemDialog editDialog = new ItemDialog(mainStage, itemListView.getItems().get(index), itemList);
-				Optional<Item> result = editDialog.showAndWait();
+				Optional<ItemDef> result = editDialog.showAndWait();
 				if(result.isPresent()) {
 					itemListView.getItems().set(index, result.get());
 
@@ -158,8 +155,8 @@ public class Item_gen extends Application {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(F));
 				bw.append(VERSION + "\n");
 
-				for (Item I : itemList) {
-					String S = I.getID() + "," + I.getName() + "," + I.getType();
+				for (ItemDef I : itemList) {
+					String S = I.getID() + "," + I.getName();
 					bw.append(S);
 					bw.newLine();
 				}
@@ -209,14 +206,14 @@ public class Item_gen extends Application {
 
 		itemListView.setItems(FXCollections.observableList(itemList));
 
-		itemListView.setCellFactory(new Callback<ListView<Item>, ListCell<Item>>() {
+		itemListView.setCellFactory(new Callback<ListView<ItemDef>, ListCell<ItemDef>>() {
 
 			@Override
-			public ListCell<Item> call(ListView<Item> listIn) {
-
-				ListCell<Item> cell = new ListCell<Item>() {
+			public ListCell<ItemDef> call(ListView<ItemDef> arg0) {
+				
+				ListCell<ItemDef> cell = new ListCell<ItemDef>() {
 					@Override
-					protected void updateItem(Item i, boolean empty) {
+					protected void updateItem(ItemDef i, boolean empty) {
 						super.updateItem(i, empty);
 						if (empty || i == null) {
 							setText(null);
@@ -228,6 +225,7 @@ public class Item_gen extends Application {
 				};
 
 				return cell;
+				
 			}
 
 		});

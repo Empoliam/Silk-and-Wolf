@@ -24,8 +24,6 @@ public class Character {
 	
 	//############################## DATA PACKING ##############################//
 	
-	private String packedData;
-	
 	//############################## PROPERTIES ##############################//
 
 	/** Character ID. */
@@ -78,19 +76,7 @@ public class Character {
 		
 	}
 
-	/**
-	 * Begins instantiation of a new Character. Populates Character list with empty Characters, ready to be unpacked from a data string.
-	 * Ensures that loading never throws a NullPointer, regardless of initialisation order.
-	 *
-	 * @param packedData packed Character data string.
-	 */
-	public Character(String packedData) {
-		this.packedData = packedData;
-	}
-	
-	public void unpack() {
-		
-		String[] in = packedData.split(",");
+	public Character(String[] in) {
 		
 		this.id = Integer.parseInt(in[0]);
 		this.firstName = in[1];
@@ -103,6 +89,7 @@ public class Character {
 		FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		
 	}
+	
 	
 	/** Initiates Character travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {
@@ -152,9 +139,9 @@ public class Character {
 		double sunrise = CLOCK.getSunriseTime();
 		double daylength = CLOCK.getCurrentDayLength();
 		
-		double baseProb = sunrise + 1;
+		double base = sunrise + 1;
 		double confidenceMod = ((1 - confidence) / 5.0) * daylength;
-		double finalProb = (baseProb + confidenceMod) / 23.0;
+		double finalProb = (base + confidenceMod) / 23.0;
 		
 		int departure = PatchiMath.generateBinomialInt(23,finalProb,RANDOM);
 		return departure;

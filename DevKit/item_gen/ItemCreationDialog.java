@@ -8,17 +8,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import patchi.components.IntegerField;
-import patchi.silk.item.Item;
+import patchi.silk.item.ItemDef;
 
-public class ItemCreationDialog extends Dialog<Item>{
+public class ItemCreationDialog extends Dialog<ItemDef>{
 
-	public ItemCreationDialog(Stage S, ArrayList<Item> iref, int currentID) {
+	public ItemCreationDialog(Stage S, ArrayList<ItemDef> iref) {
 
 		initOwner(S);
 		setTitle("Create new item");
 
-		IntegerField idField = new IntegerField(currentID);
+		TextField idField = new TextField();
 
 		idField.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -28,11 +27,11 @@ public class ItemCreationDialog extends Dialog<Item>{
 
 				boolean taken = false;
 
-				for(Item I : iref) {
-					if(I.getID() == idField.getInteger()) taken = true;
+				for(ItemDef I : iref) {
+					if(I.getID().equals(idField.getText())) taken = true;
 				}
 
-				if(taken) { 
+				if(taken || idField.getText().equals("")) { 
 					getDialogPane().lookupButton(ButtonType.OK).setDisable(true);
 				} else {
 					getDialogPane().lookupButton(ButtonType.OK).setDisable(false);
@@ -42,20 +41,18 @@ public class ItemCreationDialog extends Dialog<Item>{
 		});
 
 		TextField nameField = new TextField("Item Name");
-		IntegerField typeField = new IntegerField(0);
 
 		VBox internal = new VBox();
-		internal.getChildren().addAll(idField, nameField, typeField);
+		internal.getChildren().addAll(idField, nameField);
 
 		getDialogPane().setContent(internal);
 		getDialogPane().getButtonTypes().addAll(ButtonType.OK,ButtonType.CANCEL);
 
 		setResultConverter((ButtonType B) -> {
 			if (B == ButtonType.OK) {
-				return new Item(
-						idField.getInteger(),
-						nameField.getText(),
-						typeField.getInteger());
+				return new ItemDef(
+						idField.getText(),
+						nameField.getText());
 			}
 			return null;
 

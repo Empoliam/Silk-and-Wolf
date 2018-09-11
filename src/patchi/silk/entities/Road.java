@@ -1,7 +1,5 @@
 package patchi.silk.entities;
 
-import java.util.List;
-
 /**
  * Intermediary region between two settlements.
  */
@@ -9,9 +7,6 @@ public class Road {
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
-	
-	/** Reference to settlement dataset ArrayList*/
-	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
 	/** Road ID. Corresponds to list index. */
 	private String id;
@@ -25,28 +20,18 @@ public class Road {
 	
 	/** Road length. */
 	private int length;
-
-	private String packedData;
-		
-	public Road(String id, String packedData) {
-		this.id = id;
-		this.packedData = packedData;
-	}
 	
-	public void unpack() {
+	public Road(String[] in) {
 		
-		String[] in = packedData.split(",");
-		
-		name = in[0];
-		length = Integer.parseInt(in[2]);
-		
-		connectingA = WORLD.getSettlementByID(in[1].split(";")[0]);
-		connectingB = WORLD.getSettlementByID(in[1].split(";")[1]);		
+		id = in[0];
+		name = in[1];
+		connectingA = WORLD.getSettlementByID(in[2].split(";")[0]);
 		connectingA.getRoads().add(this);
+		connectingB = WORLD.getSettlementByID(in[2].split(";")[1]);
 		connectingB.getRoads().add(this);
 		
 	}
-
+	
 	/**
 	 * Returns the road ID.
 	 *

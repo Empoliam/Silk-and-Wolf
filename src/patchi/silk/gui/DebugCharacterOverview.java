@@ -14,7 +14,7 @@ import patchi.silk.entities.Character;
 /**
  * A debug UI element used to display all characterss and some details.
  */
-public class CharacterOverview extends VBox{
+public class DebugCharacterOverview extends VBox{
 
 	protected TableView<Character> charTable;
 	protected CharInfoWindow charInfoWindow;
@@ -24,7 +24,7 @@ public class CharacterOverview extends VBox{
 	 * Instantiates the Character Table.
 	 */
 	@SuppressWarnings("unchecked")
-	public CharacterOverview(List<Character> inputList) 
+	public DebugCharacterOverview(List<Character> inputList) 
 	{
 
 		charTable = new TableView<>();
@@ -98,8 +98,8 @@ public class CharacterOverview extends VBox{
 			
 			Button backButton = new Button("Back");
 			backButton.setOnAction(e -> {
-				CharacterOverview.this.getChildren().setAll(mainGroup);
-				CharacterOverview.this.charInfoWindow = null;
+				DebugCharacterOverview.this.getChildren().setAll(mainGroup);
+				DebugCharacterOverview.this.charInfoWindow = null;
 			});
 			
 			getChildren().addAll(name, location, backButton);

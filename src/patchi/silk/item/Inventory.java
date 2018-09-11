@@ -10,20 +10,8 @@ public class Inventory {
 		internalList = new ArrayList<>();
 	}
 	
-	public ArrayList<Item> getAll(){
+	public ArrayList<Item> getList() {
 		return internalList;
 	}
 	
-	public <T> ArrayList<Item> getAllBundlesOfType(int t) {
-		
-		ArrayList<Item> sublist = new ArrayList<>();
-		
-		for(Item I : internalList) {
-			if(I.getType() == t) sublist.add(I);
-		}
-		
-		return sublist;
-		
-	}
-
 }

@@ -20,9 +20,9 @@ import patchi.silk.entities.Character;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
 import patchi.silk.foundation.Time;
-import patchi.silk.gui.CharacterOverview;
-import patchi.silk.gui.SettlementOverview;
-import patchi.silk.gui.TravelWindow;
+import patchi.silk.gui.DebugCharacterOverview;
+import patchi.silk.gui.DebugSettlementOverview;
+import patchi.silk.gui.DebugTravelWindow;
 import patchi.silk.market.GlobalStock;
 
 /**
@@ -53,9 +53,9 @@ public class Main extends Application {
 	//UI Elements
 	private static Stage primaryStage;	
 	private static Scene mainScene;
-	private static CharacterOverview charTable;
-	private static SettlementOverview settlementTable; 
-	private static TravelWindow travelWindow;
+	private static DebugCharacterOverview charTable;
+	private static DebugSettlementOverview settlementTable; 
+	private static DebugTravelWindow travelWindow;
 
 	/**
 	 * Primary initialization method.
@@ -65,24 +65,8 @@ public class Main extends Application {
 	public static void main(String[] args) {
 
 		long start = System.currentTimeMillis();
-		Load.roads();
-		System.out.println("Loaded roads in " + (System.currentTimeMillis()-start) + "ms");
-
-		start = System.currentTimeMillis();
-		Load.characters();
-		System.out.println("Loaded characters in " + (System.currentTimeMillis()-start) + "ms");
-
-		start = System.currentTimeMillis();
-		Load.settlements();
-		System.out.println("Loaded settlements in " + (System.currentTimeMillis()-start) + "ms");
-
-		start = System.currentTimeMillis();
-		Load.stocks();
-		System.out.println("Loaded stocks in " + (System.currentTimeMillis()-start) + "ms");
-
-		start = System.currentTimeMillis();
-		Load.unpack();
-		System.out.println("Unpacked in " + (System.currentTimeMillis()-start) + "ms");
+		Load.load();
+		System.out.println("Loaded in " + (System.currentTimeMillis()-start) + "ms");
 
 		CHARACTERS.add(new Character(0,"Kraft","Lawrence",SETTLEMENTS.get(0),false,true,false));
 		CHARACTERS.add(new Character(1,"Holo","",SETTLEMENTS.get(0),true,true,false));
@@ -190,16 +174,16 @@ public class Main extends Application {
 
 		});
 
-		charTable = new CharacterOverview(CHARACTERS);
+		charTable = new DebugCharacterOverview(CHARACTERS);
 		VBox charContainer = new VBox(charTable);
 		Tab charTab = new Tab("Characters",charContainer);
 		charTab.setClosable(false);
 
-		travelWindow = new TravelWindow();
+		travelWindow = new DebugTravelWindow();
 		Tab travelTab = new Tab("Travel",travelWindow);
 		travelTab.setClosable(false);
 
-		settlementTable = new SettlementOverview();
+		settlementTable = new DebugSettlementOverview();
 		VBox settlementContainer = new VBox(settlementTable);
 		Tab settlementTab = new Tab("Settlements", settlementContainer);
 		settlementTab.setClosable(false);

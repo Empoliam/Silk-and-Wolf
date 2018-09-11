@@ -10,7 +10,7 @@ import patchi.silk.entities.Character;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
 
-public class TravelWindow extends GridPane{
+public class DebugTravelWindow extends GridPane{
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
@@ -27,7 +27,7 @@ public class TravelWindow extends GridPane{
 	static Character LAWRENCE = CHARACTERS.get(0);
 	static Character HOLO = CHARACTERS.get(1);
 	
-	public TravelWindow() {
+	public DebugTravelWindow() {
 
 		travelButtons = new ArrayList<Button>();
 		update();
