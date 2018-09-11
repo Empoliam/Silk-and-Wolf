@@ -9,11 +9,11 @@ import javafx.scene.control.TableView;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
 
-public class SettlementOverview extends TableView<Settlement> {
+public class DebugSettlementOverview extends TableView<Settlement> {
 
 	static final ArrayList<Settlement> SETTLEMENTS = World.getMainWorld().getSettlementSet();
 	
-	public SettlementOverview() {
+	public DebugSettlementOverview() {
 		
 		ObservableList<Settlement> settlementList = FXCollections.observableArrayList(SETTLEMENTS);
 		

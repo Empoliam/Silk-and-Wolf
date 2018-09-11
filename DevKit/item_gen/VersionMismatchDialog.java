@@ -17,11 +17,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import patchi.silk.item.Item;
+
+import patchi.silk.item.ItemDef;
 
 public class VersionMismatchDialog extends Dialog<Integer> {
 
-	public VersionMismatchDialog(Stage S, BufferedReader in, ArrayList<Item> itemList) {
+	public VersionMismatchDialog(Stage S, BufferedReader in, ArrayList<ItemDef> itemList) {
 
 		VBox outerContainer = new VBox();
 		GridPane innerContainer = new GridPane();
@@ -36,16 +37,9 @@ public class VersionMismatchDialog extends Dialog<Integer> {
 		TextField nameField = new TextField();
 		CheckBox nameDefaultCheck = new CheckBox();
 
-		Text typeText = new Text("Type");
-		TextField typeField = new TextField();
-		CheckBox typeDefaultCheck = new CheckBox();
-
 		innerContainer.add(nameText, 0, 0);
 		innerContainer.add(nameField, 1, 0);
 		innerContainer.add(nameDefaultCheck, 2, 0);
-		innerContainer.add(typeText, 0, 1);
-		innerContainer.add(typeField, 1, 1);
-		innerContainer.add(typeDefaultCheck, 2, 1);
 
 		innerContainer.setPadding(new Insets(10));
 		innerContainer.setHgap(10);
@@ -80,24 +74,16 @@ public class VersionMismatchDialog extends Dialog<Integer> {
 
 						String[] arr = line.split(",");
 
-						int id = Integer.parseInt(arr[0]);
+						String id = arr[0];
 						String name = null;
-						int type = 0;
 						
 						if(nameDefaultCheck.isSelected()) {
 							name = nameField.getText();
 						} else {
 							name = arr[Integer.parseInt(nameField.getText())];
 						};
-												
-						if(typeDefaultCheck.isSelected()) {
-							type = Integer.parseInt(typeField.getText());
-						} else {
-							int index = Integer.parseInt(typeField.getText());
-							type = Integer.parseInt(arr[index]);
-						}
-						
-						itemList.add(new Item(id, name, type));
+													
+						itemList.add(new ItemDef(id, name));
 
 						line = in.readLine();
 						
@@ -112,6 +98,7 @@ public class VersionMismatchDialog extends Dialog<Integer> {
 				}
 
 			}
+			
 			return null;
 
 		});

@@ -45,8 +45,6 @@ public class Settlement {
 	protected int finalValue;
 	protected boolean done;
 
-	private String packedData;
-
 	/**
 	 * Instantiates a new settlement.
 	 *
@@ -63,24 +61,6 @@ public class Settlement {
 
 	}
 
-	public Settlement(String id, String packedData) {
-
-		this.id = id;
-		this.packedData = packedData;
-		
-	}
-	
-	public void unpack() {
-		
-		String[] in = packedData.split(",");
-		
-		name = in[0];
-
-		for(GlobalStock G : STOCKS.values()) {
-			regionalMarket.add(new LocalStock(G));
-		}
-		
-	}
 
 	/**
 	 * Returns the settlement name.
@@ -142,7 +122,7 @@ public class Settlement {
 		return connectingRoads;
 	}
 
-	//Dijkstra methods
+	//----------------------------------Dijkstra methods--------------------------------------------//
 
 	public void purge() {
 		workingValue = Integer.MAX_VALUE;
@@ -173,6 +153,8 @@ public class Settlement {
 		this.done = done;
 	}
 
+	//--------------------------------------------END----------------------------------------------//
+	
 	public void addCharacter(Character A) {
 		currentInhabitants.add(A);
 	}

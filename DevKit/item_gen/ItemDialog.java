@@ -12,14 +12,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import patchi.components.IntegerField;
-import patchi.silk.item.Item;
+import patchi.silk.item.ItemDef;
 
-public class ItemDialog extends Dialog<Item> {
+public class ItemDialog extends Dialog<ItemDef> {
 
-	public ItemDialog(Stage S, Item inputItem, ArrayList<Item> iref) {
+	public ItemDialog(Stage S, ItemDef inputItem, ArrayList<ItemDef> iref) {
 
-		int originalID = inputItem.getID();
+		String originalID = inputItem.getID();
 		
 		GridPane container = new GridPane();
 
@@ -27,7 +26,7 @@ public class ItemDialog extends Dialog<Item> {
 		setTitle("Editing " + inputItem.getName());
 
 		Text idText = new Text("ID");
-		IntegerField idField = new IntegerField(inputItem.getID());
+		TextField idField = new TextField(inputItem.getID());
 
 		idField.textProperty().addListener((observable, oldValue, newValue) -> {
 
@@ -37,8 +36,10 @@ public class ItemDialog extends Dialog<Item> {
 				
 				boolean taken = false;
 
-				for(Item I : iref) {
-					if(I.getID() == idField.getInteger() && !(originalID == I.getID())) taken = true;
+				for(ItemDef I : iref) {
+					if(I.getID().equals(idField.getText()) && !(originalID.equals(I.getID()))) {
+						taken = true;
+					}
 				}
 
 				if(taken) { 
@@ -54,15 +55,10 @@ public class ItemDialog extends Dialog<Item> {
 		Text nameText = new Text("Name");
 		TextField nameField = new TextField(inputItem.getName());
 
-		Text typeText = new Text("Type");
-		IntegerField typeField = new IntegerField(inputItem.getType());
-
 		container.add(idText, 0, 0);
 		container.add(idField, 1, 0);
 		container.add(nameText, 0, 1);
 		container.add(nameField, 1, 1);
-		container.add(typeText, 0, 2);
-		container.add(typeField, 1, 2);
 
 		for(Node N : container.getChildren()) {
 			GridPane.setHalignment(N, HPos.CENTER);
@@ -79,10 +75,9 @@ public class ItemDialog extends Dialog<Item> {
 
 			if(B == ButtonType.OK) {
 
-				Item I = new Item(
-						idField.getInteger(),
-						nameField.getText(),
-						typeField.getInteger()
+				ItemDef I = new ItemDef(
+						idField.getText(),
+						nameField.getText()
 						);
 
 				return I;

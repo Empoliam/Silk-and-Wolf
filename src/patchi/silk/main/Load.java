@@ -34,10 +34,19 @@ public class Load {
 	/** Reference to character dataset*/
 	static final List<Character> CHARACTERS = WORLD.getCharacterSet();
 	
+	public static void load() {
+		
+		stocks();
+		settlements();
+		roads();
+		characters();
+		
+	}
+	
 	/**
 	 * Load settlements.
 	 */
-	public static void settlements() {
+	private static void settlements() {
 
 		try {
 			
@@ -46,9 +55,7 @@ public class Load {
 
 			while (line != null) {
 
-				int idSplitPoint = line.indexOf(",");
-				
-				SETTLEMENTS.add(new Settlement(line.substring(0, idSplitPoint), line.substring(idSplitPoint+1, line.length())));
+				SETTLEMENTS.add(new Settlement(line.split(",")));
 				line = br.readLine();
 			}
 
@@ -61,7 +68,7 @@ public class Load {
 	/**
 	 * Load roads.
 	 */
-	public static void roads() {
+	private static void roads() {
 		
 		try {
 		
@@ -70,10 +77,9 @@ public class Load {
 			
 			while(line != null) {
 				
-				int idSplitPoint = line.indexOf(",");
-				
-				ROADS.add(new Road(line.substring(0, idSplitPoint), line.substring(idSplitPoint+1, line.length())));
+				ROADS.add(new Road(line.split(",")));
 				line = br.readLine();
+				
 			}
 			
 			br.close();
@@ -85,7 +91,7 @@ public class Load {
 	/**
 	 * Load Characters.
 	 */
-	public static void characters() { 
+	private static void characters() { 
 	
 		try {
 			
@@ -94,7 +100,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				CHARACTERS.add(new Character(line));
+				CHARACTERS.add(new Character(line.split(",")));
 				line = br.readLine();
 				
 			}
@@ -106,7 +112,7 @@ public class Load {
 		
 	}
 
-	public static void stocks() { 
+	private static void stocks() { 
 		
 		try {
 			
@@ -126,19 +132,4 @@ public class Load {
 		
 	}
 	
-	public static void unpack() {
-		
-		for(Settlement S : SETTLEMENTS) {
-			S.unpack();
-		}
-		
-		for(Road R : ROADS) {
-			R.unpack();
-		}
-		
-		for(Character N : CHARACTERS) {
-			N.unpack();
-		}
-		
-	}
 }
