@@ -1,34 +1,32 @@
 package patchi.silk.main;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import patchi.silk.entities.Character;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
 import patchi.silk.foundation.Time;
-import patchi.silk.gui.DebugCharacterOverview;
-import patchi.silk.gui.DebugSettlementOverview;
-import patchi.silk.gui.DebugTravelWindow;
 import patchi.silk.market.GlobalStock;
+import patchi.silk.gui.Screen;
+import patchi.silk.gui.TitleScreen;
+
+import javax.swing.JFrame;
+
+import asciiPanel.AsciiFont;
+import asciiPanel.AsciiPanel;
+
 
 /**
  * Main class.
  */
-public class Main extends Application {
+public class Main extends JFrame implements KeyListener{
+
+	/** */
+	private static final long serialVersionUID = 1L;
 
 	/** Universal random number generator. */
 	static final Random RANDOM = new Random(System.nanoTime());
@@ -51,11 +49,10 @@ public class Main extends Application {
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 
 	//UI Elements
-	private static Stage primaryStage;	
-	private static Scene mainScene;
-	private static DebugCharacterOverview charTable;
-	private static DebugSettlementOverview settlementTable; 
-	private static DebugTravelWindow travelWindow;
+	private AsciiPanel terminal;
+	private Screen screen;
+
+
 
 	/**
 	 * Primary initialization method.
@@ -74,133 +71,31 @@ public class Main extends Application {
 		LAWRENCE = CHARACTERS.get(0);
 		HOLO = CHARACTERS.get(1);
 
-		launch(args);
+		Main app = new Main();
+		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		app.setVisible(true);
 
 	}
 
-	/**
-	 * 	Debug interface builder
-	 *	@see javafx.application.Application#start(javafx.stage.Stage)
-	 *	@param primaryStage	First Stage
-	 *	 */
-	@Override
-	public void start(Stage mainStage) throws Exception {
+	public Main() {
 
-		primaryStage = mainStage;
-
-		System.out.println("Launch successful");
-		primaryStage.setTitle("Debug build");
-
-		Label timeLabel = new Label(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-
-		TextField loopTimes = new TextField("1");
-		TextField loopDelay = new TextField("50");
-
-		Button advHourButton = new Button("Advance Time");
-
-		SimpleIntegerProperty remainingLoops = new SimpleIntegerProperty();
-
-		Service<Void> LoopService = new Service<Void>() {
-
-			@Override
-			protected Task<Void> createTask() {
-
-				Task<Void> gameLoopTask = new Task<Void>() {
-					@Override
-					protected Void call() throws Exception {
-
-						doHourTick();
-
-						int d; 
-						try {d = Integer.parseInt(loopDelay.getText());}
-						catch (NumberFormatException nfe){d = 500;}
-						Thread.sleep(d);
-						updateMessage("ping");					
-
-						return null;
-
-					};
-
-				};
-
-				return gameLoopTask;
-			}
-
-		};
-
-
-		advHourButton.setOnAction(e -> {
-
-			e.consume();
-
-			try {
-				remainingLoops.set(Integer.parseInt(loopTimes.getText()));
-			} catch( NumberFormatException nfe) {
-				remainingLoops.set(1);
-			}
-
-			advHourButton.setDisable(true);	
-			for(Button B : travelWindow.getButtons()) B.setDisable(true);	
-			LoopService.start();
-
-		});
-
-		LoopService.runningProperty().addListener((observable, oldValue, newValue) -> {
-
-			if(!LoopService.runningProperty().get()) {
-
-				LoopService.reset();
-
-				timeLabel.setText(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime());
-				charTable.refresh();
-				settlementTable.refresh();
-
-				remainingLoops.set(remainingLoops.get() - 1);
-
-				if(remainingLoops.get() > 0) {						
-					LoopService.start();			
-				} else {
-
-					advHourButton.setDisable(false);	
-
-					if (!LAWRENCE.isTravelling()) {
-						for(Button B : travelWindow.getButtons()) B.setDisable(false);			
-						travelWindow.update();
-					}
-
-				}
-
-			}
-
-		});
-
-		charTable = new DebugCharacterOverview(CHARACTERS);
-		VBox charContainer = new VBox(charTable);
-		Tab charTab = new Tab("Characters",charContainer);
-		charTab.setClosable(false);
-
-		travelWindow = new DebugTravelWindow();
-		Tab travelTab = new Tab("Travel",travelWindow);
-		travelTab.setClosable(false);
-
-		settlementTable = new DebugSettlementOverview();
-		VBox settlementContainer = new VBox(settlementTable);
-		Tab settlementTab = new Tab("Settlements", settlementContainer);
-		settlementTab.setClosable(false);
-
-		TabPane mainTabPane = new TabPane();
-		mainTabPane.getTabs().addAll(charTab, settlementTab, travelTab);
-
-		VBox mainLayout = new VBox();
-		mainLayout.getChildren().addAll(timeLabel,mainTabPane,loopTimes,loopDelay,advHourButton);
-
-		mainScene = new Scene(mainLayout, 1000, 500);
-
-		primaryStage.setScene(mainScene);
-		primaryStage.show();
-
+		super();
+		terminal = new AsciiPanel(100, 48, AsciiFont.CP437_12x12);
+		add(terminal);
+		pack();
+		
+		screen = new TitleScreen();
+		addKeyListener(this);
+		repaint();	
+		
 	}
-
+	
+	public void repaint() {
+		terminal.clear();
+		screen.displayOutput(terminal);
+		super.repaint();
+	}
+	
 	/**
 	 * Executes a single hour tick.
 	 */
@@ -236,6 +131,26 @@ public class Main extends Application {
 				}
 			}
 		}
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent key) {
+
+		screen = screen.respondToUserInput(key);
+		repaint();
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent key) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent key) {
+		// TODO Auto-generated method stub
 
 	}
 
