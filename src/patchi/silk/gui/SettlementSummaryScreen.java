@@ -15,7 +15,6 @@ public class SettlementSummaryScreen implements Screen {
 	private final World world = World.getMainWorld();
 	private final ArrayList<Settlement> SETTLEMENTS = world.getSettlementSet();
 
-	private int screenHeight;
 	private int currentPage = 1;
 	private int totalPages = (int) Math.ceil(SETTLEMENTS.size() / (float) MAX_PAGE_LENGTH);
 	private List<Settlement> currentPageList;
@@ -23,7 +22,7 @@ public class SettlementSummaryScreen implements Screen {
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
-		screenHeight = terminal.getHeightInCharacters();
+		terminal.getHeightInCharacters();
 		currentPageList = SETTLEMENTS.subList((currentPage-1)*MAX_PAGE_LENGTH, Math.min(SETTLEMENTS.size(), MAX_PAGE_LENGTH*currentPage));
 		char listIndex = 'a';		
 
@@ -52,15 +51,25 @@ public class SettlementSummaryScreen implements Screen {
 		case(KeyEvent.VK_MULTIPLY):
 			currentPage = Math.min(currentPage + 1, totalPages);
 		return this;
+		
 		case(KeyEvent.VK_SLASH):
 		case(KeyEvent.VK_DIVIDE):
 			currentPage = Math.max(currentPage - 1, 1);
 		return this;
+		
+		case(KeyEvent.VK_ESCAPE):
+			return new MainScreen();
+		
 		default:
 			return this;
 
 		}
 
+	}
+
+	@Override
+	public Screen keyReleased(KeyEvent key) {
+		return this;
 	}
 
 }

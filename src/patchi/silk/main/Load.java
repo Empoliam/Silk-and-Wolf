@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import patchi.silk.entities.Character;
+import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
@@ -32,14 +32,14 @@ public class Load {
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	/** Reference to character dataset*/
-	static final List<Character> CHARACTERS = WORLD.getCharacterSet();
+	static final List<Person> PEOPLE = WORLD.getPersonSet();
 	
 	public static void load() {
 		
 		stocks();
 		settlements();
 		roads();
-		characters();
+		people();
 		
 	}
 	
@@ -91,7 +91,7 @@ public class Load {
 	/**
 	 * Load Characters.
 	 */
-	private static void characters() { 
+	private static void people() { 
 	
 		try {
 			
@@ -100,7 +100,7 @@ public class Load {
 			
 			while(line!=null) {
 				
-				CHARACTERS.add(new Character(line.split(",")));
+				PEOPLE.add(new Person(line.split(",")));
 				line = br.readLine();
 				
 			}

@@ -10,20 +10,18 @@ import patchi.silk.item.Inventory;
 /**
  * Generic sentient humanoid entity.
  */
-public class Character {
+public class Person {
 
 	/** Main World reference */
 	static final World WORLD = World.getMainWorld();
 			
 	/** Reference to global clock */
-	static final Time CLOCK = Time.CLOCK;
-	
-	//############################## DATA PACKING ##############################//
-	
+	static final Time CLOCK = WORLD.getClock();
+		
 	//############################## PROPERTIES ##############################//
 
 	/** Character ID. */
-	private int id;	
+	private String id;	
 	/** Character first name. */
 	private String firstName;	
 	/** Character last name. */
@@ -59,7 +57,7 @@ public class Character {
 	 * @param doTravel doTravel flag
 	 * @param doDecisionTree doDecisionTree flag
 	 */
-	public Character(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
+	public Person(String id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
 
 		this.id = id;
 		locationSettlement = location;
@@ -72,9 +70,9 @@ public class Character {
 		
 	}
 
-	public Character(String[] in) {
+	public Person(String[] in) {
 		
-		this.id = Integer.parseInt(in[0]);
+		this.id = in[0];
 		this.firstName = in[1];
 		this.lastName = in[2];
 		if(Integer.parseInt(in[3]) == 0) FLAGS.add(CharacterFlags.FEMALE);
@@ -191,7 +189,7 @@ public class Character {
 	public String getLastName() {
 		return lastName;
 	}
-
+	
 	/**
 	 * Checks if the doTravel flag is set.
 	 *
@@ -240,7 +238,7 @@ public class Character {
 	 *
 	 * @return Character id
 	 */
-	public int getId() {
+	public String getID() {
 		return id;
 	}
 
@@ -320,6 +318,13 @@ public class Character {
 
 	public void setPrepTravel() {
 		FLAGS.add(CharacterFlags.PREP_TRAVEL);
+	}
+
+
+
+	public String getName() {
+
+		return getFirstName() + " " + getLastName();
 	}
 	
 }

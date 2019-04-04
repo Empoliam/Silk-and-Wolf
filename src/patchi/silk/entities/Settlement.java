@@ -15,8 +15,6 @@ import patchi.silk.market.LocalStock;
  */
 public class Settlement {
 
-
-
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
 
@@ -35,7 +33,7 @@ public class Settlement {
 	/** Settlement ID.*/
 	private String id;
 
-	private List<Character> currentInhabitants = new LinkedList<Character>();
+	private List<Person> currentInhabitants = new LinkedList<Person>();
 
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
@@ -155,11 +153,11 @@ public class Settlement {
 
 	//--------------------------------------------END----------------------------------------------//
 	
-	public void addCharacter(Character A) {
+	public void addCharacter(Person A) {
 		currentInhabitants.add(A);
 	}
 
-	public void removeCharacter(Character A) {
+	public void removeCharacter(Person A) {
 		currentInhabitants.remove(A);
 	}
 	

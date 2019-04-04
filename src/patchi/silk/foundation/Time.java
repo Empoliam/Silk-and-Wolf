@@ -14,10 +14,7 @@ public class Time {
 	
 	/** Set of months with 30 days. */
 	private static Set<Integer> THIRTY_DAYS = new HashSet<Integer>();
-	
-	/** Global clock. Synchronizes all game events */
-	public static final Time CLOCK = new Time();	
-	
+		
 	/** Current year. */
 	private int year;
 	
