@@ -3,7 +3,6 @@ package patchi.silk.gui;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.World;
 
@@ -20,26 +19,37 @@ public class PersonSummaryScreen implements Screen {
 	private int totalPages = (int) Math.ceil(PEOPLE.size() / (float) MAX_PAGE_LENGTH);
 	private List<Person> currentPageList;
 
+	private int cursorX;
+	private int cursorY;
+	
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
+		cursorX = 0;
+		cursorY = 0;
+		
 		terminal.getHeightInCharacters();
 		currentPage = (staticPage <= totalPages) ? staticPage : 1;
 		currentPageList = PEOPLE.subList((currentPage-1)*MAX_PAGE_LENGTH, Math.min(PEOPLE.size(), MAX_PAGE_LENGTH*currentPage));
 		char listIndex = 'a';		
 
-		terminal.setCursorPosition(0, 0);
-		terminal.write("Settlements:", AsciiPanel.black, AsciiPanel.white);
-		terminal.setCursorPosition(0, 1);
+		terminal.setCursorPosition(cursorX, cursorY);
+		terminal.write("People", AsciiPanel.black, AsciiPanel.white);
+		cursorY+=2;
+		terminal.setCursorPosition(cursorX, cursorY);
+		
 		terminal.write("Page " + currentPage + " of " + totalPages);
-		terminal.setCursorPosition(0, 2);
+		cursorY++;
+		terminal.setCursorPosition(cursorX, cursorY);
+		
 		terminal.write("Use /* to navigate pages");
+		cursorY+=2;
+		terminal.setCursorPosition(cursorX, cursorY);
 
-		terminal.setCursorPosition(0, 4);
 		for(Person C : currentPageList) {
 			terminal.write(listIndex + ". " + C.getName());
-			listIndex++;
-			terminal.setCursorPosition(0, terminal.getCursorY() + 1);;
+			cursorY++;
+			terminal.setCursorPosition(cursorX, cursorY);
 		}
 
 	}

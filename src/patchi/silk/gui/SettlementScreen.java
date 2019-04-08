@@ -2,21 +2,21 @@ package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
 
-import patchi.silk.entities.Person;
+import patchi.silk.entities.Settlement;
 
-public class PersonScreen implements Screen {
+public class SettlementScreen implements Screen {
 
-	private Person P;
+	private Settlement S;
 	
-	public PersonScreen(Person p) {
-		this.P = p;
+	public SettlementScreen(Settlement s) {
+		this.S = s;
 	}
 
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
 		terminal.setCursorPosition(0, 0);
-		terminal.write("Summary: " + P.getName(), AsciiPanel.black, AsciiPanel.white);
+		terminal.write("Summary: " + S.getName(), AsciiPanel.black, AsciiPanel.white);
 
 	}
 
@@ -27,7 +27,7 @@ public class PersonScreen implements Screen {
 
 				
 		case(KeyEvent.VK_ESCAPE):
-			return new PersonSummaryScreen();
+			return new SettlementSummaryScreen();
 		default:
 			return this;
 

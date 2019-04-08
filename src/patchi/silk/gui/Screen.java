@@ -1,7 +1,6 @@
 package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
-import asciiPanel.AsciiPanel;
 
 public interface Screen {
 	

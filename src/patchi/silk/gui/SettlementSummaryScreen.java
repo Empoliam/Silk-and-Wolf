@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Settlement;
 import patchi.silk.entities.World;
 
@@ -19,25 +18,37 @@ public class SettlementSummaryScreen implements Screen {
 	private int totalPages = (int) Math.ceil(SETTLEMENTS.size() / (float) MAX_PAGE_LENGTH);
 	private List<Settlement> currentPageList;
 
+	private int cursorX;
+	private int cursorY;
+	
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
+		cursorX = 0;
+		cursorY = 0;
+		
 		terminal.getHeightInCharacters();
 		currentPageList = SETTLEMENTS.subList((currentPage-1)*MAX_PAGE_LENGTH, Math.min(SETTLEMENTS.size(), MAX_PAGE_LENGTH*currentPage));
 		char listIndex = 'a';		
 
-		terminal.setCursorPosition(0, 0);
-		terminal.write("Settlements:", AsciiPanel.black, AsciiPanel.white);
-		terminal.setCursorPosition(0, 1);
+		terminal.setCursorPosition(cursorX, cursorY);
+		terminal.write("Settlements", AsciiPanel.black, AsciiPanel.white);
+		cursorY+=2;
+		terminal.setCursorPosition(cursorX, cursorY);
+		
 		terminal.write("Page " + currentPage + " of " + totalPages);
-		terminal.setCursorPosition(0, 2);
+		cursorY++;
+		terminal.setCursorPosition(cursorX, cursorY);
+		
 		terminal.write("Use /* to navigate pages");
-
-		terminal.setCursorPosition(0, 4);
+		cursorY+=2;
+		terminal.setCursorPosition(cursorX, cursorY);
+		
 		for(Settlement S : currentPageList) {
 			terminal.write(listIndex + ". " + S.getName());
 			listIndex++;
-			terminal.setCursorPosition(0, terminal.getCursorY() + 1);;
+			cursorY++;
+			terminal.setCursorPosition(cursorX, cursorY);
 		}
 
 	}
@@ -45,23 +56,36 @@ public class SettlementSummaryScreen implements Screen {
 	@Override
 	public Screen respondToUserInput(KeyEvent key) {
 
-		switch(key.getKeyCode()) {
+		char keyC = key.getKeyChar();
 
-		case(KeyEvent.VK_ASTERISK):
-		case(KeyEvent.VK_MULTIPLY):
-			currentPage = Math.min(currentPage + 1, totalPages);
-		return this;
-		
-		case(KeyEvent.VK_SLASH):
-		case(KeyEvent.VK_DIVIDE):
-			currentPage = Math.max(currentPage - 1, 1);
-		return this;
-		
-		case(KeyEvent.VK_ESCAPE):
-			return new MainScreen();
-		
-		default:
+		if(keyC >= 97 && keyC <= 122) {
+
+			try {
+				return new SettlementScreen(currentPageList.get(keyC - 97));
+			} catch (ArrayIndexOutOfBoundsException e) {
+				return this;
+			}
+		} else {
+
+			switch(key.getKeyCode()) {
+
+			case(KeyEvent.VK_ASTERISK):
+			case(KeyEvent.VK_MULTIPLY):
+				currentPage = Math.min(currentPage + 1, totalPages);
 			return this;
+
+			case(KeyEvent.VK_SLASH):
+			case(KeyEvent.VK_DIVIDE):
+				currentPage = Math.max(currentPage - 1, 1);
+			return this;
+
+			case(KeyEvent.VK_ESCAPE):
+				return new MainScreen();
+
+			default:
+				return this;
+
+			}
 
 		}
 
