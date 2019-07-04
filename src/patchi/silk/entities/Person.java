@@ -63,8 +63,8 @@ public class Person {
 		locationSettlement = location;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		
 		if(female) FLAGS.add(CharacterFlags.FEMALE);
+		locationSettlement.addCharacter(this);
 		if(doTravel) FLAGS.add(CharacterFlags.DO_TRAVEL);
 		if(doDecisionTree) FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		

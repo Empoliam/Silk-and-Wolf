@@ -2,6 +2,7 @@ package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
 
+import asciiPanel.AsciiPanel;
 import patchi.silk.entities.World;
 import patchi.silk.foundation.Time;
 
@@ -27,6 +28,9 @@ public class WaitScreen implements Screen {
 		terminal.setCursorPosition(cursorX,cursorY);
 		terminal.write(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime(), AsciiPanel.black, AsciiPanel.white);
 		cursorY+= 2;
+		terminal.setCursorPosition(cursorX, cursorY);
+		terminal.write("Use numpad 123789 to change time");
+		cursorY++;
 		terminal.setCursorPosition(cursorX, cursorY);
 		if(waitDays == 0) {
 			terminal.write("w - Wait for " + waitHours + " hours");

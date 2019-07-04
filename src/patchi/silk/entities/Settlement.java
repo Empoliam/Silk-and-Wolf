@@ -7,6 +7,7 @@ import java.util.List;
 
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import patchi.patchiLib.util.LimitedLinkedList;
 import patchi.silk.market.GlobalStock;
 import patchi.silk.market.LocalStock;
 
@@ -34,7 +35,9 @@ public class Settlement {
 	private String id;
 
 	private List<Person> currentInhabitants = new LinkedList<Person>();
-
+	private int population;
+	private LimitedLinkedList<Integer> dailyPopulation = new LimitedLinkedList<>(30);
+	
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
 
@@ -155,18 +158,31 @@ public class Settlement {
 	
 	public void addCharacter(Person A) {
 		currentInhabitants.add(A);
+		population++;
 	}
 
 	public void removeCharacter(Person A) {
 		currentInhabitants.remove(A);
+		population--;
 	}
 	
 	public int getCurrentPopulation() {
-		return currentInhabitants.size();
+		return population;
 	}
 
 	public ReadOnlyIntegerWrapper getCurrentPopulationProperty() {
 		return new ReadOnlyIntegerWrapper(currentInhabitants.size());
+	}
+	
+	public int writeDailyPop() {
+		
+		dailyPopulation.add(population);
+		return population;
+		
+	}
+	
+	public LinkedList<Integer> getDailyPop() {
+		return dailyPopulation;
 	}
 	
 }

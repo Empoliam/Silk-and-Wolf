@@ -10,11 +10,11 @@ import patchi.silk.entities.World;
 import patchi.silk.market.GlobalStock;
 import patchi.silk.gui.Screen;
 import patchi.silk.gui.TitleScreen;
-import patchi.silk.gui.AsciiPanel;
 
 import javax.swing.JFrame;
 
 import asciiPanel.AsciiFont;
+import asciiPanel.AsciiPanel;
 
 
 

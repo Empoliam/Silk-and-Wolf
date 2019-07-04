@@ -31,7 +31,7 @@ public class World {
 
 	/** Universal random number generator. */
 	private final Random RANDOM = new Random(System.nanoTime());
-	
+
 	/** Global clock. Synchronizes all game events */
 	private final Time CLOCK = new Time();	
 	
@@ -128,6 +128,11 @@ public class World {
 		throw new IllegalArgumentException();
 	}
 	
+	
+	public Random getRandom() {
+		return RANDOM;
+	}
+	
 	public void printWorld() {
 
 		ArrayList<Road> roads = new ArrayList<Road>();
@@ -216,33 +221,42 @@ public class World {
 
 		CLOCK.advanceHour();
 
-		for(Person h : PEOPLE) {
+		for(Person P : PEOPLE) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
-			if (h.getDoDecisionTree()) {
+			if (P.getDoDecisionTree()) {
 				if(		CLOCK.getHour() == 0 
-						&& h.getDoTravel() 
-						&& !h.getPrepTravel() 
-						&& !h.isTravelling()) {
+						&& P.getDoTravel() 
+						&& !P.getPrepTravel() 
+						&& !P.isTravelling()) {
 
-					h.setDepartureHours(h.generateDepartureHour(RANDOM));			
-					List<Settlement> destinationPool = h.getLocationSettlement().getConnectedSettlements();			
-					h.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
-					h.setPrepTravel();
+					P.setDepartureHours(P.generateDepartureHour(RANDOM));			
+					List<Settlement> destinationPool = P.getLocationSettlement().getConnectedSettlements();			
+					P.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
+					P.setPrepTravel();
 				}
 			}
 
 			//Characters advance
-			if(h.isTravelling()) h.advanceTravel();
+			if(P.isTravelling()) P.advanceTravel();
 
 			//Characters depart
-			if(h.getPrepTravel()) {
-				if(h.getDepartureHours() == 0) {
-					h.beginTravel();
+			if(P.getPrepTravel()) {
+				if(P.getDepartureHours() == 0) {
+					P.beginTravel();
 				} else {
-					h.decrementDepartureHours();
+					P.decrementDepartureHours();
 				}
 			}
+		}
+		
+		for(Settlement S : SETTLEMENTS) {
+			
+			//update population trackers
+			if(CLOCK.getHour() == 0) {
+				S.writeDailyPop();
+			}
+			
 		}
 
 	}

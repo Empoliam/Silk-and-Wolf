@@ -2,6 +2,7 @@ package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
 
+import asciiPanel.AsciiPanel;
 import patchi.silk.entities.World;
 import patchi.silk.foundation.Time;
 
@@ -13,7 +14,6 @@ public class MainScreen implements Screen {
 	private int cursorX;
 	private int cursorY;
 	
-	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
 		cursorX = 0;
@@ -40,9 +40,9 @@ public class MainScreen implements Screen {
 		switch(key.getKeyCode()) {
 
 		case(KeyEvent.VK_S):
-			return new SettlementSummaryScreen();
+			return new SettlementScreen();
 		case(KeyEvent.VK_P):
-			return new PersonSummaryScreen();
+			return new PersonScreen();
 		case(KeyEvent.VK_W):
 			return new WaitScreen();
 		case(KeyEvent.VK_T):
@@ -59,5 +59,6 @@ public class MainScreen implements Screen {
 
 		return this;
 	}
+
 
 }
