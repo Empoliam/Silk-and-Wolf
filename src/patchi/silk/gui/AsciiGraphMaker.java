@@ -1,6 +1,5 @@
 package patchi.silk.gui;
 
-import java.awt.Color;
 import java.util.List;
 
 import asciiPanel.AsciiPanel;

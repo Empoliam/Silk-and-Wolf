@@ -10,7 +10,7 @@ public class TestScreen implements Screen{
 	
 	public static final World WORLD = World.getMainWorld();
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
-
+	
 	public TestScreen() {
 
 	}

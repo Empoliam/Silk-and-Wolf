@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>patchi</groupId>
 	<artifactId>silk</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Silk and Wolf</name>
 	<packaging>jar</packaging>
 	<build>
-		<finalName>silk</finalName>
+		<finalName>silk-${project.version}</finalName>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>

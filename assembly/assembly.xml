@@ -10,7 +10,7 @@
 
     <files>
         <file>
-            <source>target/${project.artifactId}.jar</source>
+            <source>target/${project.artifactId}-${project.version}.jar</source>
             <outputDirectory></outputDirectory>
         </file>
     </files>
