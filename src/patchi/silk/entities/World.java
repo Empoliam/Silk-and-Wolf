@@ -3,7 +3,10 @@ package patchi.silk.entities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
+import patchi.silk.foundation.Time;
 import patchi.silk.market.GlobalStock;
 
 /**
@@ -24,23 +27,13 @@ public class World {
 	private final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 	
 	/** Full character dataset ArrayList. Automatically sorts when adding new character. */
-	private final ArrayList<Character> CHARACTERS = new ArrayList<Character>() {
+	private final ArrayList<Person> PEOPLE = new ArrayList<Person>();
 
-		private static final long serialVersionUID = 1L;
+	/** Universal random number generator. */
+	private final Random RANDOM = new Random(System.nanoTime());
 
-		@Override
-		public boolean add(Character A) {
-			
-			super.add(A);
-			
-			sort((X, Y) -> {
-				return X.getId() - Y.getId();
-			});
-			
-			return true;	
-		}
-				
-	};	
+	/** Global clock. Synchronizes all game events */
+	private final Time CLOCK = new Time();	
 	
 	/**
 	 * Instantiates a new world.
@@ -76,6 +69,10 @@ public class World {
 		return ROADS;
 	}
 	
+	public Time getClock() {
+		return CLOCK;
+	}
+	
 	/**
 	 * Gets the global stock set.
 	 *
@@ -90,8 +87,8 @@ public class World {
 	 *
 	 * @return the character list
 	 */
-	public ArrayList<Character> getCharacterSet() {
-		return CHARACTERS;
+	public ArrayList<Person> getPersonSet() {
+		return PEOPLE;
 	}
 	
 	/**
@@ -118,10 +115,22 @@ public class World {
 	public Road getRoadByID(String id) {
 		for(Road R : ROADS) {
 			if(R.getID().equals(id)) return R;
-			
 		}
 		
 		throw new IllegalArgumentException();
+	}
+	
+	public Person getPersonByID(String id) { 
+		for(Person C : PEOPLE) {
+			if(C.getID().equals(id)) return C;
+		}
+		
+		throw new IllegalArgumentException();
+	}
+	
+	
+	public Random getRandom() {
+		return RANDOM;
 	}
 	
 	public void printWorld() {
@@ -205,5 +214,51 @@ public class World {
 
 	}
 	
+	/**
+	 * Executes a single hour tick.
+	 */
+	public void doHourTick() {
+
+		CLOCK.advanceHour();
+
+		for(Person P : PEOPLE) {
+
+			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
+			if (P.getDoDecisionTree()) {
+				if(		CLOCK.getHour() == 0 
+						&& P.getDoTravel() 
+						&& !P.getPrepTravel() 
+						&& !P.isTravelling()) {
+
+					P.setDepartureHours(P.generateDepartureHour(RANDOM));			
+					List<Settlement> destinationPool = P.getLocationSettlement().getConnectedSettlements();			
+					P.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
+					P.setPrepTravel();
+				}
+			}
+
+			//Characters advance
+			if(P.isTravelling()) P.advanceTravel();
+
+			//Characters depart
+			if(P.getPrepTravel()) {
+				if(P.getDepartureHours() == 0) {
+					P.beginTravel();
+				} else {
+					P.decrementDepartureHours();
+				}
+			}
+		}
+		
+		for(Settlement S : SETTLEMENTS) {
+			
+			//update population trackers
+			if(CLOCK.getHour() == 0) {
+				S.writeDailyPop();
+			}
+			
+		}
+
+	}
 	
 }

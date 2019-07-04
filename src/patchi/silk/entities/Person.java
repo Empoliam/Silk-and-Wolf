@@ -3,31 +3,25 @@ package patchi.silk.entities;
 import java.util.EnumSet;
 import java.util.Random;
 
-import patchi.math.PatchiMath;
+import patchi.patchiLib.math.PatchiMath;
 import patchi.silk.foundation.Time;
 import patchi.silk.item.Inventory;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 
 /**
  * Generic sentient humanoid entity.
  */
-public class Character {
+public class Person {
 
 	/** Main World reference */
 	static final World WORLD = World.getMainWorld();
 			
 	/** Reference to global clock */
-	static final Time CLOCK = Time.CLOCK;
-	
-	//############################## DATA PACKING ##############################//
-	
+	static final Time CLOCK = WORLD.getClock();
+		
 	//############################## PROPERTIES ##############################//
 
 	/** Character ID. */
-	private int id;	
+	private String id;	
 	/** Character first name. */
 	private String firstName;	
 	/** Character last name. */
@@ -63,22 +57,22 @@ public class Character {
 	 * @param doTravel doTravel flag
 	 * @param doDecisionTree doDecisionTree flag
 	 */
-	public Character(int id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
+	public Person(String id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
 
 		this.id = id;
 		locationSettlement = location;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		
 		if(female) FLAGS.add(CharacterFlags.FEMALE);
+		locationSettlement.addCharacter(this);
 		if(doTravel) FLAGS.add(CharacterFlags.DO_TRAVEL);
 		if(doDecisionTree) FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		
 	}
 
-	public Character(String[] in) {
+	public Person(String[] in) {
 		
-		this.id = Integer.parseInt(in[0]);
+		this.id = in[0];
 		this.firstName = in[1];
 		this.lastName = in[2];
 		if(Integer.parseInt(in[3]) == 0) FLAGS.add(CharacterFlags.FEMALE);
@@ -177,24 +171,6 @@ public class Character {
 		return remainingDistance;
 
 	}
-
-	/**
-	 * Returns the remainingDistance as a read-only Property.
-	 *
-	 * @return  remainingDistance IntegerProperty
-	 */
-	public ReadOnlyIntegerWrapper getRemainingDistanceProperty() {
-		return new ReadOnlyIntegerWrapper(remainingDistance);
-	}
-	
-	/**
-	 * Returns the travelling Property.
-	 *
-	 * @return travelling BolleanProperty
-	 */
-	public ReadOnlyBooleanWrapper getTravellingProperty() {
-		return new ReadOnlyBooleanWrapper(isTravelling());
-	} 
 	
 	/**
 	 * Returns the first name of the Character.
@@ -205,15 +181,6 @@ public class Character {
 		return firstName;
 	}
 
-	/** 
-	 * Returns the firstName Property of the Character.
-	 * 
-	 * @return lastName Property
-	 */
-	public ReadOnlyStringWrapper getFirstNameProperty() {
-		return new ReadOnlyStringWrapper(firstName);
-	}
-
 	/**
 	 * Returns the last name of the Character.
 	 *
@@ -222,16 +189,7 @@ public class Character {
 	public String getLastName() {
 		return lastName;
 	}
-
-	/**
-	 * Returns the lastName Property of the Character
-	 * 
-	 * @return lastName property
-	 */
-	public ReadOnlyStringWrapper getLastNameProperty() {
-		return new ReadOnlyStringWrapper(lastName);
-	}
-
+	
 	/**
 	 * Checks if the doTravel flag is set.
 	 *
@@ -259,15 +217,6 @@ public class Character {
 		return departureHours;
 	}
 
-	/**
-	 * Returns departureHours as a property.
-	 * 
-	 * @return Returns departureHours as ReadOnlyIntegerWrapper
-	 */
-	public ReadOnlyIntegerWrapper getDepartureHoursProperty() {
-		return new ReadOnlyIntegerWrapper(departureHours);
-	}
-
 	/** decrements the departureHours property */
 	public void decrementDepartureHours() {
 		departureHours--
@@ -285,41 +234,12 @@ public class Character {
 	}
 
 	/**
-	 * Returns the prepTravel Property.
-	 *
-	 * @return prepTravel BooleanProperty
-	 */
-	public ReadOnlyBooleanWrapper getPrepTravelProperty() {
-		return new ReadOnlyBooleanWrapper(getPrepTravel());
-	}
-
-	/**
 	 * Returns the Character id.
 	 *
 	 * @return Character id
 	 */
-	public int getId() {
+	public String getID() {
 		return id;
-	}
-
-	/** 
-	 * Returns the id Property 
-	 * 
-	 * @return id Property
-	 */
-	public ReadOnlyIntegerWrapper getIdProperty() {
-		return new ReadOnlyIntegerWrapper(id);
-	}
-
-	/**
-	 * Returns the name of the current location.
-	 *
-	 * @return Location name as ReadOnlyStringWrapper
-	 */
-	public ReadOnlyStringWrapper locationNameProperty() {
-		String locationName;
-		locationName = this.locationName();
-		return new ReadOnlyStringWrapper(locationName);
 	}
 
 	/**
@@ -350,15 +270,6 @@ public class Character {
 	 */
 	public double getConfidence() {
 		return confidence;
-	}
-
-	/**
-	 * Returns the confidence Property.
-	 *
-	 * @return confidence Property
-	 */
-	public ReadOnlyDoubleWrapper getConfidenceProperty() {
-		return new ReadOnlyDoubleWrapper(confidence);
 	}
 
 	/**
@@ -396,11 +307,7 @@ public class Character {
 	public boolean getFemale() {
 		return FLAGS.contains(CharacterFlags.FEMALE);
 	}
-	
-	public ReadOnlyBooleanWrapper getFemaleProperty() {
-		return new ReadOnlyBooleanWrapper(getFemale());
-	}
-	
+
 	public boolean getDoDecisionTree() {
 		return FLAGS.contains(CharacterFlags.DO_DECISION_TREE);
 	}
@@ -411,6 +318,13 @@ public class Character {
 
 	public void setPrepTravel() {
 		FLAGS.add(CharacterFlags.PREP_TRAVEL);
+	}
+
+
+
+	public String getName() {
+
+		return getFirstName() + " " + getLastName();
 	}
 	
 }

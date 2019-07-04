@@ -72,7 +72,7 @@ public class Char_gen {
 
 					boolean female = RANDOM.nextBoolean();
 
-					output.append(Integer.toString(idCounter) + ",");
+					output.append(String.format("%08X", idCounter) + ",");
 					
 					//generate first name
 					if(female) {
