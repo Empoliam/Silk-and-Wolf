@@ -5,6 +5,8 @@ import java.util.List;
 import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
+import patchi.silk.gui.util.AsciiGraphMaker;
+import patchi.silk.gui.util.AsciiShapeUtil;
 
 public class TestScreen implements Screen{
 	

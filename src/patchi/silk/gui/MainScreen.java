@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import asciiPanel.AsciiPanel;
 import patchi.silk.foundation.Time;
 import patchi.silk.foundation.World;
-import patchi.silk.main.SaveGame;
 
 public class MainScreen implements Screen {
 
@@ -49,8 +48,7 @@ public class MainScreen implements Screen {
 		case(KeyEvent.VK_T):
 			return new TestScreen();
 		case(KeyEvent.VK_Z):
-			SaveGame.saveGame("test");
-			return this;
+			return new SaveScreen();
 		default:
 			return this;
 

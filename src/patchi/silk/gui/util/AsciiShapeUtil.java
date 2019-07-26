@@ -1,4 +1,4 @@
-package patchi.silk.gui;
+package patchi.silk.gui.util;
 
 import java.awt.Color;
 

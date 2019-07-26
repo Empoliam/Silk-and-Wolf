@@ -44,6 +44,10 @@ public class NewGame {
 		roads();
 		people();
 		
+		WORLD.updateRoadConnections();
+		
+		WORLD.printWorld();
+		
 		Person lawrence = new Person("00000000","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
 		lawrence.addFlags(CharacterFlags.DO_TRAVEL);
 		PEOPLE.add(0,lawrence);
@@ -87,7 +91,14 @@ public class NewGame {
 			
 			while(line != null) {
 				
-				ROADS.add(new Road(line.split(",")));
+				String[] data = line.split(",");
+				Road R = new Road(data[0]);
+				R.setName(data[1]);
+				R.setConnectingA(data[2]);
+				R.setConnectingB(data[3]);
+				R.setLength(Integer.parseInt(data[4]));
+				
+				ROADS.add(R);
 				line = br.readLine();
 				
 			}
@@ -96,6 +107,7 @@ public class NewGame {
 		}
 		catch(FileNotFoundException e){}
 		catch(IOException e){}
+				
 	}
 	
 	/**
