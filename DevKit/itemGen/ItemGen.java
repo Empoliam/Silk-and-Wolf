@@ -1,4 +1,4 @@
-package item_gen;
+package itemGen;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,7 +26,7 @@ import javafx.util.Callback;
 
 import patchi.silk.item.ItemDef;
 
-public class Item_gen extends Application {
+public class ItemGen extends Application {
 
 	static final int VERSION = 2;
 

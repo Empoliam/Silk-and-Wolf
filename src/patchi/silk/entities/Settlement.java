@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import patchi.patchiLib.util.LimitedLinkedList;
+import patchi.silk.foundation.World;
 import patchi.silk.market.GlobalStock;
 import patchi.silk.market.LocalStock;
 
@@ -28,16 +27,19 @@ public class Settlement {
 	/** Arraylist of connecting roads */
 	private ArrayList<Road> connectingRoads = new ArrayList<Road>();
 
+	/** Settlement ID.*/
+	private final String id;
+
 	/** Name of the settlement. */
 	private String name;
-
-	/** Settlement ID.*/
-	private String id;
 
 	private List<Person> currentInhabitants = new LinkedList<Person>();
 	private int population;
 	private LimitedLinkedList<Integer> dailyPopulation = new LimitedLinkedList<>(30);
-	
+	private LimitedLinkedList<Integer> monthlyPopulation = new LimitedLinkedList<>(30);
+	private int monthRunningTot = 0;
+	private int monthN = 0;
+
 	/** Local market details */
 	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
 
@@ -62,6 +64,10 @@ public class Settlement {
 
 	}
 
+	public Settlement(String id) {
+		this.id = id;
+	}
+	
 
 	/**
 	 * Returns the settlement name.
@@ -72,13 +78,11 @@ public class Settlement {
 
 		return name;
 	}
-	
-	public ReadOnlyStringWrapper getNameProperty() {
-		
-		return new ReadOnlyStringWrapper(name);
-		
-	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	/**
 	 * Gets the settlement ID.
 	 *
@@ -155,7 +159,7 @@ public class Settlement {
 	}
 
 	//--------------------------------------------END----------------------------------------------//
-	
+
 	public void addCharacter(Person A) {
 		currentInhabitants.add(A);
 		population++;
@@ -165,24 +169,39 @@ public class Settlement {
 		currentInhabitants.remove(A);
 		population--;
 	}
-	
+
 	public int getCurrentPopulation() {
 		return population;
 	}
 
-	public ReadOnlyIntegerWrapper getCurrentPopulationProperty() {
-		return new ReadOnlyIntegerWrapper(currentInhabitants.size());
+	public void setPopulation(int pop) {
+		this.population = pop;
 	}
 	
 	public int writeDailyPop() {
-		
+
 		dailyPopulation.add(population);
+		monthRunningTot += population;
+		monthN++;
 		return population;
-		
+
 	}
-	
+
 	public LinkedList<Integer> getDailyPop() {
 		return dailyPopulation;
 	}
-	
+
+	public int writeMonthlyPop() {
+
+		monthlyPopulation.add(Math.floorDiv(monthRunningTot, monthN));
+		monthRunningTot = 0;
+		monthN = 0;
+		return population;
+
+	}
+
+	public LinkedList<Integer> getMonthlyPop() {
+		return monthlyPopulation;
+	}
+
 }

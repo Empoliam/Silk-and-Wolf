@@ -3,6 +3,7 @@ package patchi.silk.gui;
 import java.util.List;
 
 import asciiPanel.AsciiPanel;
+import patchi.patchiLib.math.MilliFormatter;
 
 public class AsciiGraphMaker {
 
@@ -35,13 +36,15 @@ public class AsciiGraphMaker {
 			} 
 		}
 
-		float yDiv = (float) (ySize-1) / (lMax-lMin);		
+		float yDiv = (float) (lMax-lMin)/(ySize-1);		
 
+		
 		xCursor = xTL;
 		while(yRel < ySize) {
+
 			yCursor = yTL - yRel + ySize - 1;
 			terminal.setCursorPosition(xCursor, yCursor);
-			terminal.write(Integer.toString(yRel));
+			terminal.write(MilliFormatter.format((lMin+(yRel*yDiv)),4));
 			yRel++;
 		}
 		
@@ -51,10 +54,10 @@ public class AsciiGraphMaker {
 		int yOld = 0;
 
 		for(N F : data) {
-
+			
 			if(xCursor < xTL + xSize - 1) {
 
-				int y  = (int) Math.floor((F.floatValue()-lMin)*yDiv);
+				int y  = (int) Math.floor((F.floatValue()-lMin)/yDiv);
 
 				if(Float.isNaN(p)) {
 

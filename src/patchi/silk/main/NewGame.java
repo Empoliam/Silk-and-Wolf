@@ -8,16 +8,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import patchi.silk.entities.CharacterFlags;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
-import patchi.silk.entities.World;
+import patchi.silk.foundation.World;
 import patchi.silk.market.GlobalStock;
 
 /**
  * Handles all file loading at the start of the game.
  */
-public class Load {
+public class NewGame {
 	
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
@@ -34,13 +35,22 @@ public class Load {
 	/** Reference to character dataset*/
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
 	
-	public static void load() {
+	private NewGame() {};
+	
+	public static void newGame() {
 		
 		stocks();
 		settlements();
 		roads();
 		people();
 		
+		Person lawrence = new Person("00000000","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
+		lawrence.addFlags(CharacterFlags.DO_TRAVEL);
+		PEOPLE.add(0,lawrence);
+		Person holo = new Person("00000001","Holo","Wisewolf",SETTLEMENTS.get(0).getID());
+		holo.addFlags(CharacterFlags.FEMALE, CharacterFlags.DO_TRAVEL);
+		PEOPLE.add(1, holo);
+		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
 	}
 	
 	/**

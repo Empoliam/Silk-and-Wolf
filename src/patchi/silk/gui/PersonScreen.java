@@ -5,7 +5,7 @@ import java.util.List;
 
 import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Person;
-import patchi.silk.entities.World;
+import patchi.silk.foundation.World;
 
 public class PersonScreen implements Screen {
 

@@ -3,8 +3,8 @@ package patchi.silk.gui;
 import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
-import patchi.silk.entities.World;
 import patchi.silk.foundation.Time;
+import patchi.silk.foundation.World;
 
 public class WaitScreen implements Screen {
 

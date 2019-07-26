@@ -8,7 +8,7 @@ import java.util.Set;
  */
 
 public class Time {
-	
+		
 	/** Month names. */
 	private static final String[] MONTHS_LIST = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	
@@ -33,11 +33,6 @@ public class Time {
 	/**  Number of days since new year. */
 	private int daysCount;
 	
-	private double sunriseTime;
-	private double sunsetTime;
-	private double dayLength;
-	
-
 	/**
 	 * Initialises a time object.
 	 */
@@ -58,12 +53,39 @@ public class Time {
 		daysCount = 264;
 		
 	}
-			
+	
+	public Time(String in) {
+		
+		String[] data = in.split(",");
+		year = Integer.parseInt(data[0]);
+		month = Integer.parseInt(data[1]);
+		day = Integer.parseInt(data[2]);
+		hour = Integer.parseInt(data[3]);
+		minute = Integer.parseInt(data[4]);
+		daysCount = Integer.parseInt(data[5]);
+		
+		THIRTY_DAYS.add(3);
+		THIRTY_DAYS.add(5);
+		THIRTY_DAYS.add(8);
+		THIRTY_DAYS.add(10);
+		
+	}
+	
 	/**
 	 * Advances the time by one hour.<br>
 	 * Handles any necessary changes to the day, month, or year.
 	 */
-	public void advanceHour() {
+	public int advanceHour() {
+		
+		/**
+		 * Status Codes:
+		 * 0 NONE
+		 * 1 HOUR
+		 * 2 DAY
+		 * 3 MONTH
+		 * 4 YEAR
+		 */
+		int status = 0;
 		
 		//Advance to nearest hour
 		hour++;
@@ -75,19 +97,23 @@ public class Time {
 			hour = 0;
 			day ++;
 			daysCount ++;
+			status = 2;
 			
 			//Advance month if appropriate
 			if(month == 1 && day > 27) {
 				month ++;
 				day = 0;
+				status = 3;
 			}
 			else if(THIRTY_DAYS.contains(month) && day > 29) {
 				month ++;
 				day = 0;
+				status = 3;
 			}
 			else if(day > 30){
 				month++;
 				day = 0;
+				status = 3;
 			}
 			
 			//Advance year if appropriate
@@ -95,13 +121,13 @@ public class Time {
 				year++;
 				month = 0;
 				daysCount = 0;
+				status = 4;
 			}
 			
-			sunriseTime = 2.0 * Math.cos((Math.PI * (double) daysCount)/182.0 + (5.0 * Math.PI)/91.0) + 6.0;
-			sunsetTime = 18.0 - 2.0 * Math.cos((Math.PI * daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
-			dayLength = 12.0 - 4.0 * Math.cos((Math.PI * (double) daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
-			
 		}
+		
+		return status;
+		
 	}
 	
 	/**
@@ -188,6 +214,11 @@ public class Time {
 		}
 	}
 		
+	@Override
+	public String toString() {
+		return year +"," + month + "," + day + "," + hour + "," + minute + ","+ daysCount;
+	}
+	
 	/**
 	 * Returns the value of daysCount.
 	 *
@@ -203,15 +234,15 @@ public class Time {
 	 * @return Sunrise time
 	 */
 	public double getSunriseTime() {
-		return sunriseTime;
+		return 2.0 * Math.cos((Math.PI * (double) daysCount)/182.0 + (5.0 * Math.PI)/91.0) + 6.0;
 	}
 
 	public double getSunsetTime() {
-		return sunsetTime;
+		return 18.0 - 2.0 * Math.cos((Math.PI * daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
 	}
 	
 	public double getCurrentDayLength() {
-		return dayLength;
+		return 12.0 - 4.0 * Math.cos((Math.PI * (double) daysCount) / 182.0 + (5.0 * Math.PI) / 91.0);
 	}
 		
 }

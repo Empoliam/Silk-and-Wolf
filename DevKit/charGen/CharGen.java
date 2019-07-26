@@ -1,4 +1,4 @@
-package char_gen;
+package charGen;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Char_gen {
+public class CharGen {
 
 	final static Random RANDOM = new Random();
 	
@@ -64,7 +64,7 @@ public class Char_gen {
 
 			BufferedWriter output = new BufferedWriter(new FileWriter("characters.csv"));
 
-			int idCounter = 2;
+			int idCounter = 199;
 			
 			for(String[] s : settlements) {
 

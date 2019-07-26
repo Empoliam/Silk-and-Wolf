@@ -3,22 +3,47 @@ package patchi.silk.gui;
 import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
+import patchi.silk.main.LoadGame;
+import patchi.silk.main.NewGame;
 
 public class TitleScreen implements Screen {
 
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
-		
+
 		terminal.writeCenter("~~ Silk and Wolf ~~", terminal.getHeightInCharacters()/2 - 2);
 		terminal.writeCenter("~~ 0.0.1-SNAPSHOT ~~", terminal.getHeightInCharacters()/2);
-		
+		terminal.writeCenter("n - New Game", terminal.getHeightInCharacters()/2 + 6);
+		terminal.writeCenter("l - Load Saved Game", terminal.getHeightInCharacters()/2 + 7);
+
 	}
 
 	@Override
 	public Screen respondToUserInput(KeyEvent key) {
-		
-		return key.getKeyCode() == KeyEvent.VK_ENTER ? new MainScreen() : this;
-		
+
+		int code = key.getKeyCode();
+
+		if(code == KeyEvent.VK_N) {
+			
+			long start = System.currentTimeMillis();
+			NewGame.newGame();
+			System.out.println("Loaded in " + (System.currentTimeMillis()-start) + "ms");
+			return new MainScreen();
+			
+		} else if ( code == KeyEvent.VK_L) {
+			
+			long start = System.currentTimeMillis();
+			LoadGame.loadGame("test");
+			System.out.println("Loaded in " + (System.currentTimeMillis()-start) + "ms");
+			return new MainScreen();
+			
+		} else {
+			
+			return this;
+			
+		}
 	}
 
 }
+
+

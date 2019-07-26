@@ -1,4 +1,4 @@
-package patchi.silk.entities;
+package patchi.silk.foundation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,26 +6,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import patchi.silk.foundation.Time;
+import patchi.silk.entities.Person;
+import patchi.silk.entities.Road;
+import patchi.silk.entities.Settlement;
 import patchi.silk.market.GlobalStock;
 
 /**
  * World class. Acts as a central access point for all datasets. Also functions as a graph of settlements connected by roads.
  */
 public class World {
-	
+
 	/** The Constant WORLD. */
 	private static final World WORLD = new World();
-	
+
 	/**  Full settlement dataset ArrayList. */
 	private final ArrayList<Settlement> SETTLEMENTS = new ArrayList<Settlement>();
-	
+
 	/** Full road set as ArrayList.*/
 	private final ArrayList<Road> ROADS = new ArrayList<Road>();
-	
+
 	/** Global stock list. */
 	private final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
-	
+
 	/** Full character dataset ArrayList. Automatically sorts when adding new character. */
 	private final ArrayList<Person> PEOPLE = new ArrayList<Person>();
 
@@ -33,13 +35,13 @@ public class World {
 	private final Random RANDOM = new Random(System.nanoTime());
 
 	/** Global clock. Synchronizes all game events */
-	private final Time CLOCK = new Time();	
-	
+	private Time CLOCK = new Time();	
+
 	/**
 	 * Instantiates a new world.
 	 */
 	public World() {
-		
+
 	}
 
 	/**
@@ -50,7 +52,7 @@ public class World {
 	public static World getMainWorld() {
 		return WORLD;
 	}
-	
+
 	/**
 	 * Gets the settlements set.
 	 *
@@ -59,7 +61,7 @@ public class World {
 	public ArrayList<Settlement> getSettlementSet(){
 		return SETTLEMENTS;
 	}
-	
+
 	/**
 	 * Gets the road set.
 	 *
@@ -68,11 +70,11 @@ public class World {
 	public ArrayList<Road> getRoadSet(){
 		return ROADS;
 	}
-	
+
 	public Time getClock() {
 		return CLOCK;
 	}
-	
+
 	/**
 	 * Gets the global stock set.
 	 *
@@ -81,7 +83,7 @@ public class World {
 	public HashMap<Integer,GlobalStock> getGlobalStockSet() {
 		return STOCKS;
 	}
-	
+
 	/**
 	 * Gets the character list.
 	 *
@@ -90,7 +92,7 @@ public class World {
 	public ArrayList<Person> getPersonSet() {
 		return PEOPLE;
 	}
-	
+
 	/**
 	 * Returns a reference to the specified Settlement, if it exists. Otherwise, throws IllegalArgumentException.
 	 *
@@ -100,12 +102,12 @@ public class World {
 	public Settlement getSettlementByID(String id) {
 		for(Settlement S : SETTLEMENTS) {
 			if(S.getID().equals(id)) return S;
-			
+
 		}
-		
+
 		throw new IllegalArgumentException();
 	}
-	
+
 	/**
 	 * Returns a reference to the specified Road, if it exists. Otherwise, throws IllegalArgumentException.
 	 *
@@ -116,23 +118,41 @@ public class World {
 		for(Road R : ROADS) {
 			if(R.getID().equals(id)) return R;
 		}
-		
+
 		throw new IllegalArgumentException();
 	}
-	
+
 	public Person getPersonByID(String id) { 
 		for(Person C : PEOPLE) {
 			if(C.getID().equals(id)) return C;
 		}
-		
+
 		throw new IllegalArgumentException();
 	}
-	
+
+	public void updateCharacterLocations() {
+
+		for(Person P : PEOPLE) {
+			
+			if(!P.isTravelling()) {
+				
+				Settlement S = getSettlementByID(P.getLocationID());
+				S.setPopulation(S.getCurrentPopulation() + 1);
+				
+			}
+			
+		}
+
+	}
+
+	public void setNewTime(String in) {
+		CLOCK = new Time(in);
+	}
 	
 	public Random getRandom() {
 		return RANDOM;
 	}
-	
+
 	public void printWorld() {
 
 		ArrayList<Road> roads = new ArrayList<Road>();
@@ -149,10 +169,10 @@ public class World {
 		}
 
 	}
-	
+
 	public ArrayList<Settlement> Dijkstra(Settlement start, Settlement end) {
 
-		
+
 		ArrayList<Settlement> route = new ArrayList<Settlement>();
 
 		for(Settlement S : SETTLEMENTS) S.purge();
@@ -213,13 +233,15 @@ public class World {
 		return route;
 
 	}
-	
+
 	/**
 	 * Executes a single hour tick.
 	 */
 	public void doHourTick() {
 
-		CLOCK.advanceHour();
+		int timeStatus = 0;
+
+		timeStatus = CLOCK.advanceHour();
 
 		for(Person P : PEOPLE) {
 
@@ -231,7 +253,7 @@ public class World {
 						&& !P.isTravelling()) {
 
 					P.setDepartureHours(P.generateDepartureHour(RANDOM));			
-					List<Settlement> destinationPool = P.getLocationSettlement().getConnectedSettlements();			
+					List<Settlement> destinationPool = WORLD.getSettlementByID(P.getLocationID()).getConnectedSettlements();			
 					P.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
 					P.setPrepTravel();
 				}
@@ -249,16 +271,25 @@ public class World {
 				}
 			}
 		}
-		
+
 		for(Settlement S : SETTLEMENTS) {
-			
+
 			//update population trackers
-			if(CLOCK.getHour() == 0) {
+			if(timeStatus >= 2) {
+
 				S.writeDailyPop();
+
+				if(timeStatus >= 3) {
+
+
+
+					S.writeMonthlyPop();
+				}
+
 			}
-			
+
 		}
 
 	}
-	
+
 }

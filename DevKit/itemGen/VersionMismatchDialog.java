@@ -1,4 +1,4 @@
-package item_gen;
+package itemGen;
 
 import java.io.BufferedReader;
 import java.io.IOException;

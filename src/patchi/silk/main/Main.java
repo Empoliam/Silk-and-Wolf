@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Settlement;
-import patchi.silk.entities.World;
+import patchi.silk.foundation.World;
 import patchi.silk.market.GlobalStock;
 import patchi.silk.gui.Screen;
 import patchi.silk.gui.TitleScreen;
@@ -34,8 +34,6 @@ public class Main extends JFrame implements KeyListener{
 
 	/** References to character dataset and important Characters */
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
-	static Person LAWRENCE;
-	static Person HOLO;
 
 	/** Reference to global stock dataset */
 	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
@@ -52,16 +50,6 @@ public class Main extends JFrame implements KeyListener{
 	 * @param args unused
 	 */
 	public static void main(String[] args) {
-
-		long start = System.currentTimeMillis();
-		Load.load();
-		System.out.println("Loaded in " + (System.currentTimeMillis()-start) + "ms");
-
-		PEOPLE.add(0, new Person("00000000","Kraft","Lawrence",SETTLEMENTS.get(0),false,true,false));
-		PEOPLE.add(1, new Person("00000001","Holo","",SETTLEMENTS.get(0),true,true,false));
-
-		LAWRENCE = WORLD.getPersonByID("00000000");
-		HOLO = WORLD.getPersonByID("00000001");
 
 		Main app = new Main();
 		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

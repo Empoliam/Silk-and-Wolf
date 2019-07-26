@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Settlement;
-import patchi.silk.entities.World;
+import patchi.silk.foundation.World;
 
 public class TestScreen implements Screen{
 	
@@ -19,7 +19,7 @@ public class TestScreen implements Screen{
 	public void displayOutput(AsciiPanel terminal) {
 
 		Settlement s = SETTLEMENTS.get(0);
-		List<Integer> data = s.getDailyPop();
+		List<Integer> data = s.getMonthlyPop();
 		int xSize = data.size() + 4;
 		int ySize = 20;
 		

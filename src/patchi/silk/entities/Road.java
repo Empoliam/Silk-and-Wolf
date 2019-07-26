@@ -1,5 +1,7 @@
 package patchi.silk.entities;
 
+import patchi.silk.foundation.World;
+
 /**
  * Intermediary region between two settlements.
  */
@@ -12,8 +14,8 @@ public class Road {
 	private String id;
 		
 	/** Connecting settlements */
-	private Settlement connectingA;
-	private Settlement connectingB;
+	private String connectingA;
+	private String connectingB;
 	
 	/** Road name. */
 	private String name;
@@ -25,11 +27,15 @@ public class Road {
 		
 		id = in[0];
 		name = in[1];
-		connectingA = WORLD.getSettlementByID(in[2].split(";")[0]);
-		connectingA.getRoads().add(this);
-		connectingB = WORLD.getSettlementByID(in[2].split(";")[1]);
-		connectingB.getRoads().add(this);
+		connectingA = in[2].split(";")[0];
+		WORLD.getSettlementByID(connectingA).getRoads().add(this);
+		connectingB = in[2].split(";")[1];
+		WORLD.getSettlementByID(connectingB).getRoads().add(this);
 		
+	}
+	
+	public Road(String id) {
+		this.id = id;
 	}
 	
 	/**
@@ -52,6 +58,10 @@ public class Road {
 		return name;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	/**
 	 * Returns the length of the road.
 	 *
@@ -61,12 +71,24 @@ public class Road {
 		
 		return length;
 	}
-
-	public Settlement getConnectingA() {
-		return connectingA;
+	
+	public void setLength(int length) {
+		this.length = length;
 	}
 
+	public Settlement getConnectingA() {
+		return WORLD.getSettlementByID(connectingA);
+	}
+
+	public void setConnectingA(String id) {
+		connectingA = id;
+	}
+	
 	public Settlement getConnectingB() {
-		return connectingB;
+		return WORLD.getSettlementByID(connectingB);
+	}
+	
+	public void setConnectingB(String id) {
+		connectingB = id;
 	}
 }

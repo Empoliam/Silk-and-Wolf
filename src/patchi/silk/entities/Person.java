@@ -5,6 +5,7 @@ import java.util.Random;
 
 import patchi.patchiLib.math.PatchiMath;
 import patchi.silk.foundation.Time;
+import patchi.silk.foundation.World;
 import patchi.silk.item.Inventory;
 
 /**
@@ -21,16 +22,15 @@ public class Person {
 	//############################## PROPERTIES ##############################//
 
 	/** Character ID. */
-	private String id;	
+	private final String id;	
 	/** Character first name. */
-	private String firstName;	
+	private String firstName = "null";	
 	/** Character last name. */
-	private String lastName;
+	private String lastName = "null";
 	
-	/** Active location. While travel flag is true, road is relevant. Otherwise, settlement. */
-	private Settlement locationSettlement;
-	private Road locationRoad;
-	
+	/** Active location. Refers to settlement or road. */
+	private String location;
+
 	/** Destination settlement list index. */
 	private Settlement destination;	
 	/** The remaining distance to the next settlement. */
@@ -38,13 +38,19 @@ public class Person {
 	/** The hours remaining until an Character begins travelling. */
 	private int departureHours = 0;
 	/** Confidence modifier. Double between 0.0 and 1.0. Affects departure time. Currently unimplemented. */
-	private double confidence = 1.0;
+	private float confidence = 1.0f;
 	
 	//############################## OTHER ##############################//
 	
 	private final Inventory inventory = new Inventory();
 	
 	private EnumSet<CharacterFlags> FLAGS = EnumSet.noneOf(CharacterFlags.class);
+	
+	public Person(String id) {
+		
+		this.id = id;
+		
+	}
 	
 	/**
 	 * Instantiates a new Character.
@@ -57,28 +63,29 @@ public class Person {
 	 * @param doTravel doTravel flag
 	 * @param doDecisionTree doDecisionTree flag
 	 */
-	public Person(String id, String firstName, String lastName, Settlement location, boolean female, boolean doTravel, boolean doDecisionTree){
+	public Person(String id, String firstName, String lastName, String location){
 
 		this.id = id;
-		locationSettlement = location;
+		
+		this.location = location;
+		WORLD.getSettlementByID(location).addCharacter(this);
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
-		if(female) FLAGS.add(CharacterFlags.FEMALE);
-		locationSettlement.addCharacter(this);
-		if(doTravel) FLAGS.add(CharacterFlags.DO_TRAVEL);
-		if(doDecisionTree) FLAGS.add(CharacterFlags.DO_DECISION_TREE);
-		
+				
 	}
 
 	public Person(String[] in) {
 		
 		this.id = in[0];
+		
 		this.firstName = in[1];
 		this.lastName = in[2];
+		
+		this.location = in[4];
+		WORLD.getSettlementByID(location).addCharacter(this);
+		
 		if(Integer.parseInt(in[3]) == 0) FLAGS.add(CharacterFlags.FEMALE);
-		locationSettlement = WORLD.getSettlementByID(in[4]);
-		locationSettlement.addCharacter(this);
-
 		if(new Random().nextBoolean()) FLAGS.add(CharacterFlags.DO_TRAVEL);
 		FLAGS.add(CharacterFlags.DO_DECISION_TREE);
 		
@@ -91,11 +98,10 @@ public class Person {
 		FLAGS.remove(CharacterFlags.PREP_TRAVEL);
 		departureHours = 0;
 		FLAGS.add(CharacterFlags.TRAVELLING);	
-		Road path = locationSettlement.getRoadTo(destination);
+		Road path = WORLD.getSettlementByID(location).getRoadTo(destination);
 		remainingDistance = path.getLength();
-		locationRoad = path;
-		locationSettlement.removeCharacter(this);
-		
+		WORLD.getSettlementByID(location).removeCharacter(this);
+		location = path.getID();
 	}
 
 	/**
@@ -113,8 +119,8 @@ public class Person {
 			if(remainingDistance <= 0) {
 				remainingDistance = 0;
 				FLAGS.remove(CharacterFlags.TRAVELLING);
-				locationSettlement = destination;
-				locationSettlement.addCharacter(this);
+				location = destination.getID();
+				WORLD.getSettlementByID(location).addCharacter(this);
 			}
 		}
 
@@ -249,7 +255,7 @@ public class Person {
 	 */
 	public String locationName() {
 		String locationName;
-		locationName = (isTravelling()) ? locationRoad.getName() : locationSettlement.getName();
+		locationName = (isTravelling()) ? WORLD.getRoadByID(location).getName() : WORLD.getSettlementByID(location).getName();
 		return locationName;
 	}
 	
@@ -258,8 +264,8 @@ public class Person {
 	 *
 	 * @param d confidence
 	 */
-	public void setConfidence(double d) {
-		d = PatchiMath.cutDoubleToRange(d, 0.0, 1.0);
+	public void setConfidence(float d) {
+		d = (float) PatchiMath.cutDoubleToRange(d, 0.0, 1.0);
 		confidence = d;
 	}
 
@@ -268,7 +274,7 @@ public class Person {
 	 *
 	 * @return confidence coefficient
 	 */
-	public double getConfidence() {
+	public float getConfidence() {
 		return confidence;
 	}
 
@@ -287,21 +293,13 @@ public class Person {
 	public void setDestination(Settlement i) {
 		destination = i;
 	}
-
-	public Settlement getLocationSettlement() {
-		return locationSettlement;
+	
+	public String getLocationID() {
+		return location;
 	}
-
-	public void setLocationSettlement(Settlement locationSettlement) {
-		this.locationSettlement = locationSettlement;
-	}
-
-	public Road getLocationRoad() {
-		return locationRoad;
-	}
-
-	public void setLocationRoad(Road locationRoad) {
-		this.locationRoad = locationRoad;
+	
+	public void setLocationID(String location) {
+		this.location = location;
 	}
 	
 	public boolean getFemale() {
@@ -320,11 +318,33 @@ public class Person {
 		FLAGS.add(CharacterFlags.PREP_TRAVEL);
 	}
 
-
-
 	public String getName() {
 
 		return getFirstName() + " " + getLastName();
+	}
+
+	public void addFlags(CharacterFlags ... flags) {
+		
+		for(CharacterFlags F : flags) {
+			
+			FLAGS.add(F);
+			
+		}
+		
+	}
+	
+	public EnumSet<CharacterFlags> getFlags () {
+		
+		return FLAGS;
+		
+	}
+	
+	public void setFirstName(String fName) {
+		this.firstName = fName;
+	}
+	
+	public void setLastName(String lName) {
+		this.lastName = lName;
 	}
 	
 }
