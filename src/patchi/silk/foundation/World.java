@@ -100,9 +100,10 @@ public class World {
 	 * @return Settlement by ID
 	 */
 	public Settlement getSettlementByID(String id) {
+						
 		for(Settlement S : SETTLEMENTS) {
+						
 			if(S.getID().equals(id)) return S;
-
 		}
 
 		throw new IllegalArgumentException();
@@ -143,6 +144,23 @@ public class World {
 			
 		}
 
+	}
+	
+	public void updateRoadConnections() {
+		
+		for(Road R : ROADS) {
+						
+			if(!R.getConnectingA().getRoads().contains(R)) {
+				R.getConnectingA().getRoads().add(R);
+			}
+			
+			if(!R.getConnectingB().getRoads().contains(R)) {
+				R.getConnectingB().getRoads().add(R);
+			}
+			
+			
+		}
+		
 	}
 
 	public void setNewTime(String in) {
@@ -253,7 +271,7 @@ public class World {
 						&& !P.isTravelling()) {
 
 					P.setDepartureHours(P.generateDepartureHour(RANDOM));			
-					List<Settlement> destinationPool = WORLD.getSettlementByID(P.getLocationID()).getConnectedSettlements();			
+					List<Settlement> destinationPool = WORLD.getSettlementByID(P.getLocationID()).getConnectedSettlements();
 					P.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
 					P.setPrepTravel();
 				}
@@ -280,8 +298,6 @@ public class World {
 				S.writeDailyPop();
 
 				if(timeStatus >= 3) {
-
-
 
 					S.writeMonthlyPop();
 				}

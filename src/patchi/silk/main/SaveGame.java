@@ -133,9 +133,9 @@ public class SaveGame {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(F));
 
 				bw.write("ID:" + R.getID() + "\n");
-				bw.write("NAME:" + R.getName());
-				bw.write("SETA:" + R.getConnectingA().getID());
-				bw.write("SETB:" + R.getConnectingB().getID());
+				bw.write("NAME:" + R.getName() + "\n");
+				bw.write("SETA:" + R.getConnectingA().getID() + "\n");
+				bw.write("SETB:" + R.getConnectingB().getID() + "\n");
 				bw.write("LENGTH:" + R.getLength());
 
 				bw.close();

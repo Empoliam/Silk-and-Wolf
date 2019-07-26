@@ -36,7 +36,7 @@ public class LoadGame {
 
 	private LoadGame() {}
 
-	public static void loadGame(String saveName) {
+	public static void loadGame(String saveName) throws FileNotFoundException {
 
 		PATH = "saves/" + saveName;
 
@@ -46,6 +46,7 @@ public class LoadGame {
 		loadRoads();
 
 		WORLD.updateCharacterLocations();
+		WORLD.updateRoadConnections();
 
 	}
 
@@ -114,8 +115,6 @@ public class LoadGame {
 
 				PEOPLE.add(P);
 
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
@@ -157,8 +156,6 @@ public class LoadGame {
 
 				SETTLEMENTS.add(S);
 
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
@@ -182,9 +179,10 @@ public class LoadGame {
 				String ID = br.readLine().split(":")[1];
 				Road R = new Road(ID);
 				String line;
-
+				
+				
 				while((line = br.readLine()) != null) {
-
+										
 					String tag = line.split(":")[0];
 					String data = line.split(":")[1];
 
@@ -195,23 +193,24 @@ public class LoadGame {
 					} 
 					case "LENGTH": {
 						R.setLength(Integer.parseInt(data));
+						break;
 					}
 					case "SETA": {
 						R.setConnectingA(data);
+						break;
 					}
 					case "SETB": {
 						R.setConnectingB(data);
+						break;
 					}
 
 					}
 				}
 
 				br.close();
-
+				
 				ROADS.add(R);
 
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			
@@ -245,8 +244,6 @@ public class LoadGame {
 
 			br.close();
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			

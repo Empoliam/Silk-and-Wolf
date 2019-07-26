@@ -1,9 +1,7 @@
 package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
-
 import asciiPanel.AsciiPanel;
-import patchi.silk.main.LoadGame;
 import patchi.silk.main.NewGame;
 
 public class TitleScreen implements Screen {
@@ -32,10 +30,7 @@ public class TitleScreen implements Screen {
 			
 		} else if ( code == KeyEvent.VK_L) {
 			
-			long start = System.currentTimeMillis();
-			LoadGame.loadGame("test");
-			System.out.println("Loaded in " + (System.currentTimeMillis()-start) + "ms");
-			return new MainScreen();
+			return new LoadScreen();
 			
 		} else {
 			

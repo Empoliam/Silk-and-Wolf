@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>patchi</groupId>
 	<artifactId>silk</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<name>Silk and Wolf</name>
 	<packaging>jar</packaging>
 	<build>

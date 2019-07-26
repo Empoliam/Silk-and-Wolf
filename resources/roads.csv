@@ -1,16 +1,16 @@
-sw.southernroad,Southern Road,sw.yorenz;sw.pasloe,65
-sw.orchardtrail,Orchard Trail,sw.pasloe;sw.pazzio,120
-sw.wrplains,Western Ruvinheigen Plains,sw.pazzio;sw.ruvenheign,360
-sw.monolithpass,Monolith Pass,sw.pazzio;sw.poroson,230
-sw.erplains,Eastern Ruvinheigen Plains,sw.poroson;sw.ruvenheign,270
-sw.lamtrahills,Lamtra Foothills,sw.ruvenheign;sw.lamtra,310
-sw.foresttrail,Great Forest Trail,sw.ruvenheign;sw.kumerson,310
-sw.eeyrecrossing,Eastern Eyre Crossing,sw.kumerson;sw.enberch,270
-sw.weyrecrossing,Western Eyre Crossing,sw.kumerson;sw.ploania,405
-sw.rollingpass,Rolling Pass,sw.enberch;sw.tereo,505
-sw.northplains,White Plains North,sw.tereo;sw.lenos,150
-sw.roamcrossing,Roam Crossing,sw.ploania;sw.gerube,90
-sw.roamhighway,Roam Highway,sw.lenos;sw.ploania,260
-sw.travellersend,Travellers End,sw.lenos;sw.yoitsu,460
-sw.northernroad,Northern Road,sw.lenos;sw.nyohira,950
-sw.craggypass,Craggy Pass,sw.yoitsu;sw.nyohira,285
+sw.southernroad,Southern Road,sw.yorenz,sw.pasloe,65
+sw.orchardtrail,Orchard Trail,sw.pasloe,sw.pazzio,120
+sw.wrplains,Western Ruvinheigen Plains,sw.pazzio,sw.ruvenheign,360
+sw.monolithpass,Monolith Pass,sw.pazzio,sw.poroson,230
+sw.erplains,Eastern Ruvinheigen Plains,sw.poroson,sw.ruvenheign,270
+sw.lamtrahills,Lamtra Foothills,sw.ruvenheign,sw.lamtra,310
+sw.foresttrail,Great Forest Trail,sw.ruvenheign,sw.kumerson,310
+sw.eeyrecrossing,Eastern Eyre Crossing,sw.kumerson,sw.enberch,270
+sw.weyrecrossing,Western Eyre Crossing,sw.kumerson,sw.ploania,405
+sw.rollingpass,Rolling Pass,sw.enberch,sw.tereo,505
+sw.northplains,White Plains North,sw.tereo,sw.lenos,150
+sw.roamcrossing,Roam Crossing,sw.ploania,sw.gerube,90
+sw.roamhighway,Roam Highway,sw.lenos,sw.ploania,260
+sw.travellersend,Travellers End,sw.lenos,sw.yoitsu,460
+sw.northernroad,Northern Road,sw.lenos,sw.nyohira,950
+sw.craggypass,Craggy Pass,sw.yoitsu,sw.nyohira,285
