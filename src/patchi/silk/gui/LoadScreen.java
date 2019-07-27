@@ -32,7 +32,7 @@ public class LoadScreen implements Screen {
 		terminal.write(saveName);
 		cursorY += 2;
 		terminal.setCursorPosition(cursorX, cursorY);
-		terminal.write("Enter - load");
+		terminal.write("Enter - Load");
 		cursorY ++;
 		terminal.setCursorPosition(cursorX, cursorY);
 		if(failure) {

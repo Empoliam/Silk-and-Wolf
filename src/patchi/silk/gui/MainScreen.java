@@ -21,16 +21,22 @@ public class MainScreen implements Screen {
 		
 		terminal.setCursorPosition(cursorX,cursorY);
 		terminal.write(CLOCK.getFormattedDate() + " " + CLOCK.getFormattedTime(), AsciiPanel.black, AsciiPanel.white);
+		
 		cursorY+= 2;
 		terminal.setCursorPosition(cursorX,cursorY);
 		terminal.write("s - Settlements");
+		
 		cursorY++;
 		terminal.setCursorPosition(cursorX,cursorY);
 		terminal.write("p - People");
+		
 		cursorY++;
 		terminal.setCursorPosition(cursorX, cursorY);
 		terminal.write("w - Wait");
+		
 		cursorY++;
+		terminal.setCursorPosition(cursorX, cursorY);
+		terminal.write("z - Save");
 		
 	}
 
