@@ -10,7 +10,7 @@ public class TitleScreen implements Screen {
 	public void displayOutput(AsciiPanel terminal) {
 
 		terminal.writeCenter("~~ Silk and Wolf ~~", terminal.getHeightInCharacters()/2 - 2);
-		terminal.writeCenter("~~ 0.0.4 ~~", terminal.getHeightInCharacters()/2);
+		terminal.writeCenter("~~ 0.0.4.1 ~~", terminal.getHeightInCharacters()/2);
 		terminal.writeCenter("n - New Game", terminal.getHeightInCharacters()/2 + 6);
 		terminal.writeCenter("l - Load Saved Game", terminal.getHeightInCharacters()/2 + 7);
 

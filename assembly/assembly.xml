@@ -21,6 +21,7 @@
             <outputDirectory>/resources</outputDirectory>
             <includes>
                 <include>*.csv</include>
+                <include>*.txt</include>
             </includes>
         </fileSet>
     </fileSets>
