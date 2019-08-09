@@ -76,16 +76,16 @@ public class Road {
 		this.length = length;
 	}
 
-	public Settlement getConnectingA() {
-		return WORLD.getSettlementByID(connectingA);
+	public String getConnectingA() {
+		return connectingA;
 	}
 
 	public void setConnectingA(String id) {
 		connectingA = id;
 	}
 	
-	public Settlement getConnectingB() {
-		return WORLD.getSettlementByID(connectingB);
+	public String getConnectingB() {
+		return connectingB;
 	}
 	
 	public void setConnectingB(String id) {

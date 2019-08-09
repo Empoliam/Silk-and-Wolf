@@ -2,6 +2,7 @@ package patchi.silk.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,8 +36,10 @@ public class Settlement {
 
 	private List<Person> currentInhabitants = new LinkedList<Person>();
 	private int population;
-	private LimitedLinkedList<Integer> dailyPopulation = new LimitedLinkedList<>(30);
-	private LimitedLinkedList<Integer> monthlyPopulation = new LimitedLinkedList<>(30);
+	
+	private static int POPULATION_TRACKING_SIZE = 30;
+	private LimitedLinkedList<Integer> dailyPopulation = new LimitedLinkedList<>(POPULATION_TRACKING_SIZE);
+	private LimitedLinkedList<Integer> monthlyPopulation = new LimitedLinkedList<>(POPULATION_TRACKING_SIZE);
 	private int monthRunningTot = 0;
 	private int monthN = 0;
 
@@ -67,7 +70,7 @@ public class Settlement {
 	public Settlement(String id) {
 		this.id = id;
 	}
-	
+
 
 	/**
 	 * Returns the settlement name.
@@ -82,7 +85,7 @@ public class Settlement {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
 	 * Gets the settlement ID.
 	 *
@@ -93,13 +96,13 @@ public class Settlement {
 		return id;
 	}
 
-	public ArrayList<Settlement> getConnectedSettlements() {
-
-		ArrayList<Settlement> C = new ArrayList<>();
+	public ArrayList<String> getConnectedSettlements() {
+		
+		ArrayList<String> C = new ArrayList<>();
 		for(Road R : connectingRoads) {
-			if(R.getConnectingA() != this) C.add(R.getConnectingA());
+			if(!R.getConnectingA().equals(this.id)) C.add(R.getConnectingA());
 			else C.add(R.getConnectingB());
-		}
+		}				
 		return C;
 
 	}
@@ -110,7 +113,7 @@ public class Settlement {
 	 * @param b ID of the destination settlement
 	 * @return Road connecting the two settlements. Null if unconnected.
 	 */
-	public Road getRoadTo(Settlement s){
+	public Road getRoadTo(String s){
 
 		//Check each connecting road until the appropriate connection is found
 		for(Road r : connectingRoads) {
@@ -177,7 +180,7 @@ public class Settlement {
 	public void setPopulation(int pop) {
 		this.population = pop;
 	}
-	
+
 	public int writeDailyPop() {
 
 		dailyPopulation.add(population);
@@ -187,7 +190,7 @@ public class Settlement {
 
 	}
 
-	public LinkedList<Integer> getDailyPop() {
+	public List<Integer> getDailyPop() {
 		return dailyPopulation;
 	}
 
@@ -200,8 +203,58 @@ public class Settlement {
 
 	}
 
-	public LinkedList<Integer> getMonthlyPop() {
+	public List<Integer> getMonthlyPop() {
 		return monthlyPopulation;
+	}
+
+	public String getMonthlyPopString() {
+
+		String s = monthRunningTot + ";" +  monthN + ";";
+
+		Iterator<Integer> monthly = getDailyPop().iterator();
+		while(monthly.hasNext()) {
+			Integer I = monthly.next();
+			s = s + (I.toString());
+			if(monthly.hasNext()) {
+				s = s + ",";
+			}
+		}
+
+		return s;
+
+	}
+
+	public void setDailyPop(LimitedLinkedList<Integer> in) {
+		dailyPopulation = in;
+	}
+
+	public void parseDailyPopString(String in) {
+
+		String[] stringList = in.split(",");
+		List<Integer> popList = new LinkedList<Integer>();
+		for(String str : stringList) {
+			popList.add(Integer.parseInt(str));
+		}
+		
+		dailyPopulation = new LimitedLinkedList<Integer>(popList, POPULATION_TRACKING_SIZE);
+		
+	}
+
+	public void parseMonthlyPopString(String in) {
+
+		String[] init = in.split(";");
+		
+		monthRunningTot = Integer.parseInt(init[0]);
+		monthN = Integer.parseInt(init[1]);
+		
+		String[] stringList = init[2].split(",");
+		List<Integer> popList = new LinkedList<Integer>();
+		for(String str : stringList) {
+			popList.add(Integer.parseInt(str));
+		}
+		
+		monthlyPopulation = new LimitedLinkedList<Integer>(popList, POPULATION_TRACKING_SIZE);
+		
 	}
 
 }

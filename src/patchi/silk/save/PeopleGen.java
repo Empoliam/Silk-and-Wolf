@@ -1,20 +1,23 @@
-package charGen;
+package patchi.silk.save;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CharGen {
+import patchi.silk.entities.CharacterFlags;
+import patchi.silk.entities.Person;
+
+public class PeopleGen {
 
 	final static Random RANDOM = new Random();
-	
-	public static void main(String[] args){
+
+	public static List<Person> generate(){
+
+		List<Person> people = new ArrayList<Person>();
 
 		try {
 
@@ -22,7 +25,7 @@ public class CharGen {
 			List<String> mnames = new ArrayList<String>();
 			List<String> fnames = new ArrayList<String>();
 			List<String[]> settlements = new ArrayList<String[]>();
-			
+
 			//load surnames
 			BufferedReader rSnames = new BufferedReader(new FileReader("resources/snames.txt"));
 
@@ -62,48 +65,42 @@ public class CharGen {
 			}	
 			rSettlements.close();
 
-			BufferedWriter output = new BufferedWriter(new FileWriter("characters.csv"));
-
 			int idCounter = 199;
-			
+
 			for(String[] s : settlements) {
 
 				for(int k = 1; k <= Integer.parseInt(s[1]); k++) {
 
-					boolean female = RANDOM.nextBoolean();
-
-					output.append(String.format("%08X", idCounter) + ",");
+					Person P = new Person(Integer.toString(idCounter));
 					
+					boolean female = RANDOM.nextBoolean();
+					if(female) {
+						P.addFlags(CharacterFlags.FEMALE);
+					}
+
 					//generate first name
 					if(female) {
-						output.append(fnames.get(RANDOM.nextInt(fnames.size())));
+						P.setFirstName(fnames.get(RANDOM.nextInt(fnames.size())));
 					}
 					else {
-						output.append(mnames.get(RANDOM.nextInt(mnames.size())));
+						P.setFirstName(mnames.get(RANDOM.nextInt(mnames.size())));
 					}
 
-					output.append(",");
-
 					//generate last name
-					output.append(snames.get(RANDOM.nextInt(snames.size())) + ",");
+					P.setLastName(snames.get(RANDOM.nextInt(snames.size())));
 
-					//gender
-					output.append((female ? "0" : "1") + ",");
-					
 					//town ID
-					output.append(s[0]);
+					P.setLocationID((s[0]));
 					
-					output.newLine();
-					
+					if(RANDOM.nextBoolean()) P.addFlags(CharacterFlags.DO_TRAVEL);
+					P.addFlags(CharacterFlags.DO_DECISION_TREE);
+										
+					people.add(P);
 					idCounter++;
-					
+
 				}
 
 			}
-
-			output.close();
-			
-			System.out.println("Successfully created " + (idCounter-2) + " Characters");
 
 		} 
 		catch (FileNotFoundException e) {
@@ -112,6 +109,8 @@ public class CharGen {
 			e.printStackTrace();
 		}
 
+		return people;
+		
 	}
 
 }

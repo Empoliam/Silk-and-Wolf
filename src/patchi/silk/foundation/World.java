@@ -149,13 +149,16 @@ public class World {
 	public void updateRoadConnections() {
 		
 		for(Road R : ROADS) {
-						
-			if(!R.getConnectingA().getRoads().contains(R)) {
-				R.getConnectingA().getRoads().add(R);
+			
+			Settlement A = getSettlementByID(R.getConnectingA());
+			Settlement B = getSettlementByID(R.getConnectingB());
+			
+			if(!A.getRoads().contains(R)) {
+				A.getRoads().add(R);
 			}
 			
-			if(!R.getConnectingB().getRoads().contains(R)) {
-				R.getConnectingB().getRoads().add(R);
+			if(!B.getRoads().contains(R)) {
+				B.getRoads().add(R);
 			}
 			
 			
@@ -183,16 +186,19 @@ public class World {
 		}
 
 		for(Road E : roads) {
-			System.out.println(E.getConnectingA().getName() + " - " + E.getConnectingB().getName() + " : " + E.getLength());
+			System.out.println(getSettlementByID(E.getConnectingA()).getName() + " - " + getSettlementByID(E.getConnectingB()).getName() + " : " + E.getLength());
 		}
 
 	}
 
-	public ArrayList<Settlement> Dijkstra(Settlement start, Settlement end) {
+	public ArrayList<String> Dijkstra(String startID, String endID) {
 
 
-		ArrayList<Settlement> route = new ArrayList<Settlement>();
+		ArrayList<String> route = new ArrayList<String>();
 
+		Settlement start = WORLD.getSettlementByID(startID);
+		Settlement end = WORLD.getSettlementByID(endID);
+		
 		for(Settlement S : SETTLEMENTS) S.purge();
 
 		start.setFinalValue(0);
@@ -203,13 +209,13 @@ public class World {
 		while(!end.getDone()) {
 
 			for(Road R : active.getRoads()) {
-
-				Settlement check;
-
-				if(R.getConnectingA() == active) check = R.getConnectingB();
-				else check = R.getConnectingA();
-
-				if(! check.getDone()) {
+			
+				String checkID;
+				if(R.getConnectingA() == active.getID()) checkID = R.getConnectingB();
+				else checkID = R.getConnectingA();
+				
+				Settlement check = WORLD.getSettlementByID(checkID);
+				if(!check.getDone()) {
 					int newWorking = R.getLength() + active.getFinalValue();
 					if(check.getWorkingValue() > newWorking) check.setWorkingValue(newWorking);
 				}
@@ -229,21 +235,25 @@ public class World {
 
 		for(Settlement S : SETTLEMENTS) System.out.println(S.getName() + " : " + S.getFinalValue());
 
-		route.add(end);
+		route.add(endID);
 
 		Settlement reverse = end;
+		
 		while(!reverse.equals(start)) {
+			
 			for(Road R : reverse.getRoads()) {
-				if((reverse.getFinalValue() - R.getLength()) == R.getConnectingA().getFinalValue()) {
-					reverse = R.getConnectingA();
+				
+				if((reverse.getFinalValue() - R.getLength()) == getSettlementByID(R.getConnectingA()).getFinalValue()) {
+					reverse = getSettlementByID(R.getConnectingA());
 					break;
 				}
-				else if((reverse.getFinalValue() - R.getLength()) == R.getConnectingB().getFinalValue()) {
-					reverse = R.getConnectingB();
+				else if((reverse.getFinalValue() - R.getLength()) == getSettlementByID(R.getConnectingB()).getFinalValue()) {
+					reverse = getSettlementByID(R.getConnectingB());
 					break;
 				}
 			}
-			route.add(reverse);
+			
+			route.add(reverse.getID());
 		}
 
 		Collections.reverse(route);
@@ -256,7 +266,7 @@ public class World {
 	 * Executes a single hour tick.
 	 */
 	public void doHourTick() {
-
+		
 		int timeStatus = 0;
 
 		timeStatus = CLOCK.advanceHour();
@@ -271,7 +281,7 @@ public class World {
 						&& !P.isTravelling()) {
 
 					P.setDepartureHours(P.generateDepartureHour(RANDOM));			
-					List<Settlement> destinationPool = WORLD.getSettlementByID(P.getLocationID()).getConnectedSettlements();
+					List<String> destinationPool = WORLD.getSettlementByID(P.getLocationID()).getConnectedSettlements();
 					P.setDestination(destinationPool.get(RANDOM.nextInt(destinationPool.size())));
 					P.setPrepTravel();
 				}

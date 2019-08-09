@@ -1,4 +1,4 @@
-package patchi.silk.main;
+package patchi.silk.save;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -75,7 +76,7 @@ public class SaveGame {
 				bw.write("LNAME:" + P.getLastName() + "\n");
 				bw.write("LOC:" + P.getLocationID() + "\n");
 				try {
-					bw.write("DESTINATION:" + P.getDestination().getID() + "\n");
+					bw.write("DEST:" + P.getDestination() + "\n");
 				} catch (NullPointerException e) {
 					bw.write("DEST:null\n");
 				}
@@ -109,8 +110,21 @@ public class SaveGame {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(F));
 
 				bw.write("ID:" + S.getID() + "\n");
-				bw.write("NAME:" + S.getName());
-
+				bw.write("NAME:" + S.getName() + "\n");
+				
+				bw.write("DPOP:");
+				
+				Iterator<Integer> daily = S.getDailyPop().iterator();
+				while(daily.hasNext()) {
+					Integer I = daily.next();
+					bw.write(I.toString());
+					if(daily.hasNext()) {
+						bw.write(",");
+					}
+				}
+				bw.write("\n");
+				bw.write("MPOP:" + S.getMonthlyPopString());
+				
 				bw.close();
 
 			} catch (IOException e) {
@@ -134,8 +148,8 @@ public class SaveGame {
 
 				bw.write("ID:" + R.getID() + "\n");
 				bw.write("NAME:" + R.getName() + "\n");
-				bw.write("SETA:" + R.getConnectingA().getID() + "\n");
-				bw.write("SETB:" + R.getConnectingB().getID() + "\n");
+				bw.write("SETA:" + R.getConnectingA() + "\n");
+				bw.write("SETB:" + R.getConnectingB() + "\n");
 				bw.write("LENGTH:" + R.getLength());
 
 				bw.close();

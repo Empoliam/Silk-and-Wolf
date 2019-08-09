@@ -1,4 +1,4 @@
-package patchi.silk.main;
+package patchi.silk.save;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,7 +87,7 @@ public class LoadGame {
 					case "DEST" : {
 
 						if(!data.equals("null")) {
-							P.setDestination(WORLD.getSettlementByID(data));
+							P.setDestination(data);
 						}
 						break;
 
@@ -144,10 +144,23 @@ public class LoadGame {
 					String data = line.split(":")[1];
 
 					switch(tag)  {
+					
 					case "NAME": {
 						S.setName(data);
 						break;
-					} 
+					}
+					
+					case "DPOP": {
+						
+						S.parseDailyPopString(data);
+						
+						break;
+						
+					}
+					
+					case "MPOP": {
+						S.parseMonthlyPopString(data);												
+					}
 
 					}
 				}

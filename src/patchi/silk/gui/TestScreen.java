@@ -21,6 +21,7 @@ public class TestScreen implements Screen{
 	public void displayOutput(AsciiPanel terminal) {
 
 		Settlement s = SETTLEMENTS.get(0);
+		System.out.println(s.getID());
 		List<Integer> data = s.getMonthlyPop();
 		int xSize = data.size() + 4;
 		int ySize = 20;

@@ -3,7 +3,7 @@ package patchi.silk.gui;
 import java.awt.event.KeyEvent;
 
 import asciiPanel.AsciiPanel;
-import patchi.silk.main.SaveGame;
+import patchi.silk.save.SaveGame;
 
 public class SaveScreen implements Screen {
 

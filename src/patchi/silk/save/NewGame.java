@@ -1,4 +1,4 @@
-package patchi.silk.main;
+package patchi.silk.save;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -42,16 +42,18 @@ public class NewGame {
 		stocks();
 		settlements();
 		roads();
-		people();
-		
 		WORLD.updateRoadConnections();
+		
+		PEOPLE.addAll(PeopleGen.generate());
+		WORLD.updateCharacterLocations();
+		
 		
 		WORLD.printWorld();
 		
-		Person lawrence = new Person("00000000","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
+		Person lawrence = new Person("0","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
 		lawrence.addFlags(CharacterFlags.DO_TRAVEL);
 		PEOPLE.add(0,lawrence);
-		Person holo = new Person("00000001","Holo","Wisewolf",SETTLEMENTS.get(0).getID());
+		Person holo = new Person("1","Holo","Wisewolf",SETTLEMENTS.get(0).getID());
 		holo.addFlags(CharacterFlags.FEMALE, CharacterFlags.DO_TRAVEL);
 		PEOPLE.add(1, holo);
 		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
@@ -110,30 +112,6 @@ public class NewGame {
 				
 	}
 	
-	/**
-	 * Load Characters.
-	 */
-	private static void people() { 
-	
-		try {
-			
-			BufferedReader br = new BufferedReader(new FileReader("resources/characters.csv"));
-			String line = br.readLine();
-			
-			while(line!=null) {
-				
-				PEOPLE.add(new Person(line.split(",")));
-				line = br.readLine();
-				
-			}
-			
-			br.close();
-		}
-		catch(FileNotFoundException e){}
-		catch(IOException e){}
-		
-	}
-
 	private static void stocks() { 
 		
 		try {

@@ -37,7 +37,6 @@ public class AsciiGraphMaker {
 		}
 
 		float yDiv = (float) (lMax-lMin)/(ySize-1);		
-
 		
 		xCursor = xTL;
 		while(yRel < ySize) {
@@ -46,6 +45,7 @@ public class AsciiGraphMaker {
 			terminal.setCursorPosition(xCursor, yCursor);
 			terminal.write(MilliFormatter.format((lMin+(yRel*yDiv)),4));
 			yRel++;
+			
 		}
 		
 		xCursor += 4;
@@ -57,7 +57,7 @@ public class AsciiGraphMaker {
 			
 			if(xCursor < xTL + xSize - 1) {
 
-				int y  = (int) Math.floor((F.floatValue()-lMin)/yDiv);
+				int y  = (int) Math.ceil((F.floatValue()-lMin)/yDiv);
 
 				if(Float.isNaN(p)) {
 

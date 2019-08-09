@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 
 import asciiPanel.AsciiPanel;
-import patchi.silk.main.LoadGame;
+import patchi.silk.save.LoadGame;
 
 public class LoadScreen implements Screen {
 

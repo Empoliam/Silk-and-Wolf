@@ -32,7 +32,7 @@ public class Person {
 	private String location;
 
 	/** Destination settlement list index. */
-	private Settlement destination;	
+	private String destination;	
 	/** The remaining distance to the next settlement. */
 	private int remainingDistance = 0;		
 	/** The hours remaining until an Character begins travelling. */
@@ -113,13 +113,13 @@ public class Person {
 	public boolean advanceTravel() {
 
 		if(isTravelling()) {
-
+			
 			remainingDistance = remainingDistance - 6;
 
 			if(remainingDistance <= 0) {
 				remainingDistance = 0;
 				FLAGS.remove(CharacterFlags.TRAVELLING);
-				location = destination.getID();
+				location = destination;
 				WORLD.getSettlementByID(location).addCharacter(this);
 			}
 		}
@@ -283,15 +283,15 @@ public class Person {
 	 * 
 	 * @return Settlement reference
 	 */
-	public Settlement getDestination() {
+	public String getDestination() {
 		return destination;
 	}
 
 	/** Sets the destination
 	 * @param i Destination settlement reference
 	 */
-	public void setDestination(Settlement i) {
-		destination = i;
+	public void setDestination(String dest) {
+		destination = dest;
 	}
 	
 	public String getLocationID() {
