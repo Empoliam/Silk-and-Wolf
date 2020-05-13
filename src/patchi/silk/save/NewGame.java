@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import patchi.silk.entities.CharacterFlags;
+import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
@@ -51,10 +51,10 @@ public class NewGame {
 		WORLD.printWorld();
 		
 		Person lawrence = new Person("0","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
-		lawrence.addFlags(CharacterFlags.DO_TRAVEL);
+		lawrence.addFlags(CharacterFlag.DO_TRAVEL);
 		PEOPLE.add(0,lawrence);
 		Person holo = new Person("1","Holo","Wisewolf",SETTLEMENTS.get(0).getID());
-		holo.addFlags(CharacterFlags.FEMALE, CharacterFlags.DO_TRAVEL);
+		holo.addFlags(CharacterFlag.FEMALE, CharacterFlag.DO_TRAVEL);
 		PEOPLE.add(1, holo);
 		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
 	}

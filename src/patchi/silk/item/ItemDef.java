@@ -1,9 +1,12 @@
 package patchi.silk.item;
 
+import java.util.EnumSet;
+
 public class ItemDef {
 
 	private String id;
 	private String name;
+	private EnumSet<ItemTag> tags = EnumSet.noneOf(ItemTag.class);
 	
 	public ItemDef(String id, String name) {
 		
@@ -29,6 +32,10 @@ public class ItemDef {
 	
 	public static ItemDef getByID(String id) {	
 		return null;
+	}
+	
+	public boolean isCurrency() {
+		return tags.contains(ItemTag.CURRENCY);
 	}
 	
 }

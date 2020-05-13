@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import patchi.silk.entities.CharacterFlags;
+import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
@@ -105,7 +105,7 @@ public class LoadGame {
 						break;
 					} 
 					case "FLAG": {
-						P.addFlags(CharacterFlags.valueOf(data));
+						P.addFlags(CharacterFlag.valueOf(data));
 						break;
 					}
 					}

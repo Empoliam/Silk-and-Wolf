@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import patchi.silk.entities.CharacterFlags;
+import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
@@ -84,7 +84,7 @@ public class SaveGame {
 				bw.write("DEPHRS:" + P.getDepartureHours() + "\n");
 				bw.write("CONF:" + String.valueOf(P.getConfidence()) + "\n");
 
-				for(CharacterFlags A : P.getFlags()) {
+				for(CharacterFlag A : P.getFlags()) {
 					bw.write("FLAG:" + A.toString() +"\n");
 				}
 

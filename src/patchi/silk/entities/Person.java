@@ -44,7 +44,7 @@ public class Person {
 	
 	private final Inventory inventory = new Inventory();
 	
-	private EnumSet<CharacterFlags> FLAGS = EnumSet.noneOf(CharacterFlags.class);
+	private EnumSet<CharacterFlag> flags = EnumSet.noneOf(CharacterFlag.class);
 	
 	public Person(String id) {
 		
@@ -85,9 +85,9 @@ public class Person {
 		this.location = in[4];
 		WORLD.getSettlementByID(location).addCharacter(this);
 		
-		if(Integer.parseInt(in[3]) == 0) FLAGS.add(CharacterFlags.FEMALE);
-		if(new Random().nextBoolean()) FLAGS.add(CharacterFlags.DO_TRAVEL);
-		FLAGS.add(CharacterFlags.DO_DECISION_TREE);
+		if(Integer.parseInt(in[3]) == 0) flags.add(CharacterFlag.FEMALE);
+		if(new Random().nextBoolean()) flags.add(CharacterFlag.DO_TRAVEL);
+		flags.add(CharacterFlag.DO_DECISION_TREE);
 		
 	}
 	
@@ -95,9 +95,9 @@ public class Person {
 	/** Initiates Character travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {
 
-		FLAGS.remove(CharacterFlags.PREP_TRAVEL);
+		flags.remove(CharacterFlag.PREP_TRAVEL);
 		departureHours = 0;
-		FLAGS.add(CharacterFlags.TRAVELLING);	
+		flags.add(CharacterFlag.TRAVELLING);	
 		Road path = WORLD.getSettlementByID(location).getRoadTo(destination);
 		remainingDistance = path.getLength();
 		WORLD.getSettlementByID(location).removeCharacter(this);
@@ -118,7 +118,7 @@ public class Person {
 
 			if(remainingDistance <= 0) {
 				remainingDistance = 0;
-				FLAGS.remove(CharacterFlags.TRAVELLING);
+				flags.remove(CharacterFlag.TRAVELLING);
 				location = destination;
 				WORLD.getSettlementByID(location).addCharacter(this);
 			}
@@ -202,7 +202,7 @@ public class Person {
 	 * @return doTravel flag state
 	 */
 	public boolean getDoTravel() {
-		return FLAGS.contains(CharacterFlags.DO_TRAVEL);
+		return flags.contains(CharacterFlag.DO_TRAVEL);
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class Person {
 	 * @return prepTravel flag state
 	 */
 	public boolean getPrepTravel() {
-		return FLAGS.contains(CharacterFlags.PREP_TRAVEL);
+		return flags.contains(CharacterFlag.PREP_TRAVEL);
 	}
 
 	/**
@@ -303,19 +303,19 @@ public class Person {
 	}
 	
 	public boolean getFemale() {
-		return FLAGS.contains(CharacterFlags.FEMALE);
+		return flags.contains(CharacterFlag.FEMALE);
 	}
 
 	public boolean getDoDecisionTree() {
-		return FLAGS.contains(CharacterFlags.DO_DECISION_TREE);
+		return flags.contains(CharacterFlag.DO_DECISION_TREE);
 	}
 	
 	public boolean isTravelling() {
-		return FLAGS.contains(CharacterFlags.TRAVELLING);
+		return flags.contains(CharacterFlag.TRAVELLING);
 	}
 
 	public void setPrepTravel() {
-		FLAGS.add(CharacterFlags.PREP_TRAVEL);
+		flags.add(CharacterFlag.PREP_TRAVEL);
 	}
 
 	public String getName() {
@@ -323,19 +323,19 @@ public class Person {
 		return getFirstName() + " " + getLastName();
 	}
 
-	public void addFlags(CharacterFlags ... flags) {
+	public void addFlags(CharacterFlag ... f) {
 		
-		for(CharacterFlags F : flags) {
+		for(CharacterFlag F : f) {
 			
-			FLAGS.add(F);
+			flags.add(F);
 			
 		}
 		
 	}
 	
-	public EnumSet<CharacterFlags> getFlags () {
+	public EnumSet<CharacterFlag> getFlags () {
 		
-		return FLAGS;
+		return flags;
 		
 	}
 	

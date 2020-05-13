@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import patchi.silk.entities.CharacterFlags;
+import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
 
 public class PeopleGen {
@@ -75,7 +75,7 @@ public class PeopleGen {
 					
 					boolean female = RANDOM.nextBoolean();
 					if(female) {
-						P.addFlags(CharacterFlags.FEMALE);
+						P.addFlags(CharacterFlag.FEMALE);
 					}
 
 					//generate first name
@@ -92,8 +92,8 @@ public class PeopleGen {
 					//town ID
 					P.setLocationID((s[0]));
 					
-					if(RANDOM.nextBoolean()) P.addFlags(CharacterFlags.DO_TRAVEL);
-					P.addFlags(CharacterFlags.DO_DECISION_TREE);
+					if(RANDOM.nextBoolean()) P.addFlags(CharacterFlag.DO_TRAVEL);
+					P.addFlags(CharacterFlag.DO_DECISION_TREE);
 										
 					people.add(P);
 					idCounter++;

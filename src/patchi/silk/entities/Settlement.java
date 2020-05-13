@@ -110,7 +110,7 @@ public class Settlement {
 	/**
 	 * Returns the road to the given settlement.
 	 *
-	 * @param b ID of the destination settlement
+	 * @param s ID of the destination settlement
 	 * @return Road connecting the two settlements. Null if unconnected.
 	 */
 	public Road getRoadTo(String s){

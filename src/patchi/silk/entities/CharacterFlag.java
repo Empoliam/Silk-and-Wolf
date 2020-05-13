@@ -1,6 +1,6 @@
 package patchi.silk.entities;
 
-public enum CharacterFlags {
+public enum CharacterFlag {
 
 	FEMALE,
 	TRAVELLING,
