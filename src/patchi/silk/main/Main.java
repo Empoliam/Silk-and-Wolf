@@ -2,12 +2,10 @@ package patchi.silk.main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
 import java.util.List;
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
-import patchi.silk.market.GlobalStock;
 import patchi.silk.gui.Screen;
 import patchi.silk.gui.TitleScreen;
 
@@ -23,6 +21,8 @@ import asciiPanel.AsciiPanel;
  */
 public class Main extends JFrame implements KeyListener{
 
+	public static final String VERSION = "0.0.5.0";
+	
 	/** */
 	private static final long serialVersionUID = 1L;
 	
@@ -34,9 +34,6 @@ public class Main extends JFrame implements KeyListener{
 
 	/** References to character dataset and important Characters */
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
-
-	/** Reference to global stock dataset */
-	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 
 	//UI Elements
 	private AsciiPanel terminal;

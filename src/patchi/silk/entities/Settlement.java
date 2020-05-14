@@ -1,15 +1,12 @@
 package patchi.silk.entities;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import patchi.patchiLib.util.LimitedLinkedList;
 import patchi.silk.foundation.World;
-import patchi.silk.market.GlobalStock;
-import patchi.silk.market.LocalStock;
 
 /**
  * A generic location in which characters and buildings are contained.
@@ -18,9 +15,6 @@ public class Settlement {
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
-
-	/** Reference to global stock dataset */
-	private static final HashMap<Integer, GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 
 	/** Reference to settlement dataset ArrayList*/
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
@@ -43,8 +37,6 @@ public class Settlement {
 	private int monthRunningTot = 0;
 	private int monthN = 0;
 
-	/** Local market details */
-	final private List<LocalStock> regionalMarket = new ArrayList<LocalStock>();
 
 	/**Parameters used in executing dijkstra's algorithm */
 	protected int workingValue;
@@ -60,10 +52,6 @@ public class Settlement {
 
 		id = in[0];
 		name = in[1];
-
-		for(GlobalStock G : STOCKS.values()) {
-			regionalMarket.add(new LocalStock(G));
-		}
 
 	}
 

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,9 +15,8 @@ import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
-import patchi.silk.market.GlobalStock;
 
-public class SaveGame {
+public final class SaveGame {
 
 	/** Main World reference */
 	public static final World WORLD = World.getMainWorld();
@@ -29,16 +27,11 @@ public class SaveGame {
 	/** Reference to roads dataset. */
 	private static final List<Road> ROADS = WORLD.getRoadSet();
 
-	/** Reference to global stock dataset */
-	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
-
 	/** Reference to character dataset*/
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
 
 	static private String saveName = new Date().toString();
 	static private String PATH;
-
-	private SaveGame() { }
 
 	public static void saveGame(String name) {
 

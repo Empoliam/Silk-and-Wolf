@@ -62,8 +62,6 @@ public class PersonScreen implements Screen {
 		char keyC = key.getKeyChar();
 
 		if(keyC >= 97 && keyC <= 122) {
-
-			System.out.println(keyC);
 			
 			try {
 				return new PersonSummaryScreen(currentPageList.get(keyC - 97));

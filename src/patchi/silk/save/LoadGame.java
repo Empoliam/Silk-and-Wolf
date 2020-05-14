@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import patchi.silk.entities.CharacterFlag;
@@ -13,7 +12,6 @@ import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
-import patchi.silk.market.GlobalStock;
 
 public class LoadGame {
 
@@ -25,9 +23,6 @@ public class LoadGame {
 
 	/** Reference to roads dataset. */
 	private static final List<Road> ROADS = WORLD.getRoadSet();
-
-	/** Reference to global stock dataset */
-	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 
 	/** Reference to character dataset*/
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
@@ -263,5 +258,6 @@ public class LoadGame {
 
 
 	}
+	
 
 }

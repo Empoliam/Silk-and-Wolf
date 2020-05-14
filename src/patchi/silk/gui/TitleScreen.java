@@ -2,6 +2,7 @@ package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
 import asciiPanel.AsciiPanel;
+import patchi.silk.save.InititialiseData;
 import patchi.silk.save.NewGame;
 
 public class TitleScreen implements Screen {
@@ -9,8 +10,10 @@ public class TitleScreen implements Screen {
 	@Override
 	public void displayOutput(AsciiPanel terminal) {
 
+		InititialiseData.initialise();
+		
 		terminal.writeCenter("~~ Silk and Wolf ~~", terminal.getHeightInCharacters()/2 - 2);
-		terminal.writeCenter("~~ 0.0.4.1 ~~", terminal.getHeightInCharacters()/2);
+		terminal.writeCenter("~~ 0.0.5.0 ~~", terminal.getHeightInCharacters()/2);
 		terminal.writeCenter("n - New Game", terminal.getHeightInCharacters()/2 + 6);
 		terminal.writeCenter("l - Load Saved Game", terminal.getHeightInCharacters()/2 + 7);
 

@@ -1,30 +1,20 @@
 package patchi.silk.item;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Item held by an entity.
  */
 public class Item {
 
-	private final ItemDef itemDef;
-	private double quantity;
+	private List<TagPair> data = new LinkedList<TagPair>();
+	private float quantity;
 	
-	Item(String itemID, double quantity) {
+	public Item(List<TagPair> inputData) {
 		
-		this.itemDef = ItemDef.getByID(itemID);
-		this.quantity = quantity;
+		data = inputData;
 		
 	}
-	
-	public String getName() {
-		return itemDef.getName();
-	}
-	
-	public void setQuantity(double q) {
-		quantity = q;
-	}
-	
-	public double getQuantity() {
-		return quantity;
-	}
-	
+		
 }

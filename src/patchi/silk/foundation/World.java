@@ -2,14 +2,12 @@ package patchi.silk.foundation;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
-import patchi.silk.market.GlobalStock;
 
 /**
  * World class. Acts as a central access point for all datasets. Also functions as a graph of settlements connected by roads.
@@ -24,9 +22,6 @@ public class World {
 
 	/** Full road set as ArrayList.*/
 	private final ArrayList<Road> ROADS = new ArrayList<Road>();
-
-	/** Global stock list. */
-	private final HashMap<Integer,GlobalStock> STOCKS = new HashMap<Integer,GlobalStock>();
 
 	/** Full character dataset ArrayList. Automatically sorts when adding new character. */
 	private final ArrayList<Person> PEOPLE = new ArrayList<Person>();
@@ -75,14 +70,6 @@ public class World {
 		return CLOCK;
 	}
 
-	/**
-	 * Gets the global stock set.
-	 *
-	 * @return the global stock set
-	 */
-	public HashMap<Integer,GlobalStock> getGlobalStockSet() {
-		return STOCKS;
-	}
 
 	/**
 	 * Gets the character list.

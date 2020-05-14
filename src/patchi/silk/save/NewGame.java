@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import java.util.HashMap;
 import java.util.List;
 
 import patchi.silk.entities.CharacterFlag;
@@ -13,7 +12,6 @@ import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
-import patchi.silk.market.GlobalStock;
 
 /**
  * Handles all file loading at the start of the game.
@@ -30,7 +28,6 @@ public class NewGame {
 	private static final List<Road> ROADS = WORLD.getRoadSet();
 	
 	/** Reference to global stock dataset */
-	static final HashMap<Integer,GlobalStock> STOCKS = WORLD.getGlobalStockSet();
 	
 	/** Reference to character dataset*/
 	static final List<Person> PEOPLE = WORLD.getPersonSet();
@@ -39,24 +36,23 @@ public class NewGame {
 	
 	public static void newGame() {
 		
-		stocks();
 		settlements();
 		roads();
 		WORLD.updateRoadConnections();
 		
 		PEOPLE.addAll(PeopleGen.generate());
 		WORLD.updateCharacterLocations();
-		
-		
+			
 		WORLD.printWorld();
 		
-		Person lawrence = new Person("0","Kraft","Lawrence",SETTLEMENTS.get(0).getID());
+		Person lawrence = new Person("0","Kraft","Lawrence","sw.yorenz");
 		lawrence.addFlags(CharacterFlag.DO_TRAVEL);
 		PEOPLE.add(0,lawrence);
-		Person holo = new Person("1","Holo","Wisewolf",SETTLEMENTS.get(0).getID());
+		Person holo = new Person("1","Holo","Wisewolf","sw.yorenz");
 		holo.addFlags(CharacterFlag.FEMALE, CharacterFlag.DO_TRAVEL);
 		PEOPLE.add(1, holo);
 		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
+		
 	}
 	
 	/**
@@ -110,26 +106,6 @@ public class NewGame {
 		catch(FileNotFoundException e){}
 		catch(IOException e){}
 				
-	}
-	
-	private static void stocks() { 
-		
-		try {
-			
-			BufferedReader br = new BufferedReader(new FileReader("resources/stocks.csv"));
-			String line = br.readLine();
-			
-			while(line!=null) {
-				
-				STOCKS.put(GlobalStock.getIdTracker(),new GlobalStock(line));
-				line = br.readLine();
-			}
-			
-			br.close();
-		}
-		catch(FileNotFoundException e){}
-		catch(IOException e){}
-		
 	}
 	
 }
