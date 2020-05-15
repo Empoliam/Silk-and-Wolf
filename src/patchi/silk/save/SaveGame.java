@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 
@@ -28,7 +29,7 @@ public final class SaveGame {
 	private static final List<Road> ROADS = WORLD.getRoadSet();
 
 	/** Reference to character dataset*/
-	static final List<Person> PEOPLE = WORLD.getPersonSet();
+	static final TreeMap<String,Person> PEOPLE = WORLD.getPersonSet();
 
 	static private String saveName = new Date().toString();
 	static private String PATH;
@@ -55,8 +56,12 @@ public final class SaveGame {
 
 	private static void savePeople() {
 
-		for(Person P : PEOPLE) {
+		String[] keys = PEOPLE.keySet().toArray(new String[0]);
+		
+		for(int x = 0; x < keys.length; x++) {
 
+			Person P = PEOPLE.get(keys[x]);
+			
 			new File(PATH + "/characters/").mkdirs();
 			File F = new File(PATH + "/characters/" + P.getID() + ".dat");
 

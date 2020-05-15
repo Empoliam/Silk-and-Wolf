@@ -91,6 +91,10 @@ public class Person {
 		
 	}
 	
+	@Override
+	public String toString() {
+		return firstName + " " + lastName;
+	}
 	
 	/** Initiates Character travel state. Sets travel flag, and handles setting of route length and destination. Automatically identifies route to the destination.  */
 	public void beginTravel() {

@@ -1,7 +1,8 @@
 package patchi.silk.gui;
 
 import java.awt.event.KeyEvent;
-import java.util.List;
+import java.util.Arrays;
+import java.util.TreeMap;
 
 import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Person;
@@ -14,11 +15,12 @@ public class PersonScreen implements Screen {
 	private static int staticPage = 1;
 
 	private final World world = World.getMainWorld();
-	private final List<Person> PEOPLE = world.getPersonSet();
+	private final TreeMap<String,Person> PEOPLE = world.getPersonSet();
 
 	private int currentPage = 1;
 	private int totalPages = (int) Math.ceil(PEOPLE.size() / (float) MAX_PAGE_LENGTH);
-	private List<Person> currentPageList;
+	private String[] keys = PEOPLE.keySet().toArray(new String[0]);
+	private String[] currentPageKeys;
 
 	private int cursorX;
 	private int cursorY;
@@ -31,7 +33,7 @@ public class PersonScreen implements Screen {
 		
 		terminal.getHeightInCharacters();
 		currentPage = (staticPage <= totalPages) ? staticPage : 1;
-		currentPageList = PEOPLE.subList((currentPage-1)*MAX_PAGE_LENGTH, Math.min(PEOPLE.size(), MAX_PAGE_LENGTH*currentPage));
+		currentPageKeys = Arrays.copyOfRange(keys, (currentPage-1)*MAX_PAGE_LENGTH, Math.min((currentPage)*MAX_PAGE_LENGTH,keys.length));
 		char listIndex = 'a';		
 
 		terminal.setCursorPosition(cursorX, cursorY);
@@ -46,9 +48,9 @@ public class PersonScreen implements Screen {
 		terminal.write("Use /* to navigate pages");
 		cursorY+=2;
 		terminal.setCursorPosition(cursorX, cursorY);
-
-		for(Person C : currentPageList) {
-			terminal.write(listIndex + ". " + C.getName());
+		
+		for(int i = 0; i < Math.min(26,currentPageKeys.length); i++) {
+			terminal.write(listIndex + ". " + PEOPLE.get(currentPageKeys[i]));
 			listIndex++;
 			cursorY++;
 			terminal.setCursorPosition(cursorX, cursorY);
@@ -64,7 +66,7 @@ public class PersonScreen implements Screen {
 		if(keyC >= 97 && keyC <= 122) {
 			
 			try {
-				return new PersonSummaryScreen(currentPageList.get(keyC - 97));
+				return new PersonSummaryScreen(PEOPLE.get(currentPageKeys[keyC - 97]));
 			} catch (IndexOutOfBoundsException e) {
 				return this;
 			}

@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.util.List;
+import java.util.TreeMap;
 
 import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
@@ -30,7 +30,7 @@ public class NewGame {
 	/** Reference to global stock dataset */
 	
 	/** Reference to character dataset*/
-	static final List<Person> PEOPLE = WORLD.getPersonSet();
+	static final TreeMap<String,Person> PEOPLE = WORLD.getPersonSet();
 	
 	private NewGame() {};
 	
@@ -40,18 +40,17 @@ public class NewGame {
 		roads();
 		WORLD.updateRoadConnections();
 		
-		PEOPLE.addAll(PeopleGen.generate());
+		PEOPLE.putAll(PeopleGen.generate());
 		WORLD.updateCharacterLocations();
 			
 		WORLD.printWorld();
 		
 		Person lawrence = new Person("0","Kraft","Lawrence","sw.yorenz");
 		lawrence.addFlags(CharacterFlag.DO_TRAVEL);
-		PEOPLE.add(0,lawrence);
+		PEOPLE.put("0",lawrence);
 		Person holo = new Person("1","Holo","Wisewolf","sw.yorenz");
 		holo.addFlags(CharacterFlag.FEMALE, CharacterFlag.DO_TRAVEL);
-		PEOPLE.add(1, holo);
-		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
+		PEOPLE.put("1", holo);
 			
 	}
 	

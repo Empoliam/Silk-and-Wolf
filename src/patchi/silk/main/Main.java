@@ -3,6 +3,8 @@ package patchi.silk.main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.List;
+import java.util.TreeMap;
+
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Settlement;
 import patchi.silk.foundation.World;
@@ -33,7 +35,7 @@ public class Main extends JFrame implements KeyListener{
 	public static final List<Settlement> SETTLEMENTS = WORLD.getSettlementSet();
 
 	/** References to character dataset and important Characters */
-	static final List<Person> PEOPLE = WORLD.getPersonSet();
+	static final TreeMap<String,Person> PEOPLE = WORLD.getPersonSet();
 
 	//UI Elements
 	private AsciiPanel terminal;

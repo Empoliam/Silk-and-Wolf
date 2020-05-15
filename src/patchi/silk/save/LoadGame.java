@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.TreeMap;
 
 import patchi.silk.entities.CharacterFlag;
 import patchi.silk.entities.Person;
@@ -25,7 +26,7 @@ public class LoadGame {
 	private static final List<Road> ROADS = WORLD.getRoadSet();
 
 	/** Reference to character dataset*/
-	static final List<Person> PEOPLE = WORLD.getPersonSet();
+	static final TreeMap<String,Person> PEOPLE = WORLD.getPersonSet();
 
 	static String PATH; 
 
@@ -108,7 +109,7 @@ public class LoadGame {
 
 				br.close();
 
-				PEOPLE.add(P);
+				PEOPLE.put(P.getID(),P);
 
 			} catch (IOException e) {
 				e.printStackTrace();

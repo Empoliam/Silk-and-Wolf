@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import patchi.silk.entities.Person;
 import patchi.silk.entities.Road;
@@ -24,7 +25,7 @@ public class World {
 	private final ArrayList<Road> ROADS = new ArrayList<Road>();
 
 	/** Full character dataset ArrayList. Automatically sorts when adding new character. */
-	private final ArrayList<Person> PEOPLE = new ArrayList<Person>();
+	private final TreeMap<String,Person> PEOPLE = new TreeMap<>();
 
 	/** Universal random number generator. */
 	private final Random RANDOM = new Random(System.nanoTime());
@@ -76,7 +77,7 @@ public class World {
 	 *
 	 * @return the character list
 	 */
-	public ArrayList<Person> getPersonSet() {
+	public TreeMap<String,Person> getPersonSet() {
 		return PEOPLE;
 	}
 
@@ -111,7 +112,7 @@ public class World {
 	}
 
 	public Person getPersonByID(String id) { 
-		for(Person C : PEOPLE) {
+		for(Person C : PEOPLE.values()) {
 			if(C.getID().equals(id)) return C;
 		}
 
@@ -120,7 +121,7 @@ public class World {
 
 	public void updateCharacterLocations() {
 
-		for(Person P : PEOPLE) {
+		for(Person P : PEOPLE.values()) {
 			
 			if(!P.isTravelling()) {
 				
@@ -258,7 +259,7 @@ public class World {
 
 		timeStatus = CLOCK.advanceHour();
 
-		for(Person P : PEOPLE) {
+		for(Person P : PEOPLE.values()) {
 
 			//Travel decision making stage. Placeholder. Selects a random destination from all connected towns
 			if (P.getDoDecisionTree()) {

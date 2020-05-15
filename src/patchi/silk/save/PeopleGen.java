@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -15,9 +16,9 @@ public class PeopleGen {
 
 	final static Random RANDOM = new Random();
 
-	public static List<Person> generate(){
+	public static HashMap<String,Person> generate(){
 
-		List<Person> people = new ArrayList<Person>();
+		HashMap<String,Person> people = new HashMap<>();
 
 		try {
 
@@ -95,7 +96,7 @@ public class PeopleGen {
 					if(RANDOM.nextBoolean()) P.addFlags(CharacterFlag.DO_TRAVEL);
 					P.addFlags(CharacterFlag.DO_DECISION_TREE);
 										
-					people.add(P);
+					people.put(P.getID(),P);
 					idCounter++;
 
 				}
