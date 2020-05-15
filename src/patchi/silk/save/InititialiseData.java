@@ -20,7 +20,7 @@ public class InititialiseData {
 			
 			for(TagPair T : M.getTag()) {
 				
-				System.out.println(T.getTag());
+				System.out.println(T.getTag() +":" + T.getData());
 				
 			}
 			

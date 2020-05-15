@@ -1,5 +1,6 @@
 package patchi.silk.item;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,13 +9,24 @@ import java.util.List;
  */
 public class Item {
 
-	private List<TagPair> data = new LinkedList<TagPair>();
-	private float quantity;
+	private List<TagPair> tags = new LinkedList<TagPair>();
 	
 	public Item(List<TagPair> inputData) {
 		
-		data = inputData;
+		tags = inputData;
 		
+	}
+	
+	public void addTag(TagPair T) {
+		tags.add(T);
+	}
+		
+	public Collection<TagPair> getTag() {
+		return tags;
+	}
+	
+	public TagPair getTag(int i) {
+		return tags.get(i);
 	}
 		
 }

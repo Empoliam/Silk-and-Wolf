@@ -52,7 +52,7 @@ public class NewGame {
 		holo.addFlags(CharacterFlag.FEMALE, CharacterFlag.DO_TRAVEL);
 		PEOPLE.add(1, holo);
 		PEOPLE.sort((p1,p2) -> p1.getID().compareTo(p2.getID()));
-		
+			
 	}
 	
 	/**

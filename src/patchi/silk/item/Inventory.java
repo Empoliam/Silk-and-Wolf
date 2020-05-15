@@ -14,4 +14,10 @@ public class Inventory {
 		return internalList;
 	}
 	
+	public void addItem(Item I) {
+		
+		internalList.add(I);
+		
+	}
+	
 }
