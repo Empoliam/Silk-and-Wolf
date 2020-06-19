@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public  class Material implements RawData {
+public class Shape implements RawData {
 
-	public static HashMap<String,Material> MATERIALS = new HashMap<>();
+	public static HashMap<String,Shape> SHAPES = new HashMap<>();
 	
 	private List<TagPair> tags = new LinkedList<>();
 	
-	public Material() {}
+	public Shape() {}
 	
 	public void addTag(TagPair T) {
 		tags.add(T);
