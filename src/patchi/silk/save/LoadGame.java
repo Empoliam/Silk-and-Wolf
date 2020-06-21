@@ -136,28 +136,33 @@ public class LoadGame {
 
 				while((line = br.readLine()) != null) {
 
-					String tag = line.split(":")[0];
-					String data = line.split(":")[1];
+					try {
+						String tag = line.split(":")[0];
+						String data = line.split(":")[1];
 
-					switch(tag)  {
-					
-					case "NAME": {
-						S.setName(data);
-						break;
-					}
-					
-					case "DPOP": {
-						
-						S.parseDailyPopString(data);
-						
-						break;
-						
-					}
-					
-					case "MPOP": {
-						S.parseMonthlyPopString(data);												
-					}
+						switch(tag)  {
 
+						case "NAME": {
+							S.setName(data);
+							break;
+						}
+
+						case "DPOP": {
+
+							S.parseDailyPopString(data);
+
+							break;
+
+						}
+
+						case "MPOP": {
+							S.parseMonthlyPopString(data);												
+						}
+
+						}
+						
+					} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+						
 					}
 				}
 
@@ -188,10 +193,10 @@ public class LoadGame {
 				String ID = br.readLine().split(":")[1];
 				Road R = new Road(ID);
 				String line;
-				
-				
+
+
 				while((line = br.readLine()) != null) {
-										
+
 					String tag = line.split(":")[0];
 					String data = line.split(":")[1];
 
@@ -217,7 +222,7 @@ public class LoadGame {
 				}
 
 				br.close();
-				
+
 				ROADS.add(R);
 
 			} catch (IOException e) {
@@ -259,6 +264,6 @@ public class LoadGame {
 
 
 	}
-	
+
 
 }
