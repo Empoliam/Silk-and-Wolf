@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import patchi.silk.item.Material;
 import patchi.silk.item.RawData;
 import patchi.silk.item.Shape;
-import patchi.silk.item.TagPair;
 
 public class InititialiseData {
 
@@ -19,19 +19,20 @@ public class InititialiseData {
 
 		Material.MATERIALS = loadFromFile("resources/items/materials.silk", Material.class);
 		Shape.SHAPES = loadFromFile("resources/items/shapes.silk", Shape.class);
-		
-		for(Shape M : Shape.SHAPES.values()) {
 
-			for(TagPair T : M.getTag()) {
+		for(Entry<String, Shape> M : Shape.SHAPES.entrySet()) {
 
-				System.out.println(T.getTag() +":" + T.getData());
+			Shape S = M.getValue();			
 
+			for(Entry<String, String> T : S.getTagSet()) {
+				
+				System.out.println(T.getKey() + ":" + T.getValue());
+				
 			}
 
 		}
 
 	}
-
 
 	private static <T extends RawData> HashMap<String,T> loadFromFile(String path, Class<T> OBJ) {
 
@@ -41,7 +42,7 @@ public class InititialiseData {
 			String line = br.readLine();
 
 			HashMap<String,T> placeholderMap = new HashMap<String, T>();
-			
+
 			T M = null;
 
 			while (line != null) {
@@ -58,7 +59,7 @@ public class InititialiseData {
 
 					line = line.substring(1,line.length()-1);
 					String[] s = line.split(":");
-					M.addTag(new TagPair(s[0],s[1]));
+					M.addTag(s[0],s[1]);
 
 				}
 
@@ -67,9 +68,9 @@ public class InititialiseData {
 			}
 
 			br.close();
-			
+
 			return placeholderMap;
-			
+
 		} 
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -83,9 +84,9 @@ public class InititialiseData {
 		catch (InstantiationException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
-		
+
 	}
 
 }

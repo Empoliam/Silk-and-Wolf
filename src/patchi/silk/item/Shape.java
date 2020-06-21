@@ -1,28 +1,27 @@
 package patchi.silk.item;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Shape implements RawData {
 
 	public static HashMap<String,Shape> SHAPES = new HashMap<>();
 	
-	private List<TagPair> tags = new LinkedList<>();
+	private HashMap<String, String> tags = new HashMap<>();
 	
 	public Shape() {}
 	
-	public void addTag(TagPair T) {
-		tags.add(T);
+	public void addTag(String tag, String data) {
+		tags.put(tag, data);
 	}
-		
-	public Collection<TagPair> getTag() {
-		return tags;
+
+	public String getTag(String tag) {	
+		return tags.get(tag);	
 	}
 	
-	public TagPair getTag(int i) {
-		return tags.get(i);
+	public Set<Map.Entry<String, String>> getTagSet() {
+		return tags.entrySet();
 	}
 	
 }

@@ -1,13 +1,12 @@
 package patchi.silk.item;
 
-import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 public interface RawData {
 
-	public void addTag(TagPair T);
-		
-	public Collection<TagPair> getTag(); 
-	
-	public TagPair getTag(int i);
-	
+	public void addTag(String tag, String data);
+	public String getTag(String tag);
+	public Set<Map.Entry<String, String>> getTagSet();
+			
 }
