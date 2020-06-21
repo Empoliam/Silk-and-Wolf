@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Item held by an entity.
  */
-public class Item {
+public class Item implements RawData {
 
 	private HashMap<String,String> tags = new HashMap<String,String>();
 
@@ -66,7 +66,7 @@ public class Item {
 		
 		if(mat != null) {
 			Material M = Material.MATERIALS.get(mat);
-			matName = M.getTag("NAME");
+			matName = M.getTag("NAME") + " ";
 		}
 		
 		if(shape != null) {
@@ -76,6 +76,10 @@ public class Item {
 
 		name = matName + shapeName;		
 
+		if(name.isEmpty()) {
+			name = "Placeholder";
+		}
+		
 	}
 
 	public float getWeight() {

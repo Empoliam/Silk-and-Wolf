@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import asciiPanel.AsciiPanel;
 import patchi.silk.foundation.Time;
 import patchi.silk.foundation.World;
+import patchi.silk.main.TestCode;
 
 public class MainScreen implements Screen {
 
@@ -42,7 +43,7 @@ public class MainScreen implements Screen {
 
 	@Override
 	public Screen respondToUserInput(KeyEvent key) {
-
+		
 		switch(key.getKeyCode()) {
 
 		case(KeyEvent.VK_S):
@@ -51,8 +52,11 @@ public class MainScreen implements Screen {
 			return new PersonScreen();
 		case(KeyEvent.VK_W):
 			return new WaitScreen();
-		case(KeyEvent.VK_T):
+		case(KeyEvent.VK_G):
 			return new TestScreen();
+		case(KeyEvent.VK_T):
+			TestCode.itemTestCode();
+			return this;
 		case(KeyEvent.VK_Z):
 			return new SaveScreen();
 		default:

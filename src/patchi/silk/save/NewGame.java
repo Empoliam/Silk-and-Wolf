@@ -42,16 +42,14 @@ public class NewGame {
 		
 		PEOPLE.putAll(PeopleGen.generate());
 		WORLD.updateCharacterLocations();
-			
-		WORLD.printWorld();
-		
+					
 		Person lawrence = new Person("0","Kraft","Lawrence","sw.yorenz");
 		lawrence.addFlags(CharacterFlag.DO_TRAVEL);
 		PEOPLE.put("0",lawrence);
 		Person holo = new Person("1","Holo","Wisewolf","sw.yorenz");
 		holo.addFlags(CharacterFlag.FEMALE, CharacterFlag.DO_TRAVEL);
 		PEOPLE.put("1", holo);
-			
+					
 	}
 	
 	/**

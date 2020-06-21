@@ -7,22 +7,23 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import patchi.silk.item.Item;
+import patchi.silk.item.ItemFactory;
 import patchi.silk.item.Material;
 import patchi.silk.item.RawData;
 import patchi.silk.item.Shape;
 
 public class InititialiseData {
 
-	private InititialiseData() {}
-
 	public static void initialise() {
 
 		Material.MATERIALS = loadFromFile("resources/items/materials.silk", Material.class);
 		Shape.SHAPES = loadFromFile("resources/items/shapes.silk", Shape.class);
+		ItemFactory.storeTemplates(loadFromFile("resources/items/templates.silk", Item.class));
+		
+		for(Entry<String, Item> M : ItemFactory.getTemplates().entrySet()) {
 
-		for(Entry<String, Shape> M : Shape.SHAPES.entrySet()) {
-
-			Shape S = M.getValue();			
+			Item S = M.getValue();			
 
 			for(Entry<String, String> T : S.getTagSet()) {
 				
