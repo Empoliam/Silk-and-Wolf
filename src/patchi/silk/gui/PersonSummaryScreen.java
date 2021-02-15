@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import asciiPanel.AsciiPanel;
 import patchi.silk.entities.Person;
-import patchi.silk.item.Item;
+import patchi.silk.item.ItemStack;
 
 public class PersonSummaryScreen implements Screen {
 
@@ -29,9 +29,9 @@ public class PersonSummaryScreen implements Screen {
 		terminal.write("Inventory:");
 		yPos++;
 		terminal.setCursorPosition(0, yPos);
-		Iterator<Item> invIterator = P.getInventory().getIterator();
+		Iterator<ItemStack> invIterator = P.getInventory().getIterator();
 		while(invIterator.hasNext()) {
-			terminal.write(invIterator.next().getName());
+			terminal.write(invIterator.next().getStackName());
 			yPos++;
 			terminal.setCursorPosition(0, yPos);
 		}

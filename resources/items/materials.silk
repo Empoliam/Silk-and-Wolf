@@ -1,3 +1,5 @@
+// Density in g/cm^3
+
 #METAL_IRON
 [NAME:Iron]
 [BASE_VALUE:10]

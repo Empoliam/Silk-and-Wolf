@@ -5,24 +5,40 @@ import java.util.Iterator;
 
 public class Inventory {
 
-	private final ArrayList<Item> internalList;
-	
+	private final ArrayList<ItemStack> internalList;
+
 	public Inventory() {
 		internalList = new ArrayList<>();
 	}
-	
-	public ArrayList<Item> getList() {
+
+	public ArrayList<ItemStack> getList() {
 		return internalList;
 	}
-	
+
 	public void addItem(Item I) {
-		
-		internalList.add(I);
-		
+
+		for(ItemStack J : internalList) {
+			if(J.itemCompare(I)) {
+				J.addQuantity(1);
+				return;
+			}
+		}
+
+		internalList.add(new ItemStack(I));
+
 	}
-	
-	public Iterator<Item> getIterator() {
+
+	public boolean hasItem(Item I) {
+		for(ItemStack J : internalList) {
+			if(J.itemCompare(I)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Iterator<ItemStack> getIterator() {
 		return internalList.iterator();
 	}
-	
+
 }

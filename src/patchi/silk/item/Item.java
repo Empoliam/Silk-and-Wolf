@@ -12,14 +12,14 @@ public class Item implements RawData {
 	private HashMap<String,String> tags = new HashMap<String,String>();
 
 	public Item() {
-			
+
 	}
 
 	public Item(HashMap<String,String> inputData) {
 
 		super();
 		tags = inputData;
-				
+
 	}
 
 	public void addTag(String tag, String data) {
@@ -33,30 +33,30 @@ public class Item implements RawData {
 	public String getTag(String tag) {
 		return tags.get(tag);
 	}
-	
+
 	public void updateSize() {
-		
+
 		float shapeWeight = 1.0f;
 		float materialDensity = 1.0f;
 
 		String mat = tags.get("MATERIAL");
 		String shape = tags.get("SHAPE");		
-		
+
 		if(mat != null) {
 			Material M = Material.MATERIALS.get(mat);
 			materialDensity = Float.parseFloat(M.getTag("DENSITY"));
 		}
-		
+
 		if(shape != null) {
 			Shape S = Shape.SHAPES.get(shape);
 			shapeWeight = Float.parseFloat(S.getTag("UNIT_WEIGHT"));
 		}
-		
+
 		float volume = shapeWeight / materialDensity;
-		
+
 		tags.replace("WEIGHT", Float.toString(shapeWeight));
 		tags.replace("VOLUME", Float.toString(volume));
-		
+
 	}
 
 	public void updateName() {
@@ -66,7 +66,7 @@ public class Item implements RawData {
 
 		String mat = tags.get("MATERIAL");
 		String shape = tags.get("SHAPE");
-		
+
 		if(mat != null) {
 			Material M = Material.MATERIALS.get(mat);
 			matName = M.getTag("NAME");
@@ -78,11 +78,11 @@ public class Item implements RawData {
 		}
 
 		String name = matName + " " + shapeName;		
-		
+
 		if(name.isEmpty()) {
 			name = "BadEGG";
 		}
-		
+
 		tags.replace("NAME",name);
 
 	}
@@ -91,8 +91,33 @@ public class Item implements RawData {
 		return Float.parseFloat(tags.get("WEIGHT"));
 	}
 
+	public float getVolume() {
+		return Float.parseFloat(tags.get("VOLUME"));
+	}
+
 	public String getName() {
 		return tags.get("NAME");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if(obj == null) {
+			return false;
+		}
+
+		if(obj.getClass() != this.getClass()) {
+			return false;
+		}
+		
+		Item cmp = (Item) obj;
+		if(!tags.equals(cmp.tags)) {
+			return false;
+		}
+
+
+		return true;
+
 	}
 
 }
