@@ -199,7 +199,7 @@ public class Settlement {
 
 		String s = monthRunningTot + ";" +  monthN + ";";
 
-		Iterator<Integer> monthly = getDailyPop().iterator();
+		Iterator<Integer> monthly = getMonthlyPop().iterator();
 		while(monthly.hasNext()) {
 			Integer I = monthly.next();
 			s = s + (I.toString());

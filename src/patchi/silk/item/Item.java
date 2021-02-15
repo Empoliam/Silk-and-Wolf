@@ -11,15 +11,15 @@ public class Item implements RawData {
 
 	private HashMap<String,String> tags = new HashMap<String,String>();
 
-	private float weight = 0.0f;
-	private String name = "Placeholder";
+	public Item() {
+			
+	}
 
-	public Item() {}
-	
 	public Item(HashMap<String,String> inputData) {
 
+		super();
 		tags = inputData;
-
+				
 	}
 
 	public void addTag(String tag, String data) {
@@ -33,14 +33,14 @@ public class Item implements RawData {
 	public String getTag(String tag) {
 		return tags.get(tag);
 	}
-
-	public void updateWeight() {
-
-		float shapeVolume = 1.0f;
-		float materialDensity = 1.0f;
+	
+	public void updateSize() {
 		
+		float shapeWeight = 1.0f;
+		float materialDensity = 1.0f;
+
 		String mat = tags.get("MATERIAL");
-		String shape = tags.get("SHAPE");
+		String shape = tags.get("SHAPE");		
 		
 		if(mat != null) {
 			Material M = Material.MATERIALS.get(mat);
@@ -49,11 +49,14 @@ public class Item implements RawData {
 		
 		if(shape != null) {
 			Shape S = Shape.SHAPES.get(shape);
-			shapeVolume = Float.parseFloat(S.getTag("VOLUME"));
+			shapeWeight = Float.parseFloat(S.getTag("UNIT_WEIGHT"));
 		}
 		
-		weight = shapeVolume * materialDensity;		
-
+		float volume = shapeWeight / materialDensity;
+		
+		tags.replace("WEIGHT", Float.toString(shapeWeight));
+		tags.replace("VOLUME", Float.toString(volume));
+		
 	}
 
 	public void updateName() {
@@ -66,28 +69,30 @@ public class Item implements RawData {
 		
 		if(mat != null) {
 			Material M = Material.MATERIALS.get(mat);
-			matName = M.getTag("NAME") + " ";
+			matName = M.getTag("NAME");
 		}
-		
+
 		if(shape != null) {
 			Shape S = Shape.SHAPES.get(shape);
 			shapeName = S.getTag("NAME");
 		}
 
-		name = matName + shapeName;		
-
+		String name = matName + " " + shapeName;		
+		
 		if(name.isEmpty()) {
-			name = "Placeholder";
+			name = "BadEGG";
 		}
 		
+		tags.replace("NAME",name);
+
 	}
 
 	public float getWeight() {
-		return weight;
+		return Float.parseFloat(tags.get("WEIGHT"));
 	}
 
 	public String getName() {
-		return name;
+		return tags.get("NAME");
 	}
-	
+
 }

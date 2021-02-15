@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
 import patchi.silk.item.Item;
 import patchi.silk.item.ItemFactory;
 import patchi.silk.item.Material;
@@ -21,18 +19,6 @@ public class InititialiseData {
 		Shape.SHAPES = loadFromFile("resources/items/shapes.silk", Shape.class);
 		ItemFactory.storeTemplates(loadFromFile("resources/items/templates.silk", Item.class));
 		
-		for(Entry<String, Item> M : ItemFactory.getTemplates().entrySet()) {
-
-			Item S = M.getValue();			
-
-			for(Entry<String, String> T : S.getTagSet()) {
-				
-				System.out.println(T.getKey() + ":" + T.getValue());
-				
-			}
-
-		}
-
 	}
 
 	private static <T extends RawData> HashMap<String,T> loadFromFile(String path, Class<T> OBJ) {

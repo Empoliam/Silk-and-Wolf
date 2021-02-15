@@ -36,7 +36,7 @@ public class LoadScreen implements Screen {
 		cursorY ++;
 		terminal.setCursorPosition(cursorX, cursorY);
 		if(failure) {
-			terminal.write("Failed to load save");
+			terminal.write("Failed to load save. File not found.");
 		}
 
 	}

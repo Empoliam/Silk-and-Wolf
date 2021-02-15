@@ -1,6 +1,7 @@
 package patchi.silk.item;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Inventory {
 
@@ -18,6 +19,10 @@ public class Inventory {
 		
 		internalList.add(I);
 		
+	}
+	
+	public Iterator<Item> getIterator() {
+		return internalList.iterator();
 	}
 	
 }

@@ -12,6 +12,9 @@ public class ItemFactory {
 		
 		public ItemFactory() {
 			item = new Item();
+			addTag("NAME","Placeholder");
+			addTag("WEIGHT","0.0");
+			addTag("VOLUME","0.0");
 		}
 		
 		public Item generate() {
@@ -33,6 +36,7 @@ public class ItemFactory {
 		public void addTag(String tag, String data) {
 			item.addTag(tag, data);
 			item.updateName();
+			item.updateSize();
 		}
 
 		public static void storeTemplates(HashMap<String, Item> H) {
